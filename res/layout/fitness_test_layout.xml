@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/gender"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:text="@string/gender_string" />
+            <Spinner
+                android:id="@+id/gender_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:prompt="@string/gender_prompt" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/age_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/age_string" />
+
+            <EditText
+                android:id="@+id/age"
+                android:layout_width="0dp"               
+                android:layout_weight="0.5"
+                android:hint="@string/enter_age" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/height_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/height_string" />
+
+            <EditText
+                android:id="@+id/height"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:hint="@string/enter_height" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/weight_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/weight_string" />
+
+            <EditText
+                android:id="@+id/weight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:hint="@string/enter_weight" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/hypertension_label"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:text="@string/hypertension_string" />
+
+            <Spinner
+                android:id="@+id/hypertension_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/smoking_label"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:text="@string/smoking_string" />
+
+            <Spinner
+                android:id="@+id/smoking_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/diabetes_label"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:text="@string/diabetes_string" />
+
+            <Spinner
+                android:id="@+id/diabetes_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/blood_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/blood_string" />
+
+            <RadioGroup
+                android:id="@+id/blood_radio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/blood_no"
+                    android:checked="true"
+                    android:text="No" />
+
+                <RadioButton
+                    android:id="@+id/blood_yes"
+                    android:checked="false"
+                    android:text="Yes" />
+            </RadioGroup>
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/start_fit_test"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="@string/start_fit_test_string" />
+        </TableRow>
+    </TableLayout>
+
+</ScrollView>
