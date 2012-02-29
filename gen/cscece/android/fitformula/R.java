@@ -48,23 +48,22 @@ public final class R {
     public static final class string {
         public static final int age_string=0x7f040007;
         public static final int app_name=0x7f040001;
-        public static final int blood_string=0x7f040012;
-        public static final int cm_string=0x7f04000b;
-        public static final int diabetes_string=0x7f040011;
+        public static final int blood_string=0x7f040010;
+        public static final int diabetes_string=0x7f04000f;
         public static final int enter_age=0x7f040008;
         public static final int enter_height=0x7f04000a;
-        public static final int enter_weight=0x7f04000d;
+        public static final int enter_weight=0x7f04000c;
         public static final int gender_prompt=0x7f040006;
         public static final int gender_string=0x7f040005;
         public static final int get_workout=0x7f040003;
         public static final int height_string=0x7f040009;
         public static final int hello=0x7f040000;
-        public static final int hypertension_string=0x7f04000f;
-        public static final int kg_string=0x7f04000e;
+        public static final int hypertension_string=0x7f04000d;
+        public static final int instructions_string=0x7f040012;
         public static final int my_workout_title=0x7f040004;
-        public static final int smoking_string=0x7f040010;
-        public static final int start_fit_test_string=0x7f040013;
-        public static final int weight_string=0x7f04000c;
+        public static final int smoking_string=0x7f04000e;
+        public static final int start_fit_test_string=0x7f040011;
+        public static final int weight_string=0x7f04000b;
         public static final int workout_string=0x7f040002;
     }
 }
