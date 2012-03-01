@@ -20,6 +20,10 @@
 	<string name="blood_string">Do you know your systolic blood pressure?</string>
 	<string name="start_fit_test_string">Start Fitness Test Now</string>
 	<string name="instructions_string">Please fill out the form in order to begin the fitness test</string>
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+	<string name="male_str">Male</string>
+	<string name="female_str">Female</string>
 	
 
 	

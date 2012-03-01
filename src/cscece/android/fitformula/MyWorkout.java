@@ -1,8 +1,10 @@
 package cscece.android.fitformula;
 
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
 
 public class MyWorkout extends Activity {
 	
@@ -15,5 +17,13 @@ public class MyWorkout extends Activity {
         
         
     }//end of onCreate
+    
+    //Method called when the "Get Workout" button is Pushed
+    public void getWorkoutPushed(View view){
+    	
+    	//intent to start FitnessTest Activity
+    	startActivity(new Intent(this,FitnessTest.class));
+    	
+    }//end of getWorkoutPushed
 
 }
