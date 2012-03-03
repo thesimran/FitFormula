@@ -10,6 +10,17 @@
         android:shrinkColumns="true" >
 	
         <TableRow>
+            <TextView
+                android:id="@+id/instructions"
+                android:text="@string/instructions_string"
+                android:textSize="15dip"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dip" />"
+        </TableRow>
+        
+        <TableRow>
 
             <TextView
                 android:id="@+id/gender"

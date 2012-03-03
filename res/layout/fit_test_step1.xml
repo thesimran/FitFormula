@@ -7,10 +7,11 @@
     <TableRow>
         <TextView
             android:id="@+id/fit_test_step1_instructions"
-            android:text="@string/step1_instructions"
+            
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="15dip"/>"
+            android:textSize="15dip"/>
+        <!--  android:text="@string/step1_instructions" -->
     </TableRow>
     <TableRow>
         <ProgressBar 
