@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    
+    <TableRow>
+        <TextView
+            android:id="@+id/fit_test_step1_instructions"
+            android:text="@string/step1_instructions"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="15dip"/>"
+    </TableRow>
+    <TableRow>
+        <ProgressBar 
+            android:id="@+id/resting_heart_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dip" />"
+    </TableRow>
+    <TableRow>
+        <ImageView 
+            android:id="@+id/temp_pulse_picture"
+            android:contentDescription="A temporary placeholder graphic for the actual future grahpic"
+            android:src="@drawable/capture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </TableRow>
+
+</TableLayout>
