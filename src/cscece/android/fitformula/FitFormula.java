@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 public class FitFormula extends TabActivity {
-	
+	private TabHost tabHost;
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.main);
 
 	    Resources res = getResources(); // Resource object to get Drawables
-	    TabHost tabHost = getTabHost();  // The activity TabHost
+	    tabHost = getTabHost();  // The activity TabHost
 	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab
 	    Intent intent;  // Reusable Intent for each tab
 
@@ -47,5 +47,9 @@ public class FitFormula extends TabActivity {
 
 	    tabHost.setCurrentTab(0);
 	}//end of onCreate()
+	
+	public void switchTab (int tab ){
+		tabHost.setCurrentTab(tab);
+	}
 
 }

@@ -22,7 +22,10 @@ public class MyWorkout extends Activity {
     public void getWorkoutPushed(View view){
     	
     	//intent to start FitnessTest Activity
-    	startActivity(new Intent(this,FitnessTest.class));
+    	//startActivity(new Intent(this,FitnessTest.class));
+    	FitFormula ParentActivity;
+    	ParentActivity=(FitFormula) this.getParent();
+    	ParentActivity.switchTab(1);
     	
     }//end of getWorkoutPushed
 
