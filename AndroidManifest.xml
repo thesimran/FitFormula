@@ -40,7 +40,23 @@
          <activity
              android:name=".FitTest"
              android:label="@string/app_name" >
-         </activity>   
+         </activity>
+         <activity
+             android:name=".HcFitness"
+             android:label="@string/app_name" >
+         </activity>
+         <activity
+             android:name=".HcWeight"
+             android:label="@string/app_name" >
+         </activity>
+         <activity
+             android:name=".HcHeartRate"
+             android:label="@string/app_name" >
+         </activity>
+         <activity
+             android:name=".HcAchievements"
+             android:label="@string/app_name" >
+         </activity>       
     </application>
 
 </manifest>

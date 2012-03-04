@@ -9,6 +9,13 @@
         android:layout_height="fill_parent"
         android:padding="5dp">
        
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            />
+        <!-- I don't think we need this (But I'll keep it here just in case):  android:layout_marginBottom="-4dp"  -->
         <FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"
@@ -17,11 +24,6 @@
             android:layout_weight="1">
         </FrameLayout>
         
-         <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:layout_marginBottom="-4dp" />
+         
     </LinearLayout>
 </TabHost>
