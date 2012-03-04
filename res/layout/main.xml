@@ -4,6 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <LinearLayout
+        android:background="@drawable/background"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -22,6 +23,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:layout_marginBottom="-4dp" />
+            android:layout_marginBottom="-4dp"
+            
+             />
     </LinearLayout>
 </TabHost>

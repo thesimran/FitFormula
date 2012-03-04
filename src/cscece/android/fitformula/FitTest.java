@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.TextView;
 
 public class FitTest extends Activity {
 
-	ProgressBar bar;
+	private ProgressBar bar;
+	private TextView bpmText;
+	private int bpm; 
 	
 	/** Called when the activity is first created. */
     @Override
@@ -17,7 +21,8 @@ public class FitTest extends Activity {
         super.onCreate(icicle);
         setContentView(R.layout.fit_test_step1);
         bar = (ProgressBar)findViewById(R.id.resting_heart_progress);
-
+        bpmText = (TextView)findViewById(R.id.current_hr);
+        bpm = 0;
     }//end of onCreate
 	
     public void onResume(){
@@ -51,7 +56,10 @@ public class FitTest extends Activity {
         protected void onProgressUpdate(Integer... progress) {
           
         	bar.incrementProgressBy(progress[0]);
-        	
+        	bpm =(int)((Math.random() * 20) + 60);
+        	//Log.d("TEST", "bpm: " + bpm);
+        	String guydude = Integer.toString(bpm);
+        	bpmText.setText(guydude);
         }
         
         @Override

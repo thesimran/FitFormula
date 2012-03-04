@@ -14,8 +14,9 @@
             android:text="@string/workout_string"
             android:textSize="13dp"
             android:layout_width="fill_parent"
-            >
-        </TextView>
+            android:textStyle="bold"
+            />
+        
    </TableRow>
    <TableRow>     
         <Button 

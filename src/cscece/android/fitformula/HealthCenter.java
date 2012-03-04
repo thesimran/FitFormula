@@ -25,7 +25,7 @@ public class HealthCenter extends TabActivity {
 	    intent = new Intent().setClass(this, HcFitness.class);
 	    
 	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("hc_fitness").setIndicator("Fitness\n\n\n")
+	    spec = tabHost.newTabSpec("hc_fitness").setIndicator("Fitness")
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 	    

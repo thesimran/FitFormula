@@ -11,11 +11,12 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int capture=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int ic_tab_artists_grey=0x7f020002;
-        public static final int ic_tab_artists_white=0x7f020003;
-        public static final int ic_tab_myworkout=0x7f020004;
+        public static final int background=0x7f020000;
+        public static final int capture=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
+        public static final int ic_tab_artists_grey=0x7f020003;
+        public static final int ic_tab_artists_white=0x7f020004;
+        public static final int ic_tab_myworkout=0x7f020005;
     }
     public static final class id {
         public static final int age=0x7f05000b;
@@ -24,7 +25,7 @@ public final class R {
         public static final int blood_no=0x7f05001e;
         public static final int blood_radio=0x7f05001d;
         public static final int blood_yes=0x7f05001f;
-        public static final int currentHR=0x7f050004;
+        public static final int current_hr=0x7f050004;
         public static final int diabetes_label=0x7f050018;
         public static final int diabetes_no=0x7f05001a;
         public static final int diabetes_radio=0x7f050019;
@@ -67,6 +68,7 @@ public final class R {
         public static final int app_name=0x7f040001;
         public static final int blood_string=0x7f040010;
         public static final int bpm_string=0x7f040019;
+        public static final int bpm_val_string=0x7f04001a;
         public static final int diabetes_string=0x7f04000f;
         public static final int enter_age=0x7f040008;
         public static final int enter_height=0x7f04000a;
@@ -76,7 +78,6 @@ public final class R {
         public static final int gender_string=0x7f040005;
         public static final int get_workout=0x7f040003;
         public static final int height_string=0x7f040009;
-        public static final int hello=0x7f040000;
         public static final int hypertension_string=0x7f04000d;
         public static final int instructions_string=0x7f040012;
         public static final int male_str=0x7f040015;
@@ -86,6 +87,7 @@ public final class R {
         public static final int smoking_string=0x7f04000e;
         public static final int start_fit_test_string=0x7f040011;
         public static final int step1_instructions=0x7f040017;
+        public static final int title=0x7f040000;
         public static final int weight_string=0x7f04000b;
         public static final int workout_string=0x7f040002;
         public static final int yes=0x7f040013;

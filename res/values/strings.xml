@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World!</string>
-    <string name="app_name">FitFormula</string>
+    <string name="title">Fit Formula</string>
+    <string name="app_name">Guydude</string>
     <string name="workout_string">You currently do not have a Workout</string>
     <string name="get_workout">Get Workout</string>
     <string name="my_workout_title">My Workout</string>
@@ -27,7 +27,8 @@
 	<string name="step1_instructions">Lightly place your finger over the camera, but do not push too hard. Or
 	    the HR sensor will not function correctly.</string>
 	<string name="progress_title_string">Taking pulse, please wait&#8230;</string> 
-	<string name="bpm_string">BPM</string>    
+	<string name="bpm_string">BPM</string>
+	<string name="bpm_val_string"></string>     
 	
 
 	
