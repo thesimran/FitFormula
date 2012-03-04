@@ -24,6 +24,10 @@
 	<string name="no">No</string>
 	<string name="male_str">Male</string>
 	<string name="female_str">Female</string>
+	<string name="step1_instructions">Lightly place your finger over the camera, but do not push too hard. Or
+	    the HR sensor will not function correctly.</string>
+	<string name="progress_title_string">Taking pulse, please wait&#8230;</string> 
+	<string name="bpm_string">BPM</string>    
 	
 
 	

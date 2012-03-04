@@ -23,7 +23,7 @@ public class FitnessTest extends Activity {
     //Called when the "Start Fitness Test Now" button is pushed
     public void startTestPushed(View view){
     	
-    	
-    	
+    	Intent i = new Intent(this, FitTest.class);
+    	startActivity(i);
     }//end of startTestPushed
 }

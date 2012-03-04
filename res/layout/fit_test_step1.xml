@@ -7,11 +7,21 @@
     <TableRow>
         <TextView
             android:id="@+id/fit_test_step1_instructions"
-            
+     		android:text="@string/step1_instructions"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="15dip"/>
-        <!--  android:text="@string/step1_instructions" -->
+            android:textSize="15dip"
+            android:paddingBottom="40dip"/>
+         
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:id="@+id/progress_title"
+     		android:text="@string/progress_title_string"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="12dip"/>
+         
     </TableRow>
     <TableRow>
         <ProgressBar 
@@ -19,7 +29,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dip" />"
+            android:paddingBottom="20dip" />
     </TableRow>
     <TableRow>
         <ImageView 
@@ -27,7 +37,17 @@
             android:contentDescription="A temporary placeholder graphic for the actual future grahpic"
             android:src="@drawable/capture"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:paddingBottom="60dip"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:id="@+id/currentHR"
+            android:text="70"
+            android:layout_height="wrap_content"
+            android:textSize="70dip"
+           	android:layout_gravity="center"/>
+         "
     </TableRow>
 
 </TableLayout>
