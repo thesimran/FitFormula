@@ -13,10 +13,16 @@ public final class R {
     public static final class drawable {
         public static final int background=0x7f020000;
         public static final int capture=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int ic_tab_artists_grey=0x7f020003;
-        public static final int ic_tab_artists_white=0x7f020004;
-        public static final int ic_tab_myworkout=0x7f020005;
+        public static final int guy=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int ic_tab_artists_grey=0x7f020004;
+        public static final int ic_tab_artists_white=0x7f020005;
+        public static final int ic_tab_myworkout=0x7f020006;
+        public static final int tab_bg_selected=0x7f020007;
+        public static final int tab_bg_selector=0x7f020008;
+        public static final int tab_bg_unselected=0x7f020009;
+        public static final int tab_divider=0x7f02000a;
+        public static final int tab_text_selector=0x7f02000b;
     }
     public static final class id {
         public static final int age=0x7f05000b;
@@ -50,6 +56,8 @@ public final class R {
         public static final int smoking_label=0x7f050014;
         public static final int smoking_radio=0x7f050015;
         public static final int start_fit_test=0x7f050020;
+        public static final int tabsLayout=0x7f050024;
+        public static final int tabs_text=0x7f050025;
         public static final int temp_pulse_picture=0x7f050003;
         public static final int weight=0x7f05000f;
         public static final int weight_label=0x7f05000e;
@@ -62,6 +70,7 @@ public final class R {
         public static final int health_center_layout=0x7f030002;
         public static final int main=0x7f030003;
         public static final int my_workout_layout=0x7f030004;
+        public static final int tabs_bg=0x7f030005;
     }
     public static final class string {
         public static final int age_string=0x7f040007;

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="title">Fit Formula</string>
-    <string name="app_name">Guydude</string>
+    <string name="app_name">Fit Formula</string>
     <string name="workout_string">You currently do not have a Workout</string>
     <string name="get_workout">Get Workout</string>
     <string name="my_workout_title">My Workout</string>

@@ -1,6 +1,8 @@
 package cscece.android.fitformula;
 
 import android.app.Activity;
+import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -13,7 +15,10 @@ public class FitTest extends Activity {
 
 	private ProgressBar bar;
 	private TextView bpmText;
-	private int bpm; 
+	private int bpm;
+	private Camera cam;
+	private Parameters p;
+	
 	
 	/** Called when the activity is first created. */
     @Override
@@ -27,11 +32,35 @@ public class FitTest extends Activity {
 	
     public void onResume(){
     	bar.setProgress(0);
+    	
+    	/* TODO: Camera/flash code -- currently does not work
+    	cam = Camera.open();
+    	cam.startPreview();
+    	p = cam.getParameters();
+    	p.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY);
+    	p.setFlashMode(Parameters.FLASH_MODE_TORCH);
+    	cam.setParameters(p);
+    	*/
+    
     	new heartProgressTask().execute();
     	super.onResume();
     	
     }//end of onResume
     
+    public void onPause(){
+    	//cam.release();
+    	super.onPause();
+    }//end of onPause
+    
+    public void onStop(){
+    	//cam.release();
+    	super.onStop();
+    }// end of onStop
+    
+    public void onDestroy(){
+    	//cam.release();
+    	super.onDestroy();
+    }
     class heartProgressTask extends AsyncTask<Void, Integer, Void> {
     	
     	

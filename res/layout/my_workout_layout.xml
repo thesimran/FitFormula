@@ -26,6 +26,15 @@
             android:text="@string/get_workout"
             android:onClick="getWorkoutPushed"/>
     </TableRow>
-
+    <!-- 
+   	<TableRow>
+    	<ImageView
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:src="@drawable/guy"
+    	    android:id="@+id/running_man" />
+    	  
+   	</TableRow>
+	-->
     
 </TableLayout>
