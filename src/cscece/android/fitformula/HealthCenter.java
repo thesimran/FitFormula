@@ -4,6 +4,7 @@ import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,17 +26,25 @@ public class HealthCenter extends TabActivity {
 	    tabHost = (TabHost) findViewById(android.R.id.tabhost);  // The activity TabHost
 	    //TabHost.TabSpec spec;  // Resusable TabSpec for each tab
 	    Intent intent;  // Reusable Intent for each tab
+	    
 	    tabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
-	    setupTab(new TextView(this), "Fitness");
-	    setupTab(new TextView(this), "Weight");
-	    setupTab(new TextView(this), "Heart Rate");
-	    setupTab(new TextView(this), "Achievements");
-
-	    // Create an Intent to launch an Activity for the tab (to be reused)
 	    intent = new Intent().setClass(this, HcFitness.class);
+	    setupTab(new TextView(this), "Fitness",intent);
 	    intent = new Intent().setClass(this, HcWeight.class);
+	    setupTab(new TextView(this), "Weight", intent);
 	    intent = new Intent().setClass(this, HcHeartRate.class);
-	    intent = new Intent().setClass(this, HcAchievements.class);
+	    setupTab(new TextView(this), "Heart Rate", intent);
+	    /*We're gonna leave the "Achievements" tab out for now.
+	     * Just because it one of the least important functional requirements
+	     * of our app.  We will get to it later. Go Spiral Method!
+	    setupTab(new TextView(this), "Achivements");
+	     */
+	    
+	    // Create an Intent to launch an Activity for the tab (to be reused)
+	    
+	    
+	    
+	    //intent = new Intent().setClass(this, HcAchievements.class);
 	  
 	    /*  Old Stuff...may need it, we'll see...
 	    // Initialize a TabSpec for each tab and add it to the TabHost
@@ -63,12 +72,13 @@ public class HealthCenter extends TabActivity {
    */
     }//end of onCreate
     
-    private void setupTab(final View view, final String tag) {
+    private void setupTab(final View view, final String tag, Intent i) {
 		View tabview = createTabView(tabHost.getContext(), tag);
 
-		TabSpec setContent = tabHost.newTabSpec(tag).setIndicator(tabview).setContent(new TabContentFactory() {
+		TabSpec setContent = tabHost.newTabSpec(tag).setIndicator(tabview).setContent(i);
+				/*) {
 			public View createTabContent(String tag) {return view;}
-		});
+		});*/
 		tabHost.addTab(setContent);
 
 	}

@@ -17,6 +17,8 @@ public class FitnessTest extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.fitness_test_layout);
+        //set title
+        //FitFormula.title.setText("Fitness Test"); -- still a work in progress
 
     }//end of onCreate
 

@@ -15,6 +15,7 @@
             android:textSize="13dp"
             android:layout_width="fill_parent"
             android:textStyle="bold"
+            android:layout_gravity="center"
             />
         
    </TableRow>
@@ -26,15 +27,15 @@
             android:text="@string/get_workout"
             android:onClick="getWorkoutPushed"/>
     </TableRow>
-    <!-- 
+    
    	<TableRow>
     	<ImageView
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
-    	    android:src="@drawable/guy"
+    	    android:src="@drawable/logo_transparent"
     	    android:id="@+id/running_man" />
     	  
    	</TableRow>
-	-->
+	
     
 </TableLayout>

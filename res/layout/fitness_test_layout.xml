@@ -19,7 +19,9 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dip"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center"
+                 />
         </TableRow>
         
         <TableRow>

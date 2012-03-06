@@ -4,14 +4,17 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.TabHost;
 
 public class FitFormula extends TabActivity {
 	private TabHost tabHost;
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    
+	    requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 	    setContentView(R.layout.main);
-
+	    getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
 	    Resources res = getResources(); // Resource object to get Drawables
 	    tabHost = getTabHost();  // The activity TabHost
 	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab

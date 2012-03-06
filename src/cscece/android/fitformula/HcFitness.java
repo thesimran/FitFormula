@@ -11,9 +11,9 @@ public class HcFitness extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         
-        TextView textview = new TextView(this);
-        textview.setText("This is the HcFitness tab");
-        setContentView(textview);
+        //TextView textview = new TextView(this);
+        //textview.setText("This is the HcFitness tab");
+        setContentView(R.layout.hc_fitness_layout);
    
     }//end of onCreate
 }

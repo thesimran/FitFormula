@@ -29,7 +29,18 @@
 	<string name="progress_title_string">Taking pulse, please wait&#8230;</string> 
 	<string name="bpm_string">BPM</string>
 	<string name="bpm_val_string"></string>     
-	
+	<string name="do_test_str">You have not yet done a Fitness Test, therefore your Health Center 
+	    contains no data.  Please do the Fitness Test and then select a workout to begin your journey towards ultimate fitness prowess.</string> 
+	<string name="gen_settings_string">General Settings:</string>   
+	<string name="kg_str">KG</string>
+	<string name="lbs_str">Lbs.</string>
+	<string name="units_w_str">Units - Weight</string>
+	<string name="units_h_string">Units - Height</string>
+	<string name="meters_str">M</string>
+	<string name="ft_str">Ft.</string>
+	<string name="audio_cues_string">Audio Cues</string>
+	<string name="on_str">On</string>
+	<string name="off_str">Off</string>
+	<string name="notif_string">Notifications</string>
 
-	
 </resources>

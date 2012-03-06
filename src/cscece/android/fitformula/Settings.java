@@ -11,9 +11,8 @@ public class Settings extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         
-        TextView textview = new TextView(this);
-        textview.setText("This is the Settings tab");
-        setContentView(textview);
+       
+        setContentView(R.layout.setting_layout);
    
     }//end of onCreate
 
