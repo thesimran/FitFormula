@@ -1,24 +1,38 @@
 package cscece.android.fitformula;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 public class FitTest extends Activity {
 
 	private ProgressBar bar;
 	private TextView bpmText;
 	private int bpm;
+	private  int finalBpm;
 	private Camera cam;
 	private Parameters p;
-	
+	private AlertDialog.Builder builder;
+	private AlertDialog alertDialog;
+	private View dialogLayout;
+	private VideoView video;
+	private MediaController ctlr;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -28,6 +42,13 @@ public class FitTest extends Activity {
         bar = (ProgressBar)findViewById(R.id.resting_heart_progress);
         bpmText = (TextView)findViewById(R.id.current_hr);
         bpm = 0;
+        
+        //Alert Dialog stuff
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        dialogLayout = inflater.inflate(R.layout.custom_hr_dialog,
+                                       (ViewGroup) findViewById(R.id.layout_root));
+        builder = new AlertDialog.Builder(this);
+        
     }//end of onCreate
 	
     public void onResume(){
@@ -41,8 +62,29 @@ public class FitTest extends Activity {
     	p.setFlashMode(Parameters.FLASH_MODE_TORCH);
     	cam.setParameters(p);
     	*/
-    
-    	new heartProgressTask().execute();
+    	
+    	builder.setView(dialogLayout)
+        .setCancelable(true)
+        .setPositiveButton("Begin!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            	/*Toast
+                .makeText(FitTest.this, "Begin!", Toast.LENGTH_LONG)
+                .show();*/
+            	new heartProgressTask().execute();
+            }
+        })
+        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            	/*Toast
+                .makeText(FitTest.this, "Cancel!", Toast.LENGTH_LONG)
+                .show();*/
+            	cancelSelected();
+            }
+        });
+        alertDialog = builder.create();
+    	alertDialog.show();
+    	
+    	
     	super.onResume();
     	
     }//end of onResume
@@ -61,6 +103,29 @@ public class FitTest extends Activity {
     	//cam.release();
     	super.onDestroy();
     }
+    
+    /*
+     * This method is called when the user presses the 'Cancel' button
+     * in the AlertDialog.  All this method does is finish the Activty, which brings the user back
+     * to the FitnessTest form.
+     */
+    private void cancelSelected(){
+    	this.finish();
+    }
+    
+    private void showVideo(){
+    	
+    	//View curView = (View)findViewById(fit)
+    	//not sure what this does..we'll find out soon I guess haha
+    	getWindow().setFormat(PixelFormat.TRANSLUCENT); 
+    	
+    	
+    	Uri videoPath = Uri.parse("android.resource://cscece.android.fitformula/raw/step_test");
+    	
+    	video=(VideoView)findViewById(R.id.video); video.setVideoPath(clip.getAbsolutePath());
+    	
+    }
+    
     class heartProgressTask extends AsyncTask<Void, Integer, Void> {
     	
     	
@@ -93,9 +158,22 @@ public class FitTest extends Activity {
         
         @Override
         protected void onPostExecute(Void unused) {
+        	
+        	finalBpm = bpm;
+        	
           Toast
-            .makeText(FitTest.this, "Done!", Toast.LENGTH_LONG)
+            .makeText(FitTest.this, "Done! BPM: " + bpm , Toast.LENGTH_LONG)
             .show();
+          
+          /*
+           * At this point, we should take this final finalBpm value and use it later.
+           * Now, we should show the step test video to the user before they actually do
+           * the test.
+           */
+          
+          //Now let's call the displayVideo() method to show the step-test instructional video to the user
+          showVideo();
+          
         }
     	
     }
