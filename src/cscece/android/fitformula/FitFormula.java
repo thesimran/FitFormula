@@ -32,19 +32,19 @@ public class FitFormula extends TabActivity {
 	    // Do the same for the other tabs
 	    intent = new Intent().setClass(this, FitnessTest.class);
 	    spec = tabHost.newTabSpec("fitness_test").setIndicator("Fitness Test",
-	                      res.getDrawable(R.drawable.ic_tab_myworkout))
+	                      res.getDrawable(R.drawable.ic_tab_ftest))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 
 	    intent = new Intent().setClass(this, HealthCenter.class);
 	    spec = tabHost.newTabSpec("health_center").setIndicator("Health Center",
-	                      res.getDrawable(R.drawable.ic_tab_myworkout))
+	                      res.getDrawable(R.drawable.ic_tab_hc))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 	    
 	    intent = new Intent().setClass(this, Settings.class);
 	    spec = tabHost.newTabSpec("settings").setIndicator("Settings",
-	                      res.getDrawable(R.drawable.ic_tab_myworkout))
+	                      res.getDrawable(R.drawable.ic_tab_settings))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 

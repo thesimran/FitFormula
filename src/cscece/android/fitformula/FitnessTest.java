@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FitnessTest extends Activity {
 	
@@ -137,13 +138,40 @@ public class FitnessTest extends Activity {
     		bloodPressure = NO;
     	}
     	
-    	//Now lets get the numerical values from the EditTexts
+    	/*Commented out for now, for debuging purposes:
+    	//Now lets get and check the numerical values from the EditTexts
+    	//Age:
     	age = Integer.parseInt(ageText.getText().toString());
     	if(age < MIN_AGE || age > MAX_AGE){
     		
     		age = 0;
-    		//TODO: Error! Prompt user!	
+    		Toast
+            .makeText(this, "You must enter an age between 15 and 96 in order to continue.  Please try again.", Toast.LENGTH_LONG)
+            .show();
+    		return;
     	}
+    	
+    	//Height:
+    	height = Integer.parseInt(heightText.getText().toString());
+    	if(height == 0){
+    		
+    		
+    		Toast
+            .makeText(this, "You must enter a valid height. Please try again.", Toast.LENGTH_LONG)
+            .show();
+    		return;
+    	}
+    	
+    	//Weight:
+    	weight = Integer.parseInt(weightText.getText().toString());
+    	if(weight == 0){
+    		
+    		
+    		Toast
+            .makeText(this, "You must enter a valid weight. Please try again.", Toast.LENGTH_LONG)
+            .show();
+    		return;
+    	}*/
     	
     	Intent i = new Intent(this, FitTest.class);
     	startActivity(i);

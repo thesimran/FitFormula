@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -108,6 +109,7 @@ public class FitTest extends Activity {
     	super.onDestroy();
     }
     
+    /*
     @Override
     public void onBackPressed(){
     	
@@ -120,7 +122,7 @@ public class FitTest extends Activity {
     		super.onBackPressed();
     	}
     	
-    }
+    }*/
     
     /*
      * This method is called when the user presses the 'Cancel' button
@@ -132,6 +134,9 @@ public class FitTest extends Activity {
     }
     
     private void showVideo(){
+    	
+    	
+
     	
     	//View curView = (View)findViewById(fit)
     	//not sure what this does..we'll find out soon I guess... 
@@ -161,6 +166,7 @@ public class FitTest extends Activity {
     	
     	video.requestFocus(); 
     	video.start();
+    	
     	Toast
         .makeText(FitTest.this, "Press the 'Back' button to skip the video." , Toast.LENGTH_LONG)
         .show();
