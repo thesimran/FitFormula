@@ -11,6 +11,7 @@ public class FitTestStep2 extends Activity {
 
 	private VideoView mVideoView;
 	private Uri videoPath;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,22 @@ public class FitTestStep2 extends Activity {
         mVideoView.setMediaController(mediaController);
 		mVideoView.requestFocus();
 		mVideoView.start();
+		
+		
 
+	}
+	
+	@Override
+	public void onBackPressed(){
+		
+		if(mVideoView.isPlaying() == true){
+			
+			mVideoView.stopPlayback();
+			
+		}
+		super.onBackPressed();
+
+		
 	}
 
 }
