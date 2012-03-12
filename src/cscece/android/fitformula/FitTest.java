@@ -3,6 +3,7 @@ package cscece.android.fitformula;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -33,6 +34,7 @@ public class FitTest extends Activity {
 	private View dialogLayout;
 	private VideoView video;
 	private MediaController ctlr;
+	private Uri videoPath;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -119,10 +121,20 @@ public class FitTest extends Activity {
     	//not sure what this does..we'll find out soon I guess haha
     	getWindow().setFormat(PixelFormat.TRANSLUCENT); 
     	
+    
     	
-    	Uri videoPath = Uri.parse("android.resource://cscece.android.fitformula/raw/step_test");
+    	videoPath = Uri.parse("android.resource://cscece/android/fitformula/" + R.raw.step_test);
+    	//String thePath = videoPath.getPath();
+    	Log.d("TEST",videoPath.toString());
     	
-    	video=(VideoView)findViewById(R.id.video); video.setVideoPath(clip.getAbsolutePath());
+    	video=(VideoView)findViewById(R.id.hr_video); 
+    	video.setVideoURI(videoPath);
+    	//video.setVideoPath(thePath);
+    	ctlr=new MediaController(this); 
+    	ctlr.setMediaPlayer(video);
+    	video.setMediaController(ctlr); 
+    	video.requestFocus(); 
+    	video.start();
     	
     }
     
@@ -138,7 +150,7 @@ public class FitTest extends Activity {
         	   * run for 15 seconds max for this part of the Fitness Test.
         	   * For the active HR in step 3 (I think), we will want 10 seconds max! 
         	   */
-        	  SystemClock.sleep(1000); 
+        	  SystemClock.sleep(1); 
         	  publishProgress(second);
           }
           
