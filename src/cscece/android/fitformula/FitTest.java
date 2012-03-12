@@ -3,6 +3,7 @@ package cscece.android.fitformula;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -123,19 +125,31 @@ public class FitTest extends Activity {
     	
     
     	
-    	videoPath = Uri.parse("android.resource://cscece/android/fitformula/" + R.raw.step_test);
+    	//videoPath = Uri.parse("android.resource://cscece/android/fitformula/" + R.raw.step_test);
+        //videoPath= Uri.parse("http://www.ooklnet.com/files/368/368007/video.mp4");
+
     	//String thePath = videoPath.getPath();
     	Log.d("TEST",videoPath.toString());
-    	
-    	video=(VideoView)findViewById(R.id.hr_video); 
-    	video.setVideoURI(videoPath);
-    	//video.setVideoPath(thePath);
+   
+
+    	//video=(VideoView)findViewById(R.id.hr_video);
+    	video=new VideoView(this);
     	ctlr=new MediaController(this); 
-    	ctlr.setMediaPlayer(video);
-    	video.setMediaController(ctlr); 
+    	//ctlr.setMediaPlayer(video);
+    	video.setMediaController(ctlr);
+    	video.setVideoURI(videoPath);    	    	     	
+    	//video.setVideoPath(thePath);
+
+     	LinearLayout container = (LinearLayout)findViewById(R.id.hr_video_view1);
+        container.addView(video);
+        
     	video.requestFocus(); 
     	video.start();
     	
+    }
+    public void startVideoActivity (){
+    	 Intent i = new Intent(this, FitTestStep2.class);
+   		startActivity(i);
     }
     
     class heartProgressTask extends AsyncTask<Void, Integer, Void> {
@@ -184,7 +198,8 @@ public class FitTest extends Activity {
            */
           
           //Now let's call the displayVideo() method to show the step-test instructional video to the user
-          showVideo();
+          //showVideo();     
+          startVideoActivity();
           
         }
     	

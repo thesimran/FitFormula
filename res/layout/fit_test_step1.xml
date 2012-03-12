@@ -1,57 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- Note: I'm probably going to change this to a RelativeLayout to make it look nicer...  -->
+<!-- Note: I'm probably going to change this to a RelativeLayout to make it look nicer... -->
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@drawable/background" >
-    
+    android:background="@drawable/background"
+    android:orientation="horizontal" >
+
     <TableRow>
+
         <TextView
             android:id="@+id/fit_test_step1_instructions"
-     		android:text="@string/step1_instructions"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="15dip"
-            android:paddingBottom="40dip"/>
-         
+            android:layout_height="wrap_content"
+            android:paddingBottom="40dip"
+            android:text="@string/step1_instructions"
+            android:textSize="15dip" />
     </TableRow>
+
     <TableRow>
+
         <TextView
             android:id="@+id/progress_title"
-     		android:text="@string/progress_title_string"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="12dip"/>
-         
+            android:layout_height="wrap_content"
+            android:text="@string/progress_title_string"
+            android:textSize="12dip" />
     </TableRow>
+
     <TableRow>
-        <ProgressBar 
+
+        <ProgressBar
             android:id="@+id/resting_heart_progress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="20dip" />
     </TableRow>
+
     <TableRow>
-        <ImageView 
+
+        <ImageView
             android:id="@+id/temp_pulse_picture"
-            android:contentDescription="A temporary placeholder graphic for the actual future grahpic"
-            android:src="@drawable/capture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="60dip"/>
+            android:contentDescription="A temporary placeholder graphic for the actual future grahpic"
+            android:paddingBottom="60dip"
+            android:src="@drawable/capture" />
     </TableRow>
+
     <TableRow>
+
         <TextView
             android:id="@+id/current_hr"
-            android:text="@string/bpm_val_string"
             android:layout_height="wrap_content"
-            android:textSize="70dip"
-           	android:layout_gravity="center"/>
-         "
+            android:layout_gravity="center"
+            android:text="@string/bpm_val_string"
+            android:textSize="70dip" />
+         "
+    </TableRow>
+
+    <TableRow>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" 
+            android:id="@+id/hr_video_view1">
+
+            <!-- <VideoView
+                android:id="@+id/hr_video"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" /> -->
+        </LinearLayout>
     </TableRow>
 
 </TableLayout>
