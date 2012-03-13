@@ -46,5 +46,7 @@
 	    lens, but do not push too hard, or it will not function properly.  Press BEGIN when you are ready!</string>
 	<string name="begin">Begin</string>
 	<string name="cancel">Cancel</string>
+	<string name="st_inst_string">Fit Formula will now guide you through a Step Test in order to gauge your fitness level.  
+	    Press \'Continue\' to start the instructional video\, or press \'Cancel\' to return to the beginning of the Fitness Test</string>
 
 </resources>

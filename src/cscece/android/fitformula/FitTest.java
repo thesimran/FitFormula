@@ -30,14 +30,17 @@ public class FitTest extends Activity {
 	private TextView bpmText;
 	private int bpm;
 	private  int finalBpm;
-	private Camera cam;
+	//private Camera cam;
 	private Parameters p;
 	private AlertDialog.Builder builder;
+	private AlertDialog.Builder stepBuilder;
 	private AlertDialog alertDialog;
 	private View dialogLayout;
-	private VideoView video;
-	private MediaController ctlr;
-	private Uri videoPath;
+	private View stepDialogLayout;
+	//private VideoView video;
+	//private MediaController ctlr;
+	//private Uri videoPath;
+
 	
 	/** Called when the activity is first created. */
     @Override
@@ -109,6 +112,8 @@ public class FitTest extends Activity {
     	super.onDestroy();
     }
     
+  
+    
     /*
     @Override
     public void onBackPressed(){
@@ -132,7 +137,7 @@ public class FitTest extends Activity {
     private void cancelSelected(){
     	this.finish();
     }
-    
+    /*
     private void showVideo(){
     	
     	
@@ -171,12 +176,12 @@ public class FitTest extends Activity {
         .makeText(FitTest.this, "Press the 'Back' button to skip the video." , Toast.LENGTH_LONG)
         .show();
     	
-    }
-    /*
-    public void startVideoActivity (){
-    	 Intent i = new Intent(this, FitTestStep2.class);
-   		startActivity(i);
     }*/
+    
+    public void startVideoActivity (){
+    	 Intent i = new Intent(this, StepVideo.class);
+   		startActivity(i);
+    }
     
     class heartProgressTask extends AsyncTask<Void, Integer, Void> {
     	
@@ -190,7 +195,7 @@ public class FitTest extends Activity {
         	   * run for 15 seconds max for this part of the Fitness Test.
         	   * For the active HR in step 3 (I think), we will want 10 seconds max! 
         	   */
-        	  SystemClock.sleep(1); 
+        	  SystemClock.sleep(500); 
         	  publishProgress(second);
           }
           
@@ -214,7 +219,7 @@ public class FitTest extends Activity {
         	finalBpm = bpm;
         	
           Toast
-            .makeText(FitTest.this, "Done! BPM: " + bpm , Toast.LENGTH_LONG)
+            .makeText(FitTest.this, "Done! BPM: " + finalBpm , Toast.LENGTH_LONG)
             .show();
           
           /*
@@ -223,8 +228,32 @@ public class FitTest extends Activity {
            * the test.
            */
           
+          //Alert Dialog stuff
+          LayoutInflater inflater = (LayoutInflater) FitTest.this.getSystemService(LAYOUT_INFLATER_SERVICE);
+          stepDialogLayout = inflater.inflate(R.layout.custom_step,
+                                         (ViewGroup) findViewById(R.id.layout_root));
+          stepBuilder = new AlertDialog.Builder(FitTest.this);
+          stepBuilder.setView(stepDialogLayout)
+          .setCancelable(false)
+          .setCancelable(true)
+          .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+              	/*Go to video*/
+            	 startVideoActivity(); 
+              	
+              }
+          })
+          .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+              	/*Peace*/
+              	cancelSelected();
+              }
+          });
+          alertDialog = stepBuilder.create();
+      	  alertDialog.show();
+          
           //Now let's call the displayVideo() method to show the step-test instructional video to the user
-          showVideo();     
+          //showVideo();     
           //startVideoActivity();
           
         }

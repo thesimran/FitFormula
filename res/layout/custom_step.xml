@@ -6,14 +6,8 @@
               android:layout_height="fill_parent"
               android:padding="10dp"
               >
-    <ImageView android:id="@+id/hr_image"
-               android:layout_width="wrap_content"
-               android:layout_height="fill_parent"
-               android:layout_marginRight="10dp"
-               android:src="@drawable/hr_pic"
-               />
-    <TextView android:id="@+id/text"
-        	  android:text="@string/finger_inst"
+    <TextView android:id="@+id/step_test_inst"
+        	  android:text="@string/st_inst_string"
               android:layout_width="wrap_content"
               android:layout_height="fill_parent"
               android:textColor="#FFF"
