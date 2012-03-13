@@ -173,6 +173,8 @@ public class FitnessTest extends Activity {
     		return;
     	}*/
     	
+    	
+    	//TODO: Save biometrics into DB here! 
     	Intent i = new Intent(this, FitTest.class);
     	startActivity(i);
     }//end of startTestPushed

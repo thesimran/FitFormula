@@ -89,10 +89,11 @@ public final class R {
         public static final int smoking_label=0x7f08001a;
         public static final int smoking_radio=0x7f08001b;
         public static final int start_fit_test=0x7f080026;
+        public static final int step2_inst=0x7f08000a;
         public static final int step_test_inst=0x7f080003;
-        public static final int surface_view1=0x7f08000a;
-        public static final int tabsLayout=0x7f08003f;
-        public static final int tabs_text=0x7f080040;
+        public static final int surface_view1=0x7f08003f;
+        public static final int tabsLayout=0x7f080040;
+        public static final int tabs_text=0x7f080041;
         public static final int temp_pulse_picture=0x7f080007;
         public static final int text=0x7f080002;
         public static final int unit_ft=0x7f080036;
@@ -166,6 +167,7 @@ public final class R {
         public static final int st_inst_string=0x7f06002a;
         public static final int start_fit_test_string=0x7f060011;
         public static final int step1_instructions=0x7f060017;
+        public static final int step2_inst_str=0x7f06002b;
         public static final int title=0x7f060000;
         public static final int units_h_string=0x7f060020;
         public static final int units_w_str=0x7f06001f;

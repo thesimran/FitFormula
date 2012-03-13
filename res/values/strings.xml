@@ -48,5 +48,8 @@
 	<string name="cancel">Cancel</string>
 	<string name="st_inst_string">Fit Formula will now guide you through a Step Test in order to gauge your fitness level.  
 	    Press \'Continue\' to start the instructional video\, or press \'Cancel\' to return to the beginning of the Fitness Test</string>
-
+	<string name="step2_inst_str">Now that you know how to do the Step Test, we need to make sure you know the pace at which to do it.  
+	    The pace that you are currently listening to is your \'Warm-up Pace\' and is based upon your gender and age.  The first part of the Step Test will be the
+	    \'Warm-Up\' phase, and it will last 3 minutes.  At the end of the Warm-Up, you will be prompted to take your heart rate again.  
+	    When you are ready to begin the test, press \'Begin\'.</string>
 </resources>

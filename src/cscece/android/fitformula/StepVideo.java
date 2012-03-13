@@ -1,12 +1,14 @@
 package cscece.android.fitformula;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 import android.widget.VideoView;
 import android.widget.MediaController;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 
 
@@ -32,11 +34,41 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
         mVideoView.setMediaController(mediaController);
 		mVideoView.requestFocus();
 		mVideoView.setOnCompletionListener(this);
+		
+		//Turn Audio off
+		AudioManager audio = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+		audio.setStreamMute(AudioManager.STREAM_MUSIC,true);
+		
+		//Start Video!
 		mVideoView.start();
+		
+		Toast
+        .makeText(this, "Please observe the proper stepping motion." , Toast.LENGTH_LONG)
+        .show();
+		
 		Toast
         .makeText(this, "Press the 'Back' button to skip the video." , Toast.LENGTH_LONG)
         .show();
 
+	}
+	
+	@Override
+	public void onPause(){
+		
+		mVideoView.pause();
+		super.onPause();
+	}
+	
+	@Override
+	public void onStop(){
+		mVideoView.stopPlayback();
+		super.onStop();
+	}
+	
+	@Override
+	public void onDestroy(){
+		mVideoView.stopPlayback();
+		super.onDestroy();
 	}
 	
 	public void startStep2Activity(){
@@ -49,30 +81,19 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 
 	//Figure this out!!!!!
 	public void onCompletion(MediaPlayer arg0) {
+		mVideoView.stopPlayback();
 		startStep2Activity();
+		
 		
 	}
 	
 	
-	
-	/*
 	@Override
 	public void onBackPressed(){
 		
 		//go to next step
 		startStep2Activity();
-		
-		/*
-		if(mVideoView.isPlaying() == true){
-			
-			mVideoView.stopPlayback();
-			//Go to next step...
-			
-			
-		}
-		super.onBackPressed();
 
-		
-	}*/
-
+	}//end of onBackPressed
+	
 }
