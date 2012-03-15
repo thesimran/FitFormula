@@ -15,12 +15,12 @@ import android.widget.Toast;
 public class FitnessTest extends Activity {
 	
 	//Constants
-	public final int MALE = 1;
-	public final int FEMALE = 2;
-	public final int YES = 3;
-	public final int NO = 4;
-	public final int MIN_AGE = 15;
-	public final int MAX_AGE = 69;
+	public static final int MALE = 1;
+	public static final int FEMALE = 2;
+	public static final int YES = 3;
+	public static final int NO = 4;
+	public static final int MIN_AGE = 15;
+	public static final int MAX_AGE = 69;
 	
 	//Private
 	private RadioGroup genderRadio;

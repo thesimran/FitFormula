@@ -16,6 +16,7 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 
 	private VideoView mVideoView;
 	private Uri videoPath;
+	private AudioManager audio;
 	
 
 	@Override
@@ -36,7 +37,7 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 		mVideoView.setOnCompletionListener(this);
 		
 		//Turn Audio off
-		AudioManager audio = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+		audio = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		audio.setStreamMute(AudioManager.STREAM_MUSIC,true);
 		
 		//Start Video!
@@ -56,18 +57,21 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 	public void onPause(){
 		
 		mVideoView.pause();
+		audio.setStreamMute(AudioManager.STREAM_MUSIC,false);
 		super.onPause();
 	}
 	
 	@Override
 	public void onStop(){
 		mVideoView.stopPlayback();
+		audio.setStreamMute(AudioManager.STREAM_MUSIC,false);
 		super.onStop();
 	}
 	
 	@Override
 	public void onDestroy(){
 		mVideoView.stopPlayback();
+		audio.setStreamMute(AudioManager.STREAM_MUSIC,false);
 		super.onDestroy();
 	}
 	
@@ -75,6 +79,7 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 		
 		Intent i = new Intent(this, FitTestStep2.class);
    		startActivity(i);
+   		audio.setStreamMute(AudioManager.STREAM_MUSIC,false);
    		finish();
 		
 	}
