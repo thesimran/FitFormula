@@ -1,13 +1,21 @@
 package cscece.android.fitformula;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 import android.widget.MediaController;
 
@@ -28,16 +36,14 @@ public class FitTestStep2 extends Activity {
 	
 	//Constant Pace Data
 	public final String[] AGE_GROUPS = {"15-19","20-29","30-39","40-49","50-59","60-69"}; //more for a reference than anything
-	public final int[] BEATS_MEN = {144,144,132,114,102,84,156};
-	public final int[] BEATS_WOMEN ={66,120,114,114,102,84,84,132};
+	public final int[] BEATS_MEN = {144,144,132,114,102,84};
+	public final int[] BEATS_WOMEN ={120,114,114,102,84,84};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fit_test_step2);
-	
-		//AudioTrack will be used to play the metronome sound
-		//mertoAudio = new AudioTrack(AudioManager.STREAM_MUSIC, int sampleRateInHz, int channelConfig, int audioFormat, int bufferSizeInBytes, int mode);
+
 		
 		//We will use the SoundManager to play the metronome tone
 		//The SoundManager class uses the SoundPool class to play a selected tone
@@ -48,7 +54,7 @@ public class FitTestStep2 extends Activity {
 		//mSoundManager.playSound(1);
 		
 		//set values for gender and age now
-		//these values will actually be extracted from the DB here!
+		//TODO: These values will actually be extracted from the DB here
 		gender = FitnessTest.MALE;
 		age = 24;
 		pace = calcPace(age,gender);
@@ -56,13 +62,43 @@ public class FitTestStep2 extends Activity {
 		interval = calcInterval(pace);
 		warmupInterval = calcInterval(warmupPace);
 		
-		//Play!
-		playSound(warmupInterval);
 		
 	}//end of onCreate
 	
-
-	//TODO: Use AsyncTask to time the tone here!
+	//Listener for the 'Cancel Test' button
+	public void cancelTest(View view){
+		
+		finishAndStartOver();
+		
+	}
+	
+	public void finishAndStartOver(){
+		
+		//This will bring us back to the initial FitnessTest Activity
+    	finish();
+		
+	}
+	
+	//Listener for the 'Begin Warmup' button
+	public void startWarmup(View view){
+		
+		Button startButton = (Button)findViewById(R.id.begin_warmup_button);
+		startButton.setVisibility(Button.GONE);
+		
+		//TODO: Should add some sort of graphic or something....
+		TextView instructionText = (TextView)findViewById(R.id.step2_inst);
+		instructionText.setText("Step to the beat!");
+		instructionText.setTextSize(50);
+		
+		
+		double dWarmupPace = (double) warmupPace;
+		Double[] paceInterval = {dWarmupPace,warmupInterval}; 
+		//Play
+		new ToneTask().execute(paceInterval);
+		
+		
+	}
+	
 	
 	public int calcPace(int a, int gen){
 		
@@ -77,14 +113,12 @@ public class FitTestStep2 extends Activity {
 			beatIndex = 1;
 		}else if(theAge >= 30 && theAge <= 39){
 			beatIndex = 2;
-		}else if(theAge >= 30 && theAge <= 39){
-			beatIndex = 3;
 		}else if(theAge >= 40 && theAge <= 49){
-			beatIndex = 4;
+			beatIndex = 3;
 		}else if(theAge >= 50 && theAge <= 59){
-			beatIndex = 5;
+			beatIndex = 4;
 		}else{//over 59
-			beatIndex = 6;
+			beatIndex = 5;
 		}
 		
 		//now look-up in the array
@@ -119,9 +153,51 @@ public class FitTestStep2 extends Activity {
 	 */
 	@Override
 	public void onBackPressed(){
-		//Do nothing
-		return;
+		finishAndStartOver();
 		
 	}
+	
+     //This task is in charge of playing the tone at a given interval
+	 class ToneTask extends AsyncTask<Double, Boolean, Void> {
+	    	
+	    	
+			@Override
+	        protected Void doInBackground(Double... pI) {
+				double pace = pI[0];
+				double interval = pI[1];
+				double milliInterval = interval * 1000;
+				int intervalInt = (int) milliInterval;
+				int length = (int)pace * 3;//3 minutes
+				Boolean each = true;
+				
+	          for(int i=0; i < length; i++){
+	        	  
+	        	  SystemClock.sleep(intervalInt); //milliseconds
+	        	  publishProgress(each);
+	          }
+	          
+	          return(null);
+	        }
+	        
+	        @SuppressWarnings("unchecked")
+	        @Override
+	        protected void onProgressUpdate(Boolean... progress) {
+	          
+	        	//Actually play the sound here (in UI thread)
+	        	mSoundManager.playSound(1);
+	        	
+	        }
+	        
+	        @Override
+	        protected void onPostExecute(Void unused) {
+	        	
+	        //Don't know if I need anything here yet
+	        	Toast
+                .makeText(FitTestStep2.this, "Done playing tone", Toast.LENGTH_LONG)
+                .show();
+	          
+	        }
+	    	
+	    }
 	
 }

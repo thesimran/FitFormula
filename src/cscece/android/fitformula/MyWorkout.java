@@ -21,8 +21,7 @@ public class MyWorkout extends Activity {
     //Method called when the "Get Workout" button is Pushed
     public void getWorkoutPushed(View view){
     	
-    	//intent to start FitnessTest Activity
-    	//startActivity(new Intent(this,FitnessTest.class));
+    	
     	FitFormula ParentActivity;
     	ParentActivity=(FitFormula) this.getParent();
     	ParentActivity.switchTab(1);
