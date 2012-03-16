@@ -1,23 +1,14 @@
 package cscece.android.fitformula;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.media.AudioManager;
-import android.media.AudioTrack;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
-import android.widget.MediaController;
+
 
 
 public class FitTestStep2 extends Activity {
@@ -33,11 +24,28 @@ public class FitTestStep2 extends Activity {
 	private int warmupPace;
 	private double interval;
 	private double warmupInterval;
+	private int restingHr; //This value will be extracted from the DB
+	private int afterHr;
+	private int beatIndex;
 	
 	//Constant Pace Data
 	public final String[] AGE_GROUPS = {"15-19","20-29","30-39","40-49","50-59","60-69"}; //more for a reference than anything
 	public final int[] BEATS_MEN = {144,144,132,114,102,84};
 	public final int[] BEATS_WOMEN ={120,114,114,102,84,84};
+	
+	//Constant Test Phase Data
+	public static final int NONE = 0;
+	public static final int WARM_UP = 1;
+	public static final int AFTER_WARM = 2;
+	public static final int AFTER_SIX = 3;
+	public static final int DONE = 4;
+	
+	//ToneTasks
+	ToneTask warmupTask;
+	ToneTask afterWarmTask;
+	
+	//Current Test Phase
+	private static int currentPhase = NONE; 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +65,8 @@ public class FitTestStep2 extends Activity {
 		//TODO: These values will actually be extracted from the DB here
 		gender = FitnessTest.MALE;
 		age = 24;
+		restingHr = 65; 
+		
 		pace = calcPace(age,gender);
 		warmupPace = calcPace(age+10,gender);
 		interval = calcInterval(pace);
@@ -64,6 +74,91 @@ public class FitTestStep2 extends Activity {
 		
 		
 	}//end of onCreate
+	
+	@Override
+	public void onPause(){
+	
+		if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
+		
+			warmupTask.cancel(true);
+		}
+		super.onPause();
+		
+	}
+	
+	@Override
+	public void onStop(){
+	
+		if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
+			
+			warmupTask.cancel(true);
+		}
+		super.onStop();
+	}
+	
+	@Override
+	public void onDestroy(){
+		
+		if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
+			
+			warmupTask.cancel(true);
+		}
+		super.onDestroy();
+		
+	}
+	
+	public void phaseComplete(int hr){
+	
+		afterHr = hr;
+		
+		boolean isDone = false;
+		int diff = afterHr - restingHr;
+	
+		//Lets check to see if the new HR is too high	
+		if(beatIndex == 0){
+			if(diff > 30){
+				isDone = true;
+			}
+		}
+		if(beatIndex == 1){
+			if(diff > 29){
+				isDone = true;
+			}
+		}
+		if(beatIndex == 2){
+			if(diff > 28){
+				isDone = true;
+			}
+		}
+		if(beatIndex == 3){
+			if(diff > 26){
+				isDone = true;
+			}
+		}
+		if(beatIndex == 4){
+			if(diff > 25){
+				isDone = true;
+			}
+		}
+		if(beatIndex == 5){
+			if(diff > 24){
+				isDone = true;
+			}
+		}
+		
+		if(isDone){
+			
+			testComplete();
+		}
+		else{
+			startNextPhase(currentPhase);
+		}
+		
+	}
+	
+	public void testComplete(){
+		//TODO
+	}
 	
 	//Listener for the 'Cancel Test' button
 	public void cancelTest(View view){
@@ -79,6 +174,23 @@ public class FitTestStep2 extends Activity {
 		
 	}
 	
+	public void startNextPhase(int curPhase){
+		
+		//Increments to the next phase
+		currentPhase = curPhase + 1;
+		
+		double dPace = (double) pace;
+		
+		Double[] paceInterval = {dPace,interval};
+		
+		//TODO: Should add some sort of graphic or something....
+		TextView instructionText = (TextView)findViewById(R.id.step2_inst);
+		instructionText.setText("Step to the beat!");
+		instructionText.setTextSize(50);
+		
+		afterWarmTask = (ToneTask) new ToneTask().execute(paceInterval);
+	}
+	
 	//Listener for the 'Begin Warmup' button
 	public void startWarmup(View view){
 		
@@ -92,9 +204,11 @@ public class FitTestStep2 extends Activity {
 		
 		
 		double dWarmupPace = (double) warmupPace;
-		Double[] paceInterval = {dWarmupPace,warmupInterval}; 
+		Double[] paceInterval = {dWarmupPace,warmupInterval};
+		
+		currentPhase = WARM_UP;
 		//Play
-		new ToneTask().execute(paceInterval);
+		warmupTask = (ToneTask) new ToneTask().execute(paceInterval);
 		
 		
 	}
@@ -104,7 +218,6 @@ public class FitTestStep2 extends Activity {
 		
 		int theAge = a;
 		int theGender = gen;
-		int beatIndex = -1;
 		int thePace = 0;
 		
 		if(theAge >= 15 && theAge <= 19){
@@ -172,6 +285,9 @@ public class FitTestStep2 extends Activity {
 				
 	          for(int i=0; i < length; i++){
 	        	  
+	        	  if(isCancelled() == true){
+	        		  break;
+	        	  }
 	        	  SystemClock.sleep(intervalInt); //milliseconds
 	        	  publishProgress(each);
 	          }
@@ -191,11 +307,22 @@ public class FitTestStep2 extends Activity {
 	        @Override
 	        protected void onPostExecute(Void unused) {
 	        	
-	        //Don't know if I need anything here yet
+	        	/* TODO: Now that we are done the Warmup, we have to take the pulse again.
+	        	 * Since we have actually integrated the HR sensor into our app yet, we will supply
+	        	 * a dummy HR for now
+	        	 */
+	        	int dummyHr = 120;	
+	        	
+	        	phaseComplete(dummyHr);
+	        	
+	        }
+	        
+	        protected void onCancelled(){
+	        	
 	        	Toast
-                .makeText(FitTestStep2.this, "Done playing tone", Toast.LENGTH_LONG)
+                .makeText(FitTestStep2.this, "ToneTask Cancelled!", Toast.LENGTH_LONG)
                 .show();
-	          
+	        	
 	        }
 	    	
 	    }
