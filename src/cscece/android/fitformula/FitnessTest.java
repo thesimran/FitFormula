@@ -26,7 +26,7 @@ public class FitnessTest extends Activity {
 	public static final int YES = 3;
 	public static final int NO = 4;
 	public static final int MIN_AGE = 15;
-	public static final int MAX_AGE = 96;
+	public static final int MAX_AGE = 69;
 	
 	//Private
 	private RadioGroup genderRadio;
@@ -152,7 +152,7 @@ public class FitnessTest extends Activity {
     		
     		age = 0;
     		Toast
-            .makeText(this, "You must enter an age between 15 and 96 in order to continue.  Please try again.", Toast.LENGTH_LONG)
+            .makeText(this, "You must enter an age between 15 and 69 in order to continue.  Please try again.", Toast.LENGTH_LONG)
             .show();
     		return;
     	}

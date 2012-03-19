@@ -131,8 +131,7 @@ public final class R {
     }
     public static final class raw {
         public static final int pace_tone=0x7f040000;
-        public static final int step_test=0x7f040001;
-        public static final int steps=0x7f040002;
+        public static final int steps=0x7f040001;
     }
     public static final class string {
         public static final int age_string=0x7f060007;

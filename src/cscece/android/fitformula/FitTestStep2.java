@@ -38,7 +38,7 @@ public class FitTestStep2 extends Activity {
 	public static final int WARM_UP = 1;
 	public static final int AFTER_WARM = 2;
 	public static final int AFTER_SIX = 3;
-	public static final int DONE = 4;
+	public static final int DONE = -1;
 	
 	//ToneTasks
 	ToneTask warmupTask;
@@ -58,14 +58,13 @@ public class FitTestStep2 extends Activity {
 		mSoundManager = new SoundManager();
 		mSoundManager.initSounds(getBaseContext());
 		mSoundManager.addSound(1, R.raw.pace_tone);
-		//That should do it, to play the sound, you just call SoundManager.playSound(1);
-		//mSoundManager.playSound(1);
-		
+	
 		//set values for gender and age now
 		//TODO: These values will actually be extracted from the DB here
 		gender = FitnessTest.MALE;
 		age = 24;
 		restingHr = 65; 
+		/******************************************************/
 		
 		pace = calcPace(age,gender);
 		warmupPace = calcPace(age+10,gender);
@@ -108,8 +107,16 @@ public class FitTestStep2 extends Activity {
 	}
 	
 	public void phaseComplete(int hr){
-	
+		
 		afterHr = hr;
+		
+		if(currentPhase == DONE){
+			//Done the test!
+			testComplete();
+		}
+		
+		
+		
 		
 		boolean isDone = false;
 		int diff = afterHr - restingHr;
@@ -307,6 +314,11 @@ public class FitTestStep2 extends Activity {
 	        @Override
 	        protected void onPostExecute(Void unused) {
 	        	
+	        	//Check to see if they are done the test first...
+	        	if(currentPhase == AFTER_SIX){
+	        		currentPhase = DONE;	        		
+	        	}
+	        	
 	        	/* TODO: Now that we are done the Warmup, we have to take the pulse again.
 	        	 * Since we have actually integrated the HR sensor into our app yet, we will supply
 	        	 * a dummy HR for now
@@ -314,6 +326,8 @@ public class FitTestStep2 extends Activity {
 	        	int dummyHr = 120;	
 	        	
 	        	phaseComplete(dummyHr);
+	        	
+	        	
 	        	
 	        }
 	        
