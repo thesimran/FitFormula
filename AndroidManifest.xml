@@ -73,7 +73,9 @@
              android:name=".FitTestStep2"
              android:label="@string/app_name" >
          </activity>
-          <activity android:name="DatabaseHelper"></activity>  
+          <activity 
+              android:name="DatabaseHelper">
+          </activity>  
             
     </application>
 

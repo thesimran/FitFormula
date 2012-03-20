@@ -147,6 +147,8 @@ public class FitnessTest extends Activity {
     	//Commented out for now, for debuging purposes:
     	//Now lets get and check the numerical values from the EditTexts
     	//Age:
+    	
+    	//TODO: Try/Catch block here to prevent app crash
     	age = Integer.parseInt(ageText.getText().toString());
     	if(age < MIN_AGE || age > MAX_AGE){
     		
@@ -158,6 +160,7 @@ public class FitnessTest extends Activity {
     	}
     	
     	//Height:
+    	//TODO: Try/Catch block here to prevent app crash
     	height = Integer.parseInt(heightText.getText().toString());
     	if(height == 0){
     		
@@ -169,6 +172,7 @@ public class FitnessTest extends Activity {
     	}
     	
     	//Weight:
+    	//TODO: Try/Catch block here to prevent app crash
     	weight = Integer.parseInt(weightText.getText().toString());
     	if(weight == 0){
     		

@@ -37,48 +37,18 @@ public class HealthCenter extends TabActivity {
 	    /*We're gonna leave the "Achievements" tab out for now.
 	     * Just because it one of the least important functional requirements
 	     * of our app.  We will get to it later. Go Spiral Method!
-	    setupTab(new TextView(this), "Achivements");
+	     * 
+	     * 
+	    	setupTab(new TextView(this), "Achivements");
 	     */
 	    
-	    // Create an Intent to launch an Activity for the tab (to be reused)
-	    
-	    
-	    
-	    //intent = new Intent().setClass(this, HcAchievements.class);
-	  
-	    /*  Old Stuff...may need it, we'll see...
-	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("hc_fitness").setIndicator("Fitness")
-	                  .setContent(intent);
-	    tabHost.addTab(spec);
-	    
-	 // Do the same for the other tabs
-	    
-	    spec = tabHost.newTabSpec("hc_weight").setIndicator("Weight")
-	                  .setContent(intent);
-	    tabHost.addTab(spec);
-	  
-	 // Do the same for the other tabs
-	    
-	    spec = tabHost.newTabSpec("hc_heart_rate").setIndicator("Heart Rate")
-	                  .setContent(intent);
-	    tabHost.addTab(spec);  
-	    
-	 // Do the same for the other tabs
-	    
-	    spec = tabHost.newTabSpec("hc_achievements").setIndicator("Achievements")
-	                  .setContent(intent);
-	    tabHost.addTab(spec);
-   */
     }//end of onCreate
     
     private void setupTab(final View view, final String tag, Intent i) {
 		View tabview = createTabView(tabHost.getContext(), tag);
 
 		TabSpec setContent = tabHost.newTabSpec(tag).setIndicator(tabview).setContent(i);
-				/*) {
-			public View createTabContent(String tag) {return view;}
-		});*/
+				
 		tabHost.addTab(setContent);
 
 	}
