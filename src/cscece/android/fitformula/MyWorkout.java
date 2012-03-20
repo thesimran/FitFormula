@@ -8,18 +8,29 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MyWorkout extends Activity {
-	public static final String PREFS_NAME = "MyPrefs";
+	ImageView myImage;
+	Button myButton;
+	TextView myText;
+	
+	public static final String PREFS_NAME = "MyPrefs";	
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.my_workout_layout);
-
+		myImage= (ImageView) findViewById(R.id.running_man);
+		myButton= (Button) findViewById(R.id.get_workout);
+		myText= (TextView) findViewById(R.id.workout_text);				
+		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		boolean savedWorkouts = settings.getBoolean("savedNewWorkouts", false);
+		
 
 		if (!savedWorkouts) { // if workouts haven't been saved to database yet
 			Log.d("db","saving new workouts");
@@ -32,8 +43,32 @@ public class MyWorkout extends Activity {
 
 	}// end of onCreate
 
+	@Override
+    protected void onResume() {
+        super.onResume();
+     Log.d("db","onStart");
+
+     SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+     	boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
+     
+     	if(gottenWorkout==true){
+     	myImage.setImageResource(R.drawable.calendar);
+ 		myText.setVisibility(View.INVISIBLE);
+ 		//myButton.setVisibility(View.INVISIBLE);
+     	}
+     	else{
+     		myImage.setImageResource(R.drawable.logo_transparent);
+     		myText.setVisibility(View.VISIBLE);
+     	}
+    }	
+	
 	// Method called when the "Get Workout" button is Pushed
 	public void getWorkoutPushed(View view) {
+		
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+    	SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean("gottenWorkout", false);
+		editor.commit();
 
 		FitFormula ParentActivity;
 		ParentActivity = (FitFormula) this.getParent();

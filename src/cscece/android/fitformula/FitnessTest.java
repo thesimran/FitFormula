@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -21,10 +22,10 @@ import android.widget.Toast;
 public class FitnessTest extends Activity {
 	
 	//Constants
-	public static final int MALE = 1;
-	public static final int FEMALE = 2;
-	public static final int YES = 3;
-	public static final int NO = 4;
+	public static final int MALE = 0;
+	public static final int FEMALE = 1;
+	public static final int YES = 1;
+	public static final int NO = 0;
 	public static final int MIN_AGE = 15;
 	public static final int MAX_AGE = 69;
 	
@@ -55,9 +56,11 @@ public class FitnessTest extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.fitness_test_layout);
+        Log.d("db","oncreate");
         //set title
         //FitFormula.title.setText("Fitness Test"); -- still a work in progress
         
+        //TODO: Pull biometric data from database if exists
         //Gender
         //no gender initially
         gender = 0;
@@ -147,10 +150,9 @@ public class FitnessTest extends Activity {
     	//Commented out for now, for debuging purposes:
     	//Now lets get and check the numerical values from the EditTexts
     	//Age:
-    	
     	//TODO: Try/Catch block here to prevent app crash
     	age = Integer.parseInt(ageText.getText().toString());
-    	if(age < MIN_AGE || age > MAX_AGE){
+    	if(age < MIN_AGE || age > MAX_AGE ){
     		
     		age = 0;
     		Toast
@@ -162,7 +164,7 @@ public class FitnessTest extends Activity {
     	//Height:
     	//TODO: Try/Catch block here to prevent app crash
     	height = Integer.parseInt(heightText.getText().toString());
-    	if(height == 0){
+    	if(height == 0 ){
     		
     		
     		Toast
@@ -174,7 +176,7 @@ public class FitnessTest extends Activity {
     	//Weight:
     	//TODO: Try/Catch block here to prevent app crash
     	weight = Integer.parseInt(weightText.getText().toString());
-    	if(weight == 0){
+    	if(weight == 0 ){
     		
     		
     		Toast
@@ -183,9 +185,13 @@ public class FitnessTest extends Activity {
     		return;
     	}
     	
-    	
     	//Save biometrics into DB here! 
     	addUserInfoToDB();
+    	
+		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
+    	SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean("gottenWorkout", true);
+		editor.commit();
 
     	//dismiss keyboard
     	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
