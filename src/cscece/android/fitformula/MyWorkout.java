@@ -277,8 +277,291 @@ public class MyWorkout extends Activity {
 		values.put(DatabaseHelper.duration, 25);
 		values.put(DatabaseHelper.aerobic, false);
 		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
+		//Program 1 - Level 2, Aerobic
+		values.put(DatabaseHelper.level, 2);
+		data = "0.60";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.65";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 25);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
+		// Program 1 - Level 2, Interval
+		values.put(DatabaseHelper.level, 2);
+		data = "0.60,0.60,0.60,0.60,0.60,0.50,0.50,0.60,0.60,0.60,0.60";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.65,0.65,0.65,0.65,0.65,0.55,0.55,0.65,0.65,0.65,0.65";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 30);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
+		//Program 1 - Level 3, Aerobic
+		values.put(DatabaseHelper.level, 3);
+		data = "0.60";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.65";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 30);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
+		// Program 1 - Level 3, Interval
+		values.put(DatabaseHelper.level, 3);
+		data = "0.70,0.60,0.70,0.60,0.70,0.60,0.70,0.60,0.70,0.60,0.70";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.75,0.65,0.75,0.65,0.75,0.65,0.75,0.65,0.75,0.65,0.75";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 35);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
+		//Program 1 - Level 4, Aerobic
+		values.put(DatabaseHelper.level, 4);
+		data = "0.65";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.70";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 40);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
+		// Program 1 - Level 4, Interval
+		values.put(DatabaseHelper.level, 4);
+		data = "0.70,0.65,0.70,0.65,0.70,0.65,0.70,0.65,0.70,0.65,0.70";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.75,0.70,0.75,0.70,0.75,0.70,0.75,0.70,0.75,0.70,0.75";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 40);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
+		//Program 1 - Level 5, Aerobic
+		values.put(DatabaseHelper.level, 5);
+		data = "0.70";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.75";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 45);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
+		// Program 1 - Level 5, Interval
+		values.put(DatabaseHelper.level, 5);
+		data = "0.80,0.70,0.80,0.70,0.80,0.70,0.80,0.70,0.80,0.70,0.80";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.85,0.75,0.85,0.75,0.85,0.75,0.85,0.75,0.85,0.75,0.85";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 40);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
 		values.clear();
-		//Program 1 - Level 1, Interval
+		
+		// Program 2
+		db.delete(DatabaseHelper.PROGRAM2_TABLE_NAME, null, null);
+		//Program 2 - Level 1, Aerobic -- N/A
+		//Program 2 - Level 1, Interval
+		values.put(DatabaseHelper.level, 1);
+		data = "0.50,0.50,0.50,0.40,0.40,0.50,0.50,0.50,0.50,0.40,0.40";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 20);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM2_TABLE_NAME, null, values);
+		//Program 2 - Level 2, Aerobic
+		values.put(DatabaseHelper.level, 2);
+		data = "0.55";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.60";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 25);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM2_TABLE_NAME, null, values);
+		//Program 2 - Level 2, Interval
+		values.put(DatabaseHelper.level, 2);
+		data = "0.60,0.60,0.60,0.40,0.40,0.60,0.60,0.60,0.60,0.40,0.40";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.65,0.65,0.65,0.55,0.55,0.65,0.65,0.65,0.65,0.55,0.55";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 25);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM2_TABLE_NAME, null, values);
+		//Program 2 - Level 3, Aerobic
+		values.put(DatabaseHelper.level, 3);
+		data = "0.60";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.65";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 30);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM2_TABLE_NAME, null, values);
+		//Program 2 - Level 3, Interval
+		values.put(DatabaseHelper.level, 3);
+		data = "0.65,0.65,0.65,0.65,0.55,0.55,0.65,0.65,0.65,0.65,0.55";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.70,0.70,0.70,0.70,0.60,0.60,0.70,0.70,0.70,0.70,0.60";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 30);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM2_TABLE_NAME, null, values);
+		//Program 2 - Level 4, Aerobic
+		values.put(DatabaseHelper.level, 4);
+		data = "0.65";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.70";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 35);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM2_TABLE_NAME, null, values);
+		//Program 2 - Level 4, Interval
+		values.put(DatabaseHelper.level, 4);
+		data = "0.70,0.70,0.70,0.70,0.55,0.55,0.70,0.70,0.70,0.70,0.70";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.75,0.75,0.75,0.75,0.60,0.60,0.75,0.75,0.75,0.75,0.75";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 35);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM2_TABLE_NAME, null, values);
+		//Program 2 - Level 5, Aerobic
+		values.put(DatabaseHelper.level, 5);
+		data = "0.70";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.75";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 40);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM2_TABLE_NAME, null, values);
+		//Program 2 - Level 5, Interval
+		values.put(DatabaseHelper.level, 5);
+		data = "0.75,0.75,0.75,0.75,0.60,0.60,0.75,0.75,0.75,0.75,0.75";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.80,0.80,0.80,0.80,0.65,0.65,0.80,0.80,0.80,0.80,0.80";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 40);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM2_TABLE_NAME, null, values);
+		values.clear();
+		
+		// Program 3
+		db.delete(DatabaseHelper.PROGRAM3_TABLE_NAME, null, null);
+		//Program 3 - Level 1, Aerobic -- N/A
+		//Program 3 - Level 1, Interval
+		values.put(DatabaseHelper.level, 1);
+		data = "0.55,0.55,0.55,0.40,0.40,0.55,0.55,0.55,0.40,0.40,0.55";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.60,0.60,0.60,0.55,0.55,0.60,0.60,0.60,0.55,0.55,0.60";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 25);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
+		//Program 3 - Level 2, Aerobic
+		values.put(DatabaseHelper.level, 2);
+		data = "0.70";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.75";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 25);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
+		//Program 3 - Level 2, Interval
+		values.put(DatabaseHelper.level, 2);
+		data = "0.70,0.70,0.60,0.40,0.55,0.55,0.55,0.40,0.60,0.60,0.60";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.75,0.75,0.65,0.55,0.60,0.60,0.60,0.55,0.65,0.65,0.65";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 25);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
+		//Program 3 - Level 3, Aerobic
+		values.put(DatabaseHelper.level, 3);
+		data = "0.70";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.75";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 30);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
+		//Program 3 - Level 3, Interval
+		values.put(DatabaseHelper.level, 3);
+		data = "0.70,0.65,0.75,0.65,0.80,0.65,0.80,0.65,0.70,0.65,0.70";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.75,0.70,0.80,0.70,0.85,0.70,0.85,0.70,0.75,0.70,0.75";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 30);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
+		//Program 3 - Level 4, Aerobic
+		values.put(DatabaseHelper.level, 4);
+		data = "0.75";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.80";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 40);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
+		//Program 3 - Level 4, Interval
+		values.put(DatabaseHelper.level, 4);
+		data = "0.75,0.75,0.65,0.75,0.75,0.65,0.80,0.80,0.65,0.80,0.80,0.65,0.80,0.80,0.65,0.80,0.80,0.65,0.75,0.75,0.75";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.80,0.80,0.70,0.80,0.80,0.70,0.85,0.85,0.70,0.85,0.85,0.70,0.85,0.85,0.70,0.85,0.85,0.70,0.80,0.80,0.80";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40,0.45,0.50,0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90,0.95,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 40);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
+		//Program 3 - Level 5, Aerobic
+		values.put(DatabaseHelper.level, 5);
+		data = "0.75";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.85";
+		values.put(DatabaseHelper.intensityhigh, data);
+		values.put(DatabaseHelper.progresspercentage, 0);
+		values.put(DatabaseHelper.duration, 40);
+		values.put(DatabaseHelper.aerobic, true);
+		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
+		//Program 3 - Level 5, Interval
+		values.put(DatabaseHelper.level, 5);
+		data = "0.75,0.75,0.65,0.80,0.80,0.65,0.80,0.80,0.65,0.85,0.65,0.85,0.65,0.85,0.65,0.80,0.80,0.65,0.80,0.80,0.65";
+		values.put(DatabaseHelper.intensitylow, data);
+		data = "0.80,0.80,0.70,0.85,0.85,0.70,0.85,0.85,0.70,0.90,0.70,0.90,0.70,0.90,0.70,0.85,0.85,0.70,0.85,0.85,0.70";
+		values.put(DatabaseHelper.intensityhigh, data);
+		data = "0.0,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40,0.45,0.50,0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90,0.95,1.00";
+		values.put(DatabaseHelper.progresspercentage, data);
+		values.put(DatabaseHelper.duration, 40);
+		values.put(DatabaseHelper.aerobic, false);
+		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
+		values.clear();
 		
 		db.close();
 	}
