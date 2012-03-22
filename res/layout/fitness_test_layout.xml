@@ -43,12 +43,12 @@
                 <RadioButton
                     android:id="@+id/male"
                     android:checked="true"
-                    android:text="@string/female_str" />
+                    android:text="@string/male_str" />
 
                 <RadioButton
                     android:id="@+id/female"
                     android:checked="false"
-                    android:text="@string/male_str" />
+                    android:text="@string/female_str" />
 
             </RadioGroup>
             

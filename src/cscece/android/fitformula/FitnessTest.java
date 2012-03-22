@@ -176,9 +176,7 @@ public class FitnessTest extends Activity {
     	//Weight:
     	//TODO: Try/Catch block here to prevent app crash
     	weight = Integer.parseInt(weightText.getText().toString());
-    	if(weight == 0 ){
-    		
-    		
+    	if(weight == 0 ){    		    		
     		Toast
             .makeText(this, "You must enter a valid weight. Please try again.", Toast.LENGTH_LONG)
             .show();
@@ -188,10 +186,11 @@ public class FitnessTest extends Activity {
     	//Save biometrics into DB here! 
     	addUserInfoToDB();
     	
-		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
+    	//For Spiral 4 demo
+		/*SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
     	SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("gottenWorkout", true);
-		editor.commit();
+		editor.commit();*/
 
     	//dismiss keyboard
     	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -223,10 +222,10 @@ public class FitnessTest extends Activity {
 			// checking if any database columns need updating
 			int columnIndex = c.getColumnIndex(DatabaseHelper.gender);
 			data = c.getInt(columnIndex);
-			Log.d("db", "gender " + data);
+			Log.d("db", "gender " + data);			
 			if (!(data == gender)) {
 				Log.d("db", "gender is different");
-				values.put(DatabaseHelper.gender, data);
+				values.put(DatabaseHelper.gender, gender);
 			}
 			columnIndex = c.getColumnIndex(DatabaseHelper.age);
 			data = c.getInt(columnIndex);
@@ -294,6 +293,17 @@ public class FitnessTest extends Activity {
 			values.put(DatabaseHelper.smoking, smoking);
 			values.put(DatabaseHelper.diabetes, diabetes);
 			values.put(DatabaseHelper.bloodpressure, bloodPressure);
+			
+			/*values.put(DatabaseHelper.bmi, 0);
+			values.put(DatabaseHelper.bmiclass, "");
+			values.put(DatabaseHelper.risk, 0); 
+			values.put(DatabaseHelper.normalrisk, 0);
+			values.put(DatabaseHelper.cvdrisk, 0);
+			values.put(DatabaseHelper.normalcvdrisk, 0);
+			values.put(DatabaseHelper.cvdriskclass, "");
+			values.put(DatabaseHelper.heartage, 0);
+			values.put(DatabaseHelper.vo2, 0);
+			values.put(DatabaseHelper.vo2class, "");*/
 
 			db = dbh.getWritableDatabase();
 			db.insert(DatabaseHelper.USER_TABLE_NAME, null, values);
