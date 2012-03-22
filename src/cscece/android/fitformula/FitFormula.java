@@ -1,6 +1,7 @@
 package cscece.android.fitformula;
 
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.widget.TabHost;
 
 public class FitFormula extends TabActivity {
 	private TabHost tabHost;
+
+	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
@@ -55,4 +58,5 @@ public class FitFormula extends TabActivity {
 		tabHost.setCurrentTab(tab);
 	}
 
+	
 }

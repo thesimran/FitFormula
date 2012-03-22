@@ -45,6 +45,9 @@ public class FitTestStep2 extends Activity {
 	ToneTask warmupTask;
 	ToneTask afterWarmTask;
 	
+	//TextViews
+	TextView instructionText;
+	
 	//Current Test Phase
 	private static int currentPhase = NONE; 
 
@@ -73,15 +76,29 @@ public class FitTestStep2 extends Activity {
 		interval = calcInterval(pace);
 		warmupInterval = calcInterval(warmupPace);
 		
+	
+		
 		
 	}//end of onCreate
 	
 	@Override
 	public void onPause(){
 	
-		if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
-		
-			warmupTask.cancel(true);
+		try{
+			if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
+			
+				warmupTask.cancel(true);
+			}
+		}catch(Exception e){
+			
+		}
+		try{
+			if(afterWarmTask.getStatus() == AsyncTask.Status.RUNNING){
+				
+				afterWarmTask.cancel(true);
+			}
+		}catch(Exception e){
+			
 		}
 		super.onPause();
 		
@@ -90,9 +107,21 @@ public class FitTestStep2 extends Activity {
 	@Override
 	public void onStop(){
 	
-		if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
+		try{
+			if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
+				
+				warmupTask.cancel(true);
+			}
+		}catch(Exception e){
 			
-			warmupTask.cancel(true);
+		}	
+		try{	
+			if(afterWarmTask.getStatus() == AsyncTask.Status.RUNNING){
+				
+				afterWarmTask.cancel(true);
+			}
+		}catch(Exception e){
+			
 		}
 		super.onStop();
 	}
@@ -100,10 +129,22 @@ public class FitTestStep2 extends Activity {
 	@Override
 	public void onDestroy(){
 		
-		if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
+		try{
+			if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
+				
+				warmupTask.cancel(true);
+			}
+		}catch(Exception e){
 			
-			warmupTask.cancel(true);
-		}
+		}	
+		try{
+			if(afterWarmTask.getStatus() == AsyncTask.Status.RUNNING){
+				
+				afterWarmTask.cancel(true);
+			}
+		}catch(Exception e){
+			
+		}	
 		super.onDestroy();
 		
 	}
@@ -114,7 +155,8 @@ public class FitTestStep2 extends Activity {
 		
 		if(currentPhase == DONE){
 			//Done the test!
-			testComplete();
+			testComplete(afterHr);
+			return;
 		}
 		
 		
@@ -157,7 +199,7 @@ public class FitTestStep2 extends Activity {
 		
 		if(isDone){
 			
-			testComplete();
+			testComplete(afterHr);
 		}
 		else{
 			startNextPhase(currentPhase);
@@ -165,8 +207,18 @@ public class FitTestStep2 extends Activity {
 		
 	}
 	
-	public void testComplete(){
-		//TODO
+	public void testComplete(int hr){
+	
+		//TODO: save this to the DB
+		int heartRate = hr;
+		
+		Toast
+        .makeText(FitTestStep2.this, "Test Complete", Toast.LENGTH_LONG)
+        .show();
+		
+		//Should bring us back to the FitnessTest Activity
+		FitnessTest.testComplete = true;
+		finish();
 	}
 	
 	//Listener for the 'Cancel Test' button
@@ -193,10 +245,14 @@ public class FitTestStep2 extends Activity {
 		Double[] paceInterval = {dPace,interval};
 		
 		//TODO: Should add some sort of graphic or something....
-		TextView instructionText = (TextView)findViewById(R.id.step2_inst);
+		//TODO: Below statements are doing nothing for some reason...
+		instructionText.setText("Get Ready for the Next Phase...");
+		instructionText.setTextSize(40);
+		
+		//TODO: Give user 3 seconds to prepare...Check with Sam here, this may not be ok...
+		SystemClock.sleep(3000);
 		instructionText.setText("Step to the beat!");
 		instructionText.setTextSize(50);
-		
 		afterWarmTask = (ToneTask) new ToneTask().execute(paceInterval);
 	}
 	
@@ -207,7 +263,7 @@ public class FitTestStep2 extends Activity {
 		startButton.setVisibility(Button.GONE);
 		
 		//TODO: Should add some sort of graphic or something....
-		TextView instructionText = (TextView)findViewById(R.id.step2_inst);
+		instructionText = (TextView)findViewById(R.id.step2_inst);
 		instructionText.setText("Step to the beat!");
 		instructionText.setTextSize(50);
 		
@@ -292,7 +348,9 @@ public class FitTestStep2 extends Activity {
 				int length = (int)pace * 3;//3 minutes
 				Boolean each = true;
 				
-	          for(int i=0; i < length; i++){
+				//So far, this loop does not go for the EXACT amount of time, it seems to add a few seconds.
+				//TODO: A better timing method will eventually be required.
+				for(int i=0; i < length; i++){
 	        	  
 	        	  if(isCancelled() == true){
 	        		  break;
@@ -325,7 +383,8 @@ public class FitTestStep2 extends Activity {
 	        	 * Since we have actually integrated the HR sensor into our app yet, we will supply
 	        	 * a dummy HR for now
 	        	 */
-	        	int dummyHr = 120;	
+	        	int dummyHr = 80;
+	        	/***************************************/
 	        	
 	        	phaseComplete(dummyHr);
 	        	

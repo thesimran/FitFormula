@@ -1,8 +1,10 @@
 package cscece.android.fitformula;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -50,6 +52,9 @@ public class FitnessTest extends Activity {
 	public int diabetes;
 	public int bloodPressure;
 	
+	//Static to indicate that the test has just been completed!
+	public static boolean testComplete = false;
+	
 	
 	/** Called when the activity is first created. */
     @Override
@@ -95,6 +100,20 @@ public class FitnessTest extends Activity {
         bloodRadio = (RadioGroup)findViewById(R.id.blood_radio);
         
     }//end of onCreate
+    
+    @Override
+    public void onResume(){
+    	
+    	if(testComplete){
+    		testComplete = false;
+    		//switch to HealthCenter Tab
+    		FitFormula ParentActivity;
+    		ParentActivity = (FitFormula) this.getParent();
+    		ParentActivity.switchTab(2);
+    	}
+    	
+    	super.onResume();
+    }
 
     //Called when the "Start Fitness Test Now" button is pushed
     public void startTestPushed(View view){
@@ -150,8 +169,14 @@ public class FitnessTest extends Activity {
     	//Commented out for now, for debuging purposes:
     	//Now lets get and check the numerical values from the EditTexts
     	//Age:
-    	//TODO: Try/Catch block here to prevent app crash
-    	age = Integer.parseInt(ageText.getText().toString());
+    	try{
+    		age = Integer.parseInt(ageText.getText().toString());
+    	}catch(Exception e){
+    		
+    		pleaseEnterTextAlert();
+    		return;
+    		
+    	}
     	if(age < MIN_AGE || age > MAX_AGE ){
     		
     		age = 0;
@@ -162,8 +187,14 @@ public class FitnessTest extends Activity {
     	}
     	
     	//Height:
-    	//TODO: Try/Catch block here to prevent app crash
-    	height = Integer.parseInt(heightText.getText().toString());
+    	try{
+    		height = Integer.parseInt(heightText.getText().toString());
+    	}catch(Exception e){
+    		
+    		pleaseEnterTextAlert();
+    		return;
+    		
+    	}	
     	if(height == 0 ){
     		
     		
@@ -174,8 +205,14 @@ public class FitnessTest extends Activity {
     	}
     	
     	//Weight:
-    	//TODO: Try/Catch block here to prevent app crash
-    	weight = Integer.parseInt(weightText.getText().toString());
+    	try{
+    		weight = Integer.parseInt(weightText.getText().toString());
+    	}catch(Exception e){
+    		
+    		pleaseEnterTextAlert();
+    		return;
+    		
+    	}	
     	if(weight == 0 ){    		    		
     		Toast
             .makeText(this, "You must enter a valid weight. Please try again.", Toast.LENGTH_LONG)
@@ -202,6 +239,20 @@ public class FitnessTest extends Activity {
     	Intent i = new Intent(this, FitTest.class);
     	startActivity(i);
     }//end of startTestPushed
+    
+    public void pleaseEnterTextAlert(){
+    	
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setMessage("You must fill out all text fields in the form in order to continue with the test.  Please try again.")
+    	       .setCancelable(true)
+    	       .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	                dialog.cancel();
+    	           }
+    	       });
+    	AlertDialog alert = builder.create();
+    	alert.show();
+    }
     
 	public void addUserInfoToDB() {
 		DatabaseHelper dbh;

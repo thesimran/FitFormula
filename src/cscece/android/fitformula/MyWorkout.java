@@ -2,6 +2,7 @@ package cscece.android.fitformula;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,7 @@ public class MyWorkout extends Activity {
 	ImageView myImage;
 	Button myButton;
 	TextView myText;
+	public static Context context; 
 	
 	public static final String PREFS_NAME = "MyPrefs";	
 
@@ -23,6 +25,7 @@ public class MyWorkout extends Activity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+		context = this;
 		setContentView(R.layout.my_workout_layout);
 		//For Spiral 4 demo
 		/*myImage= (ImageView) findViewById(R.id.running_man);
@@ -43,6 +46,10 @@ public class MyWorkout extends Activity {
 		}
 
 	}// end of onCreate
+	
+	public static Context getContext(){
+		return context;
+	}
 
 	//For Spiral 4 demo
 	/*@Override
@@ -72,6 +79,7 @@ public class MyWorkout extends Activity {
 		editor.putBoolean("gottenWorkout", false);
 		editor.commit();
 
+		//Switch Tabs
 		FitFormula ParentActivity;
 		ParentActivity = (FitFormula) this.getParent();
 		ParentActivity.switchTab(1);
@@ -270,6 +278,7 @@ public class MyWorkout extends Activity {
 		values.put(DatabaseHelper.aerobic, false);
 		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
 		values.clear();
+		//Program 1 - Level 1, Interval
 		
 		db.close();
 	}
