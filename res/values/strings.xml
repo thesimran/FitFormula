@@ -58,5 +58,6 @@
 	<string name="cancel_test_str">Cancel Test</string>
 	<string name="begin_warmup_str">Begin Warmup</string>
 	<string name="user_emails">Select a Google account:</string>
-	<string name="user_calendars">Select a Calendar to store workouts:</string>        
+	<string name="user_calendars">Select a Calendar to store workouts:</string>
+	<string name="get_schedule">Give me my Workout schedule!</string>
 </resources>

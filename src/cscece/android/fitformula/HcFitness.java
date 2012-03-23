@@ -33,6 +33,7 @@ public class HcFitness extends Activity {
 	String vo2Class;
 	
 	int program;
+	int level;
 	String programName;
 	
 	/** Called when the activity is first created. */
@@ -100,7 +101,7 @@ public class HcFitness extends Activity {
 			Log.d("db", "bloodpressure " + bloodPressure);									
 			determineHealthFactors(dbh);								
 			determineHealthClass(dbh);
-			determineProgram();
+			determineProgram(dbh);
 
 			SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
 	    	SharedPreferences.Editor editor = settings.edit();
@@ -118,7 +119,7 @@ public class HcFitness extends Activity {
 		db.close();
     }
     
-    public void determineProgram(){
+    public void determineProgram(DatabaseHelper dbh){
     	boolean bmiProblem=false;
     	boolean cvdRiskProblem=false;
     	boolean vo2Problem=false;
@@ -166,6 +167,18 @@ public class HcFitness extends Activity {
     		program = 2;
     		programName = "Cardiac Wellness";
     	}
+    	
+    	/****************************************REMOVE LEVEL****************************************/
+    	level=1;
+    	
+    	ContentValues values = new ContentValues();		
+		int rowIndex = 1;
+		SQLiteDatabase db = dbh.getWritableDatabase();		
+		Log.d("db","program:"+program+" level:"+level+" bmiProblem:"+bmiProblem+" cvdRiskProblem:"+cvdRiskProblem+" vo2Problem:"+vo2Problem);
+		values.put(DatabaseHelper.program, program);
+		values.put(DatabaseHelper.level, level);		
+		db.update(DatabaseHelper.USER_TABLE_NAME, values, "_id = "
+				+ rowIndex, null);
     }
     
     public void determineHealthFactors(DatabaseHelper dbh){    					

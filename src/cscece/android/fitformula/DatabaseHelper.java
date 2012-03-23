@@ -46,8 +46,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String date = "date";    
      
     //myprogram columns
-    public static final String program = "program";
-    public static final String cycle = "cycle";
+    public static final String program = "program";    
+    public static final String calID = "calID";
     
     //frequency columns
     public static final String numinterval="numinterval";
@@ -97,7 +97,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    				+ cvdriskclass + " TEXT,"
 	    				+ heartage + " DOUBLE,"
 	    				+ vo2 + " DOUBLE,"
-	    				+ vo2class + " TEXT"	    				
+	    				+ vo2class + " TEXT,"
+	    				+ program + " INTEGER,"
+	    				+ level + " INTEGER"
 	    				+ ");");	              
 	        }
 	        
@@ -123,10 +125,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    		db.execSQL("CREATE TABLE " + MY_PROGRAM_TABLE_NAME + " ("
 	    				+ "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 	    				+ program + " INTEGER,"	    				
-	    				+ level + " INTEGER,"
-	    				+ cycle + " INTEGER,"	    				
+	    				+ level + " INTEGER,"	    				
 	    				+ aerobic + " BOOLEAN,"
-	    				+ date + " BIGINT"
+	    				+ date + " BIGINT,"
+	    				+ calID + " INTEGER"
 	    				+ ");");	               
 	        }
 	        dbExist = checkDataBase(FREQUENCY_TABLE_NAME);		  

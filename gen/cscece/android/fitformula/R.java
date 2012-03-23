@@ -171,6 +171,7 @@ public final class R {
         public static final int gen_settings_string=0x7f06001f;
         public static final int gender_prompt=0x7f060006;
         public static final int gender_string=0x7f060005;
+        public static final int get_schedule=0x7f060033;
         public static final int get_workout=0x7f060003;
         public static final int height_string=0x7f060009;
         public static final int hypertension_string=0x7f06000e;
