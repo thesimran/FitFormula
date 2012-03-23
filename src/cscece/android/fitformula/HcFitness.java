@@ -95,15 +95,13 @@ public class HcFitness extends Activity {
 			Log.d("db", "diabetes " + diabetes);
 						
 			columnIndex = c.getColumnIndex(DatabaseHelper.bloodpressure);
-			//bloodPressure = c.getInt(columnIndex);
-			//******************************************REMOVE BP********************************************//
-			bloodPressure= 130;
+			bloodPressure = c.getInt(columnIndex);
 			Log.d("db", "bloodpressure " + bloodPressure);									
 			determineHealthFactors(dbh);								
 			determineHealthClass(dbh);
 			determineProgram();
 
-			myTextView.setText("Height: "+height+" cm\nWeight: "+weight+" kg\nBMI: "
+			myTextView.setText("Blood Pressure: "+bloodPressure+" mmHg\nHeight: "+height+" cm\nWeight: "+weight+" kg\nBMI: "
 					 +String.format("%.1f",myBMI)+"\nRisk/Normal Risk: "+String.format("%.2f",risk)+"/"+String.format("%.2f",normalRisk)
 					 +"\nCVD Risk/Normal CVD Risk: "+String.format("%.2f",100*myCVDRisk)+"/"+String.format("%.2f",100*normalCVDRisk)
 					 +"%\nHeart Age/Age: "+String.format("%.0f",heartAge)+"/"+age);

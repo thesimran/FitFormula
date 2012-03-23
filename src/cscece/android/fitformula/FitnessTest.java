@@ -12,16 +12,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FitnessTest extends Activity {
+public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeListener{
 	
 	//Constants
 	public static final int MALE = 0;
@@ -40,7 +43,11 @@ public class FitnessTest extends Activity {
 	private EditText ageText;
 	private EditText heightText;
 	private EditText weightText;
+	private Spinner bloodSpinner;
+	private EditText bloodEntry;
+	private TextView bloodLabel;
 	
+	private static final String[] bloodRanges={"Low", "Normal", "High"};
 	
 	//Public
 	public int gender;
@@ -98,8 +105,31 @@ public class FitnessTest extends Activity {
         //Sys. Blood Pressure
         bloodPressure = 0;
         bloodRadio = (RadioGroup)findViewById(R.id.blood_radio);
+        bloodRadio.setOnCheckedChangeListener(this);        
+        bloodEntry=(EditText)findViewById(R.id.blood_entry);
+        bloodLabel=(TextView)findViewById(R.id.blood_label_no);
+        bloodSpinner= (Spinner)findViewById(R.id.blood_spinner);
+        ArrayAdapter<String> aa=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,bloodRanges);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bloodSpinner.setAdapter(aa);
+        bloodSpinner.setSelection(1);
         
     }//end of onCreate
+    
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		switch (checkedId) {
+		case R.id.blood_no:
+			bloodLabel.setText(R.string.blood_string_no);
+			bloodSpinner.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.5f));
+			bloodEntry.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.0f));	
+			break;
+		case R.id.blood_yes:
+			bloodLabel.setText(R.string.blood_string_yes);
+			bloodSpinner.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.0f));
+			bloodEntry.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.5f));			    
+			break;
+		}
+	}
     
     @Override
     public void onResume(){
@@ -154,17 +184,7 @@ public class FitnessTest extends Activity {
     		diabetes = YES;
     	}else{
     		diabetes = NO;
-    	}
-    	
-    	//Sys. Blood Pressure:
-    	if(bloodRadio.getCheckedRadioButtonId() == R.id.blood_yes){
-    		
-    		//TODO: If they know their blood pressure, then we actually want
-    		//to get the actual value, not the constant YES.
-    		
-    	}else{
-    		bloodPressure = NO;
-    	}
+    	}    	    	
     	
     	//Commented out for now, for debuging purposes:
     	//Now lets get and check the numerical values from the EditTexts
@@ -185,6 +205,52 @@ public class FitnessTest extends Activity {
             .show();
     		return;
     	}
+    	
+    	//Sys. Blood Pressure:
+    	if(bloodRadio.getCheckedRadioButtonId() == R.id.blood_yes){
+    		try{
+        		bloodPressure = Integer.parseInt(bloodEntry.getText().toString());
+        	}catch(Exception e){        		
+        		pleaseEnterTextAlert();
+        		return;        		
+        	}
+    		
+    	}else{ //User selects low, normal, or high BP
+    		String myBP=bloodRanges[bloodSpinner.getSelectedItemPosition()];
+    		if (age<35){
+    			if (myBP.equalsIgnoreCase("Low")){
+    				bloodPressure=115;
+    			}else if (myBP.equalsIgnoreCase("Normal")){
+    				bloodPressure=120;
+    			}else{ //myBP.equalsIgnoreCase("High")
+    				bloodPressure=140;
+    			}    			
+    		}else if (age>=35 && age<=49){
+    			if (myBP.equalsIgnoreCase("Low")){
+    				bloodPressure=125;
+    			}else if (myBP.equalsIgnoreCase("Normal")){
+    				bloodPressure=130;
+    			}else{ //myBP.equalsIgnoreCase("High")
+    				bloodPressure=150;
+    			}
+    		}else if (age>=50 && age<=69){
+    			if (myBP.equalsIgnoreCase("Low")){
+    				bloodPressure=130;
+    			}else if (myBP.equalsIgnoreCase("Normal")){
+    				bloodPressure=135;
+    			}else{ //myBP.equalsIgnoreCase("High")
+    				bloodPressure=155;
+    			}
+    		}else { //age>=70
+    			if (myBP.equalsIgnoreCase("Low")){
+    				bloodPressure=135;
+    			}else if (myBP.equalsIgnoreCase("Normal")){
+    				bloodPressure=140;
+    			}else{ //myBP.equalsIgnoreCase("High")
+    				bloodPressure=160;
+    			}
+    		}
+    	}    	
     	
     	//Height:
     	try{

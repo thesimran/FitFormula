@@ -4,6 +4,7 @@
     android:layout_height="match_parent" >
 
     <TableLayout
+        android:id="@+id/fitness_test_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -227,7 +228,35 @@
                     android:text="@string/yes" />
             </RadioGroup>
         </TableRow>
+        
+		<TableRow android:id="@+id/blood_row">
 
+            <TextView
+                android:id="@+id/blood_label_no"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/blood_string_no" />
+
+            <Spinner 
+                android:id="@+id/blood_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:drawSelectorOnTop="true" />
+                   
+            <EditText
+                android:id="@+id/blood_entry"
+                android:layout_width="0dp"                
+                android:layout_height="wrap_content"
+                android:layout_weight="0.0"  
+                android:hint="@string/enter_bp"
+                android:inputType="number"
+                android:maxLength="3"
+                />
+            
+        </TableRow>
+        
         <TableRow>
 
             <Button
