@@ -55,7 +55,7 @@
             
            
         </TableRow>
-
+
         <TableRow>
 
             <TextView
@@ -74,8 +74,7 @@
                 android:inputType="number"
                 android:maxLength="2"
                 />
-        </TableRow>
-
+        </TableRow>
         <TableRow>
 
             <TextView
@@ -93,8 +92,7 @@
                 android:hint="@string/enter_height"
                 android:inputType="number"
                 android:maxLength="3" />
-        </TableRow>
-
+        </TableRow>
         <TableRow>
 
             <TextView
@@ -249,10 +247,11 @@
                 android:id="@+id/blood_entry"
                 android:layout_width="0dp"                
                 android:layout_height="wrap_content"
-                android:layout_weight="0.0"  
+                android:layout_weight="0.5"  
                 android:hint="@string/enter_bp"
                 android:inputType="number"
                 android:maxLength="3"
+                android:visibility="gone"
                 />
             
         </TableRow>

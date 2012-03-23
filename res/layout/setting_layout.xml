@@ -52,149 +52,170 @@
 
 </RelativeLayout>
 -->
-<TableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:shrinkColumns="true"
-         >
-	
-        <TableRow>
-            <TextView
-                android:id="@+id/general_settings"
-                android:text="@string/gen_settings_string"
-                android:textSize="15dip"
-                android:layout_width="0dip"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:paddingBottom="20dip"
-                android:textStyle="bold"
-                android:gravity="center"
-                 />
-        </TableRow>
-        
-        <TableRow>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:shrinkColumns="true" >
 
-            <TextView
-                android:id="@+id/units_weight"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-          	    android:text="@string/units_w_str" />
-            
-            <RadioGroup
-                android:id="@+id/unit_w_radio"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:orientation="horizontal" >
+    <TableRow>
 
-                <RadioButton
-                    android:id="@+id/unit_kg"
-                    android:checked="true"
-                    android:text="@string/kg_str" />
+        <TextView
+            android:id="@+id/general_settings"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="20dip"
+            android:text="@string/gen_settings_string"
+            android:textSize="15dip"
+            android:textStyle="bold" />
+    </TableRow>
 
-                <RadioButton
-                    android:id="@+id/unit_lbs"
-                    android:checked="false"
-                    android:text="@string/lbs_str" />
+    <TableRow>
 
-            </RadioGroup>
-           
-        </TableRow>
+        <TextView
+            android:id="@+id/units_weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/units_w_str" />
 
+        <RadioGroup
+            android:id="@+id/unit_w_radio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:orientation="horizontal" >
 
+            <RadioButton
+                android:id="@+id/unit_kg"
+                android:checked="true"
+                android:text="@string/kg_str" />
 
-        <TableRow>
+            <RadioButton
+                android:id="@+id/unit_lbs"
+                android:checked="false"
+                android:text="@string/lbs_str" />
+        </RadioGroup>
+    </TableRow>
 
-            <TextView
-                android:id="@+id/units_height"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/units_h_string" />
-			
-            <RadioGroup
-                android:id="@+id/unit_h_radio"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:orientation="horizontal" >
+    <TableRow>
 
-                <RadioButton
-                    android:id="@+id/unit_m"
-                    android:checked="true"
-                    android:text="@string/meters_str" />
+        <TextView
+            android:id="@+id/units_height"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/units_h_string" />
 
-                <RadioButton
-                    android:id="@+id/unit_ft"
-                    android:checked="false"
-                    android:text="@string/ft_str" />
+        <RadioGroup
+            android:id="@+id/unit_h_radio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:orientation="horizontal" >
 
-            </RadioGroup>
-            
-        </TableRow>
+            <RadioButton
+                android:id="@+id/unit_m"
+                android:checked="true"
+                android:text="@string/meters_str" />
 
+            <RadioButton
+                android:id="@+id/unit_ft"
+                android:checked="false"
+                android:text="@string/ft_str" />
+        </RadioGroup>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/audio_cues"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/audio_cues_string" />
+
+        <RadioGroup
+            android:id="@+id/audio_rg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/audio_on"
+                android:checked="true"
+                android:text="@string/on_str" />
+
+            <RadioButton
+                android:id="@+id/audio_off"
+                android:checked="false"
+                android:text="@string/off_str" />
+        </RadioGroup>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/notif_ask"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/notif_string" />
+
+        <RadioGroup
+            android:id="@+id/notif_rg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/notif_on"
+                android:checked="true"
+                android:text="@string/on_str" />
+
+            <RadioButton
+                android:id="@+id/notif_off"
+                android:checked="false"
+                android:text="@string/off_str" />
+        </RadioGroup>
+    </TableRow>
+    
 	<TableRow>
-
             <TextView
-                android:id="@+id/audio_cues"
+                android:id="@+id/email_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="@string/audio_cues_string" />
-			
-            <RadioGroup
-                android:id="@+id/audio_rg"
+                android:text="@string/user_emails" />
+
+            <Spinner 
+                android:id="@+id/email_spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:orientation="horizontal" >
-
-                <RadioButton
-                    android:id="@+id/audio_on"
-                    android:checked="true"
-                    android:text="@string/on_str" />
-
-                <RadioButton
-                    android:id="@+id/audio_off"
-                    android:checked="false"
-                    android:text="@string/off_str" />
-
-            </RadioGroup>
+                android:drawSelectorOnTop="true" />                               
             
-        </TableRow>
-        <TableRow>
-
+	</TableRow>
+	<TableRow>
             <TextView
-                android:id="@+id/notif_ask"
+                android:id="@+id/calendar_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="@string/notif_string" />
-			
-            <RadioGroup
-                android:id="@+id/notif_rg"
+                android:text="@string/user_calendars" 
+                />
+
+            <Spinner 
+                android:id="@+id/calendar_spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:orientation="horizontal" >
-
-                <RadioButton
-                    android:id="@+id/notif_on"
-                    android:checked="true"
-                    android:text="@string/on_str" />
-
-                <RadioButton
-                    android:id="@+id/notif_off"
-                    android:checked="false"
-                    android:text="@string/off_str" />
-
-            </RadioGroup>
+                android:drawSelectorOnTop="true" 
+                />                               
             
-        </TableRow>		
-
-    </TableLayout>
-    
-    
+	</TableRow>
+</TableLayout>

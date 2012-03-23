@@ -27,7 +27,14 @@
             android:text="@string/get_workout"
             android:onClick="getWorkoutPushed"/>
     </TableRow>
-    
+    <TableRow>     
+        <Button 
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/make_calendar_event"
+            android:text="Make calendar event"
+            android:onClick="makeCalendarEvent"/>
+    </TableRow>
    	<TableRow>
     	<ImageView
     	    android:layout_width="wrap_content"

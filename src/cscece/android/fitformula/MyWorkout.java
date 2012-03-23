@@ -1,5 +1,9 @@
 package cscece.android.fitformula;
 
+import java.util.Calendar;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -34,7 +38,7 @@ public class MyWorkout extends Activity {
 		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		boolean savedWorkouts = settings.getBoolean("savedNewWorkouts", false);
-		
+		boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
 
 		if (!savedWorkouts) { // if workouts haven't been saved to database yet
 			Log.d("db","saving new workouts");
@@ -49,6 +53,20 @@ public class MyWorkout extends Activity {
 	
 	public static Context getContext(){
 		return context;
+	}
+	
+	public void makeCalendarEvent(View view){		
+
+/*		Calendar cal = Calendar.getInstance();              
+		Intent intent = new Intent(Intent.ACTION_EDIT);
+		intent.setType("vnd.android.cursor.item/event");
+		intent.putExtra("beginTime", cal.getTimeInMillis());
+		intent.putExtra("allDay", true);
+		intent.putExtra("rrule", "FREQ=YEARLY");
+		intent.putExtra("endTime", cal.getTimeInMillis()+60*60*1000);
+		intent.putExtra("title", "A Test Event from android app");
+		startActivity(intent);*/
+
 	}
 
 	//For Spiral 4 demo
@@ -72,12 +90,7 @@ public class MyWorkout extends Activity {
     }	*/
 	
 	// Method called when the "Get Workout" button is Pushed
-	public void getWorkoutPushed(View view) {
-		
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-    	SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean("gottenWorkout", false);
-		editor.commit();
+	public void getWorkoutPushed(View view) {		
 
 		//Switch Tabs
 		FitFormula ParentActivity;

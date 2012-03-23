@@ -2,6 +2,7 @@ package cscece.android.fitformula;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -101,6 +102,11 @@ public class HcFitness extends Activity {
 			determineHealthClass(dbh);
 			determineProgram();
 
+			SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
+	    	SharedPreferences.Editor editor = settings.edit();
+			editor.putBoolean("gottenWorkout", true);
+			editor.commit();
+			
 			myTextView.setText("Blood Pressure: "+bloodPressure+" mmHg\nHeight: "+height+" cm\nWeight: "+weight+" kg\nBMI: "
 					 +String.format("%.1f",myBMI)+"\nRisk/Normal Risk: "+String.format("%.2f",risk)+"/"+String.format("%.2f",normalRisk)
 					 +"\nCVD Risk/Normal CVD Risk: "+String.format("%.2f",100*myCVDRisk)+"/"+String.format("%.2f",100*normalCVDRisk)

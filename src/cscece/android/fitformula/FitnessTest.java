@@ -120,13 +120,17 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 		switch (checkedId) {
 		case R.id.blood_no:
 			bloodLabel.setText(R.string.blood_string_no);
-			bloodSpinner.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.5f));
-			bloodEntry.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.0f));	
+			bloodSpinner.setVisibility(View.VISIBLE);
+			bloodEntry.setVisibility(View.GONE);
+			//bloodSpinner.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.5f));
+			//bloodEntry.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.0f));	
 			break;
 		case R.id.blood_yes:
 			bloodLabel.setText(R.string.blood_string_yes);
-			bloodSpinner.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.0f));
-			bloodEntry.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.5f));			    
+			bloodSpinner.setVisibility(View.GONE);
+			bloodEntry.setVisibility(View.VISIBLE);
+			//bloodSpinner.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.0f));
+			//bloodEntry.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.5f));			    
 			break;
 		}
 	}
@@ -287,13 +291,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	}
     	
     	//Save biometrics into DB here! 
-    	addUserInfoToDB();
-    	
-    	//For Spiral 4 demo
-		/*SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
-    	SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean("gottenWorkout", true);
-		editor.commit();*/
+    	addUserInfoToDB();    	
 
     	//dismiss keyboard
     	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
