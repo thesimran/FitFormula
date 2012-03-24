@@ -32,9 +32,17 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:id="@+id/make_calendar_event"
+            android:layout_gravity="center_horizontal"
             android:text="@string/get_schedule"
             android:visibility="gone"/>            
-        
+        <Button 
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/view_calendar"
+            android:text="@string/view_schedule"
+            android:layout_gravity="center_horizontal"
+            android:onClick="viewCalendar"
+            android:visibility="gone"/>     
     </TableRow>    
    	<TableRow>
     	<ImageView
@@ -44,6 +52,15 @@
     	    android:id="@+id/running_man" />
     	  
    	</TableRow>
-	
+	<!-- <TableRow>
+	    <CalendarView 
+	    android:background="#000000" 
+	   	android:id="@+id/my_calendar"     
+    	android:layout_width="300dp" 
+    	android:layout_height="300dp"
+    	android:showWeekNumber="false"    	
+    	android:visibility="gone"/>
+	    
+	</TableRow> -->
     
 </TableLayout>

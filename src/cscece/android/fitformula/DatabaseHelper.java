@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      
     //myprogram columns
     public static final String program = "program";    
-    public static final String calID = "calID";
+    public static final String eventID = "eventID";
     
     //frequency columns
     public static final String numinterval="numinterval";
@@ -128,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    				+ level + " INTEGER,"	    				
 	    				+ aerobic + " BOOLEAN,"
 	    				+ date + " BIGINT,"
-	    				+ calID + " INTEGER"
+	    				+ eventID + " BIGINT"
 	    				+ ");");	               
 	        }
 	        dbExist = checkDataBase(FREQUENCY_TABLE_NAME);		  

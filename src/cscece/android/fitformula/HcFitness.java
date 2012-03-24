@@ -168,8 +168,8 @@ public class HcFitness extends Activity {
     		programName = "Cardiac Wellness";
     	}
     	
-    	/****************************************REMOVE LEVEL****************************************/
-    	level=1;
+    	//TODO: ************************************REMOVE LEVEL****************************************/
+    	level=4;
     	
     	ContentValues values = new ContentValues();		
 		int rowIndex = 1;
@@ -179,6 +179,7 @@ public class HcFitness extends Activity {
 		values.put(DatabaseHelper.level, level);		
 		db.update(DatabaseHelper.USER_TABLE_NAME, values, "_id = "
 				+ rowIndex, null);
+		db.close();
     }
     
     public void determineHealthFactors(DatabaseHelper dbh){    					
@@ -246,6 +247,7 @@ public class HcFitness extends Activity {
 		values.put(DatabaseHelper.heartage, heartAge);
 		db.update(DatabaseHelper.USER_TABLE_NAME, values, "_id = "
 				+ rowIndex, null);
+		db.close();
     }
     
 	public void determineHealthClass(DatabaseHelper dbh) {
@@ -478,5 +480,6 @@ public class HcFitness extends Activity {
 		values.put(DatabaseHelper.vo2class, vo2Class);		
 		db.update(DatabaseHelper.USER_TABLE_NAME, values, "_id = "
 				+ rowIndex, null);
+		db.close();
 	}
 }

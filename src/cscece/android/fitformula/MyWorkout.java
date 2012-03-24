@@ -1,26 +1,34 @@
 package cscece.android.fitformula;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
+import android.text.format.Time;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,13 +37,16 @@ import android.widget.Toast;
 public class MyWorkout extends Activity {
 	private ImageView myImage;
 	private Button myButton;
+	private Button viewCalButton;
 	private TextView myText;
+	private CalendarView myCal;
 	public static Context context; 
 	
     private Button mPickDate;
     private int mYear;
     private int mMonth;
     private int mDay;
+    private long calID;
     static final int DATE_DIALOG_ID = 0;
     
     private int program;
@@ -55,10 +66,12 @@ public class MyWorkout extends Activity {
 		super.onCreate(icicle);
 		context = this;
 		setContentView(R.layout.my_workout_layout);
-		//For Spiral 4 demo
-		/*myImage= (ImageView) findViewById(R.id.running_man);
+
+		//myImage= (ImageView) findViewById(R.id.running_man);
 		myButton= (Button) findViewById(R.id.get_workout);
-		myText= (TextView) findViewById(R.id.workout_text);		*/
+		myText= (TextView) findViewById(R.id.workout_text);
+		viewCalButton=(Button) findViewById(R.id.view_calendar);
+		//myCal = (CalendarView) findViewById(R.id.my_calendar);
 		
         mPickDate = (Button) findViewById(R.id.make_calendar_event);
         mPickDate.setOnClickListener(new View.OnClickListener() {
@@ -93,18 +106,40 @@ public class MyWorkout extends Activity {
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
-				int dayOfMonth) {
+				int dayOfMonth) {			
+
 			if (year>=mYear && monthOfYear>=mMonth && dayOfMonth>=mDay){ //making sure start date is current day or later
 				mYear = year;
 				mMonth = monthOfYear;
 				mDay = dayOfMonth;			
-				Log.d("email",""+mYear+"-"+mMonth+"-"+mDay);						
-				//makeWorkoutSchedule(mYear,mMonth,mDay);
+				Log.d("email",""+mYear+"-"+mMonth+"-"+mDay);
+				
+				/*Calendar beginTime = Calendar.getInstance();
+				beginTime.set(mYear, mMonth, mDay);		
+				Log.d("email",""+beginTime.get(Calendar.DAY_OF_MONTH));
+				long startMillis = beginTime.getTimeInMillis();
+				Calendar output = Calendar.getInstance();
+				output.setTimeInMillis(startMillis);
+				Log.d("email",""+output.get(Calendar.DAY_OF_MONTH));*/
+				//Log.d("email",""+TimeZone.getDefault().getID());
+				//Log.d("email",""+TimeZone.getDefault().getOffset(System.currentTimeMillis()));
+				//Log.d("email",""+Time.getCurrentTimezone());
+				makeWorkoutSchedule(mYear,mMonth,mDay);
 			}
 			else{
-				Toast.makeText(MyWorkout.this,
+				new AlertDialog.Builder(MyWorkout.this)
+				.setTitle("Invalid Date")
+				.setMessage("Please select a valid start date.")
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface arg0, int arg1) {
+				        // Some stuff to do when ok got clicked
+				    }
+				})				
+				.show();
+				
+				/*Toast.makeText(MyWorkout.this,
 						"Please select a valid start date.",
-						Toast.LENGTH_LONG).show();
+						Toast.LENGTH_LONG).show();*/
 			}
 		}
 	};
@@ -124,6 +159,22 @@ public class MyWorkout extends Activity {
 		return context;
 	}
 	public void makeWorkoutSchedule (int myYear, int myMonth, int myDay){
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		String calDisplayName = settings.getString ("calDisplayName", null);
+		if (calDisplayName == null){
+			Log.d("email","calDisplayName is null");
+			new AlertDialog.Builder(MyWorkout.this)
+			.setTitle("Invalid Google Account")
+			.setMessage("Please designate a Google Account and Calendar in the Settings tab.")
+			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface arg0, int arg1) {			    	
+			    }
+			})				
+			.show();					
+			return;
+		}		
+		calID=settings.getLong("calID", -1);
+		
 		DatabaseHelper dbh;
 		dbh = new DatabaseHelper(this);		
 		int rowIndex = 1;
@@ -172,85 +223,132 @@ public class MyWorkout extends Activity {
 		}
 		
 		Calendar beginTime = Calendar.getInstance();
-		beginTime.set(myYear, myMonth, myDay);		
+		beginTime.set(myYear, myMonth, myDay, 0, 0, 0);		
 		
 		for (int i = 0; i < numCycles; i++) {
 			if (restAlternate) {
-
+				boolean altRestTime=false;
+				for (int j = 0; j < numInterval; j++) {
+					if (altRestTime){
+						makeCalendarEvent(beginTime,dbh, program, level, false, calID);
+						if (j<numInterval-1 || numAerobic >=1){ //do not add rest time if the last session of cycle
+							beginTime.add(Calendar.DAY_OF_MONTH, altRest);
+						}
+						altRestTime=!altRestTime;
+					}else{ //!altRestTime
+						makeCalendarEvent(beginTime,dbh, program, level, false, calID);
+						if (j<numInterval-1 || numAerobic >=1){ //do not add rest time if the last session of cycle
+							beginTime.add(Calendar.DAY_OF_MONTH, rest);
+						}
+						altRestTime=!altRestTime;
+					}
+				}
+				for (int k = 0; k < numAerobic; k++) {
+					if (altRestTime){
+						makeCalendarEvent(beginTime,dbh, program, level, true, calID);
+						if (k<numAerobic-1){ //do not add rest time if the last session of cycle
+							beginTime.add(Calendar.DAY_OF_MONTH, altRest);
+						}
+						altRestTime=!altRestTime;
+					}else{ //!altRestTime
+						makeCalendarEvent(beginTime,dbh, program, level, true, calID);
+						if (k<numAerobic-1){ //do not add rest time if the last session of cycle
+							beginTime.add(Calendar.DAY_OF_MONTH, rest);
+						}
+						altRestTime=!altRestTime;
+					}										
+				}
 			} 
 			else {
 				for (int j = 0; j < numInterval; j++) {
-					//makeCalendarEvent(beginTime,dbh);
-					beginTime.roll(Calendar.DAY_OF_MONTH, rest);									
+					Log.d("email",""+beginTime.get(Calendar.DAY_OF_MONTH));
+
+					makeCalendarEvent(beginTime,dbh, program, level, false, calID);
+					if (j<numInterval-1 || numAerobic >=1){ //do not add rest time if the last session of cycle
+						beginTime.add(Calendar.DAY_OF_MONTH, rest);								
+					}
 				}
 				for (int k = 0; k < numAerobic; k++) {
-					//makeCalendarEvent(beginTime,dbh);
-					beginTime.roll(Calendar.DAY_OF_MONTH, rest);										
+					makeCalendarEvent(beginTime,dbh, program, level, true, calID);
+					if (k<numAerobic-1){ //do not add rest time if the last session of cycle
+						beginTime.add(Calendar.DAY_OF_MONTH, rest);
+					}															
 				}
 			}
-			beginTime.roll(Calendar.DAY_OF_MONTH, 2); //48 hour rest between cycles
+			beginTime.add(Calendar.DAY_OF_MONTH, 2); //one day rest between cycles
 		}
 		
 		
 		db.close();
 		
-		//TODO: disable workout schedule button, present CalendarView
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean("gottenSchedule", true);
+		editor.commit();			
+		
+		//myImage.setVisibility(View.GONE);
+		myButton.setVisibility(View.GONE);
+		myText.setVisibility(View.GONE);		
+		mPickDate.setVisibility(View.GONE);
+		viewCalButton.setVisibility(View.VISIBLE);
+		viewCalButton.setGravity(Gravity.CENTER_HORIZONTAL);
+        //myCal.setVisibility(View.VISIBLE);*/
+        
+		viewCalendar(viewCalButton);
+		//TODO: ability to delete calendar events and db entries
 	}
 	
-	public void makeCalendarEvent(Calendar beginTime,DatabaseHelper dbh, int myProgram, int myLevel, int mySession){		
+	public void viewCalendar (View theButton){
+		long startMillis = System.currentTimeMillis();
+		Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+		builder.appendPath("time");
+		ContentUris.appendId(builder, startMillis);
+		Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+		startActivity(intent);
+	}
+	
+	public void makeCalendarEvent(Calendar beginTime,DatabaseHelper dbh, int myProgram, int myLevel, boolean aerobic, long mCalID){		
 
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		String calDisplayName = settings.getString ("calDisplayName", null);
-		if (calDisplayName != null){
-			long calID = settings.getLong ("calID", -1);
-			Log.d("email","calDisplayName not null "+calID);
-			
-			long startMillis = 0; 
-			//long endMillis = 0;     
-			//Calendar beginTime = Calendar.getInstance();
-			//beginTime.set(myYear, myMonth, myDay); //months start at 0
-			startMillis = beginTime.getTimeInMillis();
-			//Calendar endTime = Calendar.getInstance();
-			//endTime.set(myYear, myMonth, myDay); //months start at 0
-			//endMillis = endTime.getTimeInMillis();			
+		long startMillis = 0;
+		// long endMillis = 0;
+		// Calendar beginTime = Calendar.getInstance();
+		// beginTime.set(myYear, myMonth, myDay); //months start at 0
+		startMillis = beginTime.getTimeInMillis();
 
-			ContentResolver cr = getContentResolver();
-			ContentValues values = new ContentValues();
-			values.put(Events.DTSTART, startMillis);
-			values.put(Events.DTEND, startMillis);
-			//values.put(Events.EVENT_LOCATION, "Gym");
-			values.put(Events.TITLE, "Workout Session");
-			values.put(Events.DESCRIPTION, "My FitFormula Workout - Program "+myProgram+" - Level "+myLevel);
-			values.put(Events.ALL_DAY, 1);
-			values.put(Events.AVAILABILITY, Events.AVAILABILITY_FREE);
-			values.put(Events.CALENDAR_ID, calID);
-			values.put(Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
-			Uri uri = cr.insert(Events.CONTENT_URI, values);
-			
-			// get the event ID that is the last element in the Uri
-			long eventID = Long.parseLong(uri.getLastPathSegment());
-			Log.d("email","eventID:"+eventID);
+		// Calendar endTime = Calendar.getInstance();
+		// endTime.set(myYear, myMonth, myDay); //months start at 0
+		// endMillis = endTime.getTimeInMillis();
 
-			/*ContentValues values = new ContentValues();		
-			int rowIndex = 1;
-			SQLiteDatabase db = dbh.getWritableDatabase();	
-			
-			values.put(DatabaseHelper.bmi, myBMI);
-			values.put(DatabaseHelper.risk, risk);
-			values.put(DatabaseHelper.normalrisk, normalRisk);
-			values.put(DatabaseHelper.cvdrisk, myCVDRisk);
-			values.put(DatabaseHelper.normalcvdrisk, normalCVDRisk);
-			values.put(DatabaseHelper.heartage, heartAge);
-			db.update(DatabaseHelper.USER_TABLE_NAME, values, "_id = "
-					+ rowIndex, null);*/
-		}
-		else{ //(calDisplayName==null)
-			Log.d("email","calDisplayName is null");
-			Toast.makeText(
-					this,
-					"Please designate a Google account and Calendar in the Settings tab.",
-					Toast.LENGTH_LONG).show();
-		}
+		ContentResolver cr = getContentResolver();
+		ContentValues values = new ContentValues();
+		values.put(Events.DTSTART, startMillis+TimeZone.getDefault().getOffset(System.currentTimeMillis()));
+		values.put(Events.DTEND, startMillis+TimeZone.getDefault().getOffset(System.currentTimeMillis())); 
+		// values.put(Events.EVENT_LOCATION, "Gym");		
+		if(aerobic==true){
+			values.put(Events.TITLE, "Workout Session - Aerobic");
+			values.put(Events.DESCRIPTION, "FitFormula Aerobic Workout Session - Program "+ myProgram + " - Level " + myLevel);}
+		else{//aerobic==false
+			values.put(Events.TITLE, "Workout Session - Interval");
+			values.put(Events.DESCRIPTION, "FitFormula Interval Workout Session - Program "+ myProgram + " - Level " + myLevel);}		
+		values.put(Events.ALL_DAY, 1);
+		values.put(Events.AVAILABILITY, Events.AVAILABILITY_FREE);
+		values.put(Events.CALENDAR_ID, mCalID);
+		values.put(Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
+		Uri uri = cr.insert(Events.CONTENT_URI, values);
+
+		// get the event ID that is the last element in the Uri
+		long eventID = Long.parseLong(uri.getLastPathSegment());
+		//Log.d("email", "eventID:" + eventID);
+
+		ContentValues mValues = new ContentValues();
+		SQLiteDatabase db = dbh.getWritableDatabase();
+
+		mValues.put(DatabaseHelper.program, myProgram);
+		mValues.put(DatabaseHelper.level, myLevel);
+		mValues.put(DatabaseHelper.aerobic, aerobic);
+		mValues.put(DatabaseHelper.date, startMillis);
+		mValues.put(DatabaseHelper.eventID, eventID);
+		db.insert(DatabaseHelper.MY_PROGRAM_TABLE_NAME, null, mValues);
+		db.close();
 		
 /*		Calendar cal = Calendar.getInstance();              
 		Intent intent = new Intent(Intent.ACTION_EDIT);
@@ -270,9 +368,17 @@ public class MyWorkout extends Activity {
         
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);						
 		boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
+		boolean gottenSchedule = settings.getBoolean("gottenSchedule", false);
 		if (gottenWorkout){
-			mPickDate.setVisibility(View.VISIBLE);			
-		}     
+			myText.setVisibility(View.GONE);
+	 		myButton.setVisibility(View.GONE);
+			if (!gottenSchedule){
+				mPickDate.setVisibility(View.VISIBLE);
+			}else{
+				viewCalButton.setVisibility(View.VISIBLE);
+				viewCalButton.setGravity(Gravity.CENTER_HORIZONTAL);
+			}
+		}								  
 		
 		/*For Spiral 4 demo
      SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
