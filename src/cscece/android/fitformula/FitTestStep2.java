@@ -1,6 +1,10 @@
 package cscece.android.fitformula;
 
+
 import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -41,6 +45,11 @@ public class FitTestStep2 extends Activity {
 	public static final int AFTER_SIX = 3;
 	public static final int DONE = -1;
 	
+	//DB
+	private DatabaseHelper db;
+	private Cursor userCursor = null;
+	private Cursor hrCursor = null;
+	
 	//ToneTasks
 	ToneTask warmupTask;
 	ToneTask afterWarmTask;
@@ -54,9 +63,17 @@ public class FitTestStep2 extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		//requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.fit_test_step2);
-		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+		//getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+		instructionText = (TextView)findViewById(R.id.step2_inst);
+	
+		
+		
+	}//end of onCreate
+	
+	@Override
+	public void onResume(){
 		
 		//We will use the SoundManager to play the metronome tone
 		//The SoundManager class uses the SoundPool class to play a selected tone
@@ -65,21 +82,44 @@ public class FitTestStep2 extends Activity {
 		mSoundManager.addSound(1, R.raw.pace_tone);
 	
 		//set values for gender and age now
-		//TODO: These values will actually be extracted from the DB here
+		//These values are extracted from the DB
+		db= new DatabaseHelper(this);
+		userCursor=db
+                .getReadableDatabase()
+                .rawQuery("SELECT _id, gender, age "+
+                          "FROM " + DatabaseHelper.USER_TABLE_NAME,
+                          null);
+		hrCursor = db
+					.getReadableDatabase()
+					.rawQuery("SELECT _id, heartrate, date " + 
+								"FROM " + DatabaseHelper.HR_TABLE_NAME,
+								null);
+		
+		//should only be one row in the table
+		userCursor.moveToFirst();
+		gender = userCursor.getInt(1);
+		age = userCursor.getInt(2);
+		
+		//hr should come from the last entry, meaning it was taken from the latest date
+		hrCursor.moveToLast();
+		restingHr = hrCursor.getInt(1);
+		
+		hrCursor.close();
+		userCursor.close();
+		
+		/* -- Testing dummy data
 		gender = FitnessTest.MALE;
 		age = 24;
 		restingHr = 65; 
-		/******************************************************/
+		*/
 		
 		pace = calcPace(age,gender);
 		warmupPace = calcPace(age+10,gender);
 		interval = calcInterval(pace);
 		warmupInterval = calcInterval(warmupPace);
-		
-	
-		
-		
-	}//end of onCreate
+
+		super.onResume();
+	}
 	
 	@Override
 	public void onPause(){
@@ -100,6 +140,7 @@ public class FitTestStep2 extends Activity {
 		}catch(Exception e){
 			
 		}
+		db.close();
 		super.onPause();
 		
 	}
@@ -123,6 +164,7 @@ public class FitTestStep2 extends Activity {
 		}catch(Exception e){
 			
 		}
+		db.close();
 		super.onStop();
 	}
 	
@@ -144,7 +186,8 @@ public class FitTestStep2 extends Activity {
 			}
 		}catch(Exception e){
 			
-		}	
+		}
+		db.close();
 		super.onDestroy();
 		
 	}
@@ -209,8 +252,20 @@ public class FitTestStep2 extends Activity {
 	
 	public void testComplete(int hr){
 	
-		//TODO: save this to the DB
+		//save this to the DB
 		int heartRate = hr;
+		long date = System.currentTimeMillis();
+		//Save to DB
+    	ContentValues values = new ContentValues();
+		DatabaseHelper dbh;
+		dbh = new DatabaseHelper(this);
+		SQLiteDatabase db = dbh.getWritableDatabase();
+    	values.put(DatabaseHelper.heartrate, heartRate);
+    	values.put(DatabaseHelper.date, date);
+    	db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
+		values.clear();
+		
+		
 		
 		Toast
         .makeText(FitTestStep2.this, "Test Complete", Toast.LENGTH_LONG)
@@ -263,7 +318,7 @@ public class FitTestStep2 extends Activity {
 		startButton.setVisibility(Button.GONE);
 		
 		//TODO: Should add some sort of graphic or something....
-		instructionText = (TextView)findViewById(R.id.step2_inst);
+		
 		instructionText.setText("Step to the beat!");
 		instructionText.setTextSize(50);
 		
@@ -395,7 +450,7 @@ public class FitTestStep2 extends Activity {
 	        protected void onCancelled(){
 	        	
 	        	Toast
-                .makeText(FitTestStep2.this, "ToneTask Cancelled!", Toast.LENGTH_LONG)
+                .makeText(FitTestStep2.this, "Step Test Cancelled!", Toast.LENGTH_LONG)
                 .show();
 	        	
 	        }

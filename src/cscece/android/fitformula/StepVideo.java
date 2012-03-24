@@ -23,9 +23,9 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		//requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.step_vid_layout);
-		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+		//getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
 		mVideoView = (VideoView) findViewById(R.id.surface_view1);
 
 		videoPath = Uri.parse("android.resource://"+getPackageName()+"/"+ R.raw.steps);		

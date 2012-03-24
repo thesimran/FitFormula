@@ -2,10 +2,12 @@ package cscece.android.fitformula;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -34,6 +36,7 @@ public class FitTest extends Activity {
 	private AlertDialog alertDialog;
 	private View dialogLayout;
 	private View stepDialogLayout;
+	private DatabaseHelper db;
 	//private VideoView video;
 	//private MediaController ctlr;
 	//private Uri videoPath;
@@ -96,16 +99,35 @@ public class FitTest extends Activity {
     
     public void onPause(){
     	//cam.release();
+    	try{
+    		db.close();
+    	}catch(Exception e){
+    		
+    	}
+    	
     	super.onPause();
+    	
     }//end of onPause
     
     public void onStop(){
     	//cam.release();
+    	try{
+    		db.close();
+    	}catch(Exception e){
+    		
+    	}
     	super.onStop();
+    	
     }// end of onStop
     
     public void onDestroy(){
     	//cam.release();
+    	try{
+    		db.close();
+    	}catch(Exception e){
+    		
+    	}
+    	
     	super.onDestroy();
     }
     
@@ -122,9 +144,23 @@ public class FitTest extends Activity {
     
     public void startVideoActivity (){
     	
-    	//TODO: Save HR into DB here!
+    	long date;
+    	//get the current date/time
+    	date = System.currentTimeMillis();
     	
-    	 Intent i = new Intent(this, StepVideo.class);
+    	//Save to DB
+    	ContentValues values = new ContentValues();
+		DatabaseHelper dbh;
+		dbh = new DatabaseHelper(this);
+		SQLiteDatabase db = dbh.getWritableDatabase();
+    	values.put(DatabaseHelper.heartrate, finalBpm);
+    	values.put(DatabaseHelper.date, date);
+    	db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
+		values.clear();
+		db.close();
+		
+		//lets go to the next step and finish() this Activity
+    	Intent i = new Intent(this, StepVideo.class);
    		startActivity(i);
    		finish();
     }
@@ -141,7 +177,7 @@ public class FitTest extends Activity {
         	   * run for 15 seconds max for this part of the Fitness Test.
         	   * For the active HR in step 3 (I think), we will want 10 seconds max! 
         	   */
-        	  SystemClock.sleep(1); 
+        	  SystemClock.sleep(500); 
         	  publishProgress(second);
           }
           
