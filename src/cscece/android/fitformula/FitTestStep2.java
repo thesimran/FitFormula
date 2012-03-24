@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -33,11 +34,14 @@ public class FitTestStep2 extends Activity {
 	private int afterHr;
 	private int beatIndex;
 	private double vo2Max;
+	private double engeryCost;
+	private int weight;
 	
 	//Constant Pace Data
 	public final String[] AGE_GROUPS = {"15-19","20-29","30-39","40-49","50-59","60-69"}; //more for a reference than anything
 	public final int[] BEATS_MEN = {144,144,132,114,102,84};
 	public final int[] BEATS_WOMEN ={120,114,114,102,84,84};
+	public final double[] ENERGY_COST = {1.63,1.49,1.49,1.32,1.05,1.05};
 	
 	//Constant Test Phase Data
 	public static final int NONE = 0;
@@ -105,20 +109,19 @@ public class FitTestStep2 extends Activity {
 		hrCursor.moveToLast();
 		restingHr = hrCursor.getInt(1);
 		
+		//Closing
 		hrCursor.close();
 		userCursor.close();
-		
-		/* -- Testing dummy data
-		gender = FitnessTest.MALE;
-		age = 24;
-		restingHr = 65; 
-		*/
+		db.close();
 		
 		pace = calcPace(age,gender);
 		warmupPace = calcPace(age+10,gender);
 		interval = calcInterval(pace);
 		warmupInterval = calcInterval(warmupPace);
-
+		
+		/*Testing
+		testComplete(100);
+		*/
 		super.onResume();
 	}
 	
@@ -253,20 +256,34 @@ public class FitTestStep2 extends Activity {
 	
 	public void testComplete(int hr){
 	
+		//get weight from db so we can calc Vo2Max
+		db= new DatabaseHelper(this);
+		userCursor=db
+                .getReadableDatabase()
+                .rawQuery("SELECT _id, weight "+
+                          "FROM " + DatabaseHelper.USER_TABLE_NAME,
+                          null);
+		userCursor.moveToFirst();
+		weight = userCursor.getInt(1);
+		userCursor.close();
+		
+		Log.d("TEST", "" + weight);
+		vo2Max = 42.5 + 16.6 * getEnergyCost() - .12 * weight - .12 * hr - .24 * age;
+		
 		//save this to the DB
 		int heartRate = hr;
 		long date = System.currentTimeMillis();
 		//Save to DB
     	ContentValues values = new ContentValues();
-		DatabaseHelper dbh;
-		dbh = new DatabaseHelper(this);
-		SQLiteDatabase db = dbh.getWritableDatabase();
+		SQLiteDatabase dbSQL = db.getWritableDatabase();
     	values.put(DatabaseHelper.heartrate, heartRate);
     	values.put(DatabaseHelper.date, date);
-    	db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
+    	dbSQL.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
 		values.clear();
 		
-		vo2Max = 42.5 + 16.6
+		values.put(DatabaseHelper.vo2, vo2Max);
+		dbSQL.insert(DatabaseHelper.USER_TABLE_NAME, null, values);
+		values.clear();
 		
 		Toast
         .makeText(FitTestStep2.this, "Test Complete", Toast.LENGTH_LONG)
@@ -275,6 +292,12 @@ public class FitTestStep2 extends Activity {
 		//Should bring us back to the FitnessTest Activity
 		FitnessTest.testComplete = true;
 		finish();
+	}
+	
+	private double getEnergyCost(){
+		
+		return ENERGY_COST[beatIndex];
+		
 	}
 	
 	//Listener for the 'Cancel Test' button
@@ -307,8 +330,8 @@ public class FitTestStep2 extends Activity {
 		
 		//TODO: Give user 3 seconds to prepare...Check with Sam here, this may not be ok...
 		SystemClock.sleep(3000);
-		instructionText.setText("Step to the beat!");
-		instructionText.setTextSize(50);
+		//instructionText.setText("Step to the beat!");
+		//instructionText.setTextSize(50);
 		afterWarmTask = (ToneTask) new ToneTask().execute(paceInterval);
 	}
 	
