@@ -32,6 +32,7 @@ public class FitTestStep2 extends Activity {
 	private int restingHr; //This value will be extracted from the DB
 	private int afterHr;
 	private int beatIndex;
+	private double vo2Max;
 	
 	//Constant Pace Data
 	public final String[] AGE_GROUPS = {"15-19","20-29","30-39","40-49","50-59","60-69"}; //more for a reference than anything
@@ -265,7 +266,7 @@ public class FitTestStep2 extends Activity {
     	db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
 		values.clear();
 		
-		
+		vo2Max = 42.5 + 16.6
 		
 		Toast
         .makeText(FitTestStep2.this, "Test Complete", Toast.LENGTH_LONG)
