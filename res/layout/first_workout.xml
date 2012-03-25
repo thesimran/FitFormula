@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+     
+    <TextView
+        android:id="@+id/first_workout_inst" 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/firstw_inst_str"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        
+    />
+    
+    <TextView 
+        android:id="@+id/time_remaining"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/time_str"
+        android:textSize="45dip"
+        android:layout_below="@id/first_workout_inst"
+     /> 
+     
+     <Button
+        android:id="@+id/cancel_first_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:onClick="cancelWorkout" />
+    
+     <Button
+        android:id="@+id/begin_first_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/begin_first_str"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="startWorkout" />
+    
+</RelativeLayout>

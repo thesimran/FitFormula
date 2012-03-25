@@ -61,4 +61,9 @@
 	<string name="user_calendars">Select a Calendar to store workouts:</string>
 	<string name="get_schedule">Give me my Workout schedule</string>
 	<string name="view_schedule">View my Workout schedule</string>
+	<string name="firstw_inst_str">This workout will be used to further assess your fitness level.  First, your heart rate will be taken, then you will run/bike
+	    for 8 minutes.  Then, your heart rate will be taken again, and you will be asked for some simple feedback.  After which, we will adjust the remainder
+	    of the workout based on your response.  The total length of the workout is 20 minutes.  Press \'Begin Workout\' when you are ready.</string>
+	<string name="begin_first_str">Begin Workout</string>
+	<string name="time_str">8:00</string>    
 </resources>
