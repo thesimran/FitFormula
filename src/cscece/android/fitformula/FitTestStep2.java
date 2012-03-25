@@ -115,7 +115,14 @@ public class FitTestStep2 extends Activity {
 		db.close();
 		
 		pace = calcPace(age,gender);
-		warmupPace = calcPace(age+10,gender);
+		if(age > 59){
+			//mad slow for the old people
+			warmupPace = 66;
+			
+		}else{
+			warmupPace = calcPace(age+10,gender);
+		}
+		
 		interval = calcInterval(pace);
 		warmupInterval = calcInterval(warmupPace);
 		
@@ -323,17 +330,27 @@ public class FitTestStep2 extends Activity {
 		
 		Double[] paceInterval = {dPace,interval};
 		
-		//TODO: Should add some sort of graphic or something....
-		//TODO: Below statements are doing nothing for some reason...
 		instructionText.setText("Get Ready for the Next Phase...");
 		instructionText.setTextSize(40);
+		startTask(paceInterval);
 		
-		//TODO: Give user 3 seconds to prepare...Check with Sam here, this may not be ok...
-		SystemClock.sleep(3000);
-		//instructionText.setText("Step to the beat!");
-		//instructionText.setTextSize(50);
-		afterWarmTask = (ToneTask) new ToneTask().execute(paceInterval);
 	}
+	//TODO: This shit does not work.
+	public void startTask(Double[] paceI){
+		
+		Double[] paceInterval = paceI;
+		//TODO: Give user 3 seconds to prepare...Check with Sam here, this may not be ok...
+		long now = System.currentTimeMillis();
+		while(System.currentTimeMillis() <= now + 3000){
+			//wait
+		}
+		instructionText.setText("Step to the beat!");
+		instructionText.setTextSize(50);
+		afterWarmTask = (ToneTask) new ToneTask().execute(paceInterval);
+		
+		
+	}
+	
 	
 	//Listener for the 'Begin Warmup' button
 	public void startWarmup(View view){
@@ -426,11 +443,16 @@ public class FitTestStep2 extends Activity {
 				int intervalInt = (int) milliInterval;
 				int length = (int)pace * 3;//3 minutes
 				Boolean each = true;
+				long begin = System.currentTimeMillis();
 				
-				//So far, this loop does not go for the EXACT amount of time, it seems to add a few seconds.
 				//TODO: A better timing method will eventually be required.
 				for(int i=0; i < length; i++){
-	        	  
+	        	
+				  //This should make it exactly 3 minutes	
+				  if(System.currentTimeMillis() >= begin + 180000){
+					  break;
+				  }
+					
 	        	  if(isCancelled() == true){
 	        		  break;
 	        	  }
