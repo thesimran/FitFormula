@@ -487,9 +487,7 @@ public class FitTestStep2 extends Activity {
 	        	int dummyHr = 80;
 	        	/***************************************/
 	        	
-	        	phaseComplete(dummyHr);
-	        	
-	        	
+	        	phaseComplete(dummyHr);	
 	        	
 	        }
 	        
