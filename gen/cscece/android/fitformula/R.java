@@ -80,7 +80,7 @@ public final class R {
         public static final int gender_radio=0x7f080014;
         public static final int general_settings=0x7f08003c;
         public static final int get_workout=0x7f080037;
-        public static final int hc_linear=0x7f080032;
+        public static final int hc_relative=0x7f080032;
         public static final int height=0x7f08001a;
         public static final int height_label=0x7f080019;
         public static final int hr_image=0x7f080001;

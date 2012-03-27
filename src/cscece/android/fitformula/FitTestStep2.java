@@ -41,7 +41,8 @@ public class FitTestStep2 extends Activity {
 	public final String[] AGE_GROUPS = {"15-19","20-29","30-39","40-49","50-59","60-69"}; //more for a reference than anything
 	public final int[] BEATS_MEN = {144,144,132,114,102,84};
 	public final int[] BEATS_WOMEN ={120,114,114,102,84,84};
-	public final double[] ENERGY_COST = {1.63,1.49,1.49,1.32,1.05,1.05};
+	public final double[] ENERGY_COST_WOMEN = {1.63,1.49,1.49,1.32,1.05,1.05};
+	public final double[] ENERGY_COST_MEN = {2.28,2.38,2.01,1.83,1.63,1.35};
 	
 	//Constant Test Phase Data
 	public static final int NONE = 0;
@@ -274,8 +275,9 @@ public class FitTestStep2 extends Activity {
 		weight = userCursor.getInt(1);
 		userCursor.close();
 		
-		Log.d("TEST", "" + weight);
-		vo2Max = 42.5 + 16.6 * getEnergyCost() - .12 * weight - .12 * hr - .24 * age;
+		Log.d("TEST", "ecost"+getEnergyCost()+"weight" + weight+"hr"+hr+"age"+age);
+		//TODO: energy cost needs to be multiplied by time
+		vo2Max = 42.5 + 16.6 * getEnergyCost()* 1 - .12 * weight - .12 * hr - .24 * age;
 		
 		//save this to the DB
 		int heartRate = hr;
@@ -288,8 +290,10 @@ public class FitTestStep2 extends Activity {
     	dbSQL.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
 		values.clear();
 		
+		int rowIndex = 1;
 		values.put(DatabaseHelper.vo2, vo2Max);
-		dbSQL.insert(DatabaseHelper.USER_TABLE_NAME, null, values);
+		//dbSQL.insert(DatabaseHelper.USER_TABLE_NAME, null, values);
+		dbSQL.update(DatabaseHelper.USER_TABLE_NAME, values, "_id = "+ rowIndex, null);
 		values.clear();
 		
 		Toast
@@ -302,8 +306,12 @@ public class FitTestStep2 extends Activity {
 	}
 	
 	private double getEnergyCost(){
+		if(gender == FitnessTest.MALE){
+			return ENERGY_COST_MEN[beatIndex];
+		}else{
+			return ENERGY_COST_WOMEN[beatIndex];
+		}
 		
-		return ENERGY_COST[beatIndex];
 		
 	}
 	
@@ -311,7 +319,7 @@ public class FitTestStep2 extends Activity {
 	public void cancelTest(View view){
 		
 		/*TODO: Spiral 4 Demo */
-		testComplete(150);
+		testComplete(120); 
 		/***********************/
 		
 		finishAndStartOver();
