@@ -58,6 +58,7 @@ public class firstWorkout extends Activity {
 		           }
 		       });
 		AlertDialog alert = builder.create();
+		alert.show();
 	}
 	
 	class WorkoutTimeTask extends AsyncTask<Long, Long, Void> {

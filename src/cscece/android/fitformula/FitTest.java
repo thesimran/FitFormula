@@ -177,7 +177,7 @@ public class FitTest extends Activity {
         	   * run for 15 seconds max for this part of the Fitness Test.
         	   * For the active HR in step 3 (I think), we will want 10 seconds max! 
         	   */
-        	  SystemClock.sleep(500); 
+        	  SystemClock.sleep(100); 
         	  publishProgress(second);
           }
           
