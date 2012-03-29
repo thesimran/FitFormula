@@ -1,6 +1,6 @@
 package cscece.android.fitformula;
 
-import cscece.android.fitformula.FitTestStep2.ToneTask;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
