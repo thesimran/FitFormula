@@ -78,7 +78,8 @@
          </activity>
           <activity 
               android:name="DatabaseHelper">
-          </activity>  
+          </activity>
+          <activity android:name="StartWorkout"></activity>  
             
     </application>
 

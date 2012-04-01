@@ -1,8 +1,12 @@
 package cscece.android.fitformula;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
+
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -10,6 +14,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ListActivity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -19,22 +24,30 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Paint.Align;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
+import android.text.Html;
 import android.text.format.Time;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MyWorkout extends Activity {
+public class MyWorkout extends ListActivity {
 	private ImageView myImage;
 	private Button myButton;
 	private Button viewCalButton;
@@ -51,6 +64,7 @@ public class MyWorkout extends Activity {
     
     private int program;
     private int level;
+    private String programName;
     private int numInterval;
     private int numAerobic;
     private int numCycles;
@@ -58,8 +72,20 @@ public class MyWorkout extends Activity {
     private int altRest;
     private boolean restAlternate;
 	
-	public static final String PREFS_NAME = "MyPrefs";	
-
+	public static final String PREFS_NAME = "MyPrefs";
+	
+	private static final String[] items={"lorem", "ipsum", "dolor",
+		"sit", "amet"};
+	
+	private ArrayList<Integer> workoutProgram;
+	private ArrayList<Integer> workoutLevel;
+	private ArrayList<Boolean> workoutAerobic;
+	private ArrayList<Long> workoutDate;
+	private ArrayList<String>workoutDateInString;
+	private ArrayList<Long> workoutEventID;
+	private ArrayList<String> workoutProgramName;
+	private TextView workoutListTitle;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -180,7 +206,7 @@ public class MyWorkout extends Activity {
 		int rowIndex = 1;
 		SQLiteDatabase db = dbh.getReadableDatabase();
 		Cursor c = db.query(DatabaseHelper.USER_TABLE_NAME, new String[] {
-				DatabaseHelper.program, DatabaseHelper.level},
+				DatabaseHelper.program, DatabaseHelper.level, DatabaseHelper.programname},
 				"_id = " + rowIndex, null, null, null, null);
 
 		if (c.moveToNext()) { // table has data (rows) in it
@@ -190,7 +216,11 @@ public class MyWorkout extends Activity {
 			
 			columnIndex = c.getColumnIndex(DatabaseHelper.level);
 			level = c.getInt(columnIndex);
-			Log.d("db", "level " + level);												
+			Log.d("db", "level " + level);
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.programname);
+			programName = c.getString(columnIndex);
+			Log.d("db", "programname " + programName);		
 		}
 		
 		c = db.query(DatabaseHelper.FREQUENCY_TABLE_NAME, new String[] {
@@ -302,8 +332,12 @@ public class MyWorkout extends Activity {
 		Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
 		builder.appendPath("time");
 		ContentUris.appendId(builder, startMillis);
+		Toast.makeText(this,
+				"Press the Back button to return to FitFormula",
+				Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
 		startActivity(intent);
+		//TODO: create notifications of scheduled workout sessions
 	}
 	
 	public void makeCalendarEvent(Calendar beginTime,DatabaseHelper dbh, int myProgram, int myLevel, boolean aerobic, long mCalID){		
@@ -347,6 +381,7 @@ public class MyWorkout extends Activity {
 		mValues.put(DatabaseHelper.aerobic, aerobic);
 		mValues.put(DatabaseHelper.date, startMillis);
 		mValues.put(DatabaseHelper.eventID, eventID);
+		mValues.put(DatabaseHelper.programname, programName);
 		db.insert(DatabaseHelper.MY_PROGRAM_TABLE_NAME, null, mValues);
 		db.close();
 		
@@ -375,8 +410,18 @@ public class MyWorkout extends Activity {
 			if (!gottenSchedule){
 				mPickDate.setVisibility(View.VISIBLE);
 			}else{
-				viewCalButton.setVisibility(View.VISIBLE);
-				viewCalButton.setGravity(Gravity.CENTER_HORIZONTAL);
+				//viewCalButton.setVisibility(View.VISIBLE);
+				//viewCalButton.setGravity(Gravity.CENTER_HORIZONTAL);				
+				
+				getWorkoutFromDB();
+				setContentView(R.layout.my_workout_layout2);				
+				workoutListTitle=(TextView)findViewById(R.id.workout_list_title);				
+				workoutListTitle.setText(Html.fromHtml("<big>My Workout Sessions</big> <br><b><i><u>"+workoutProgramName.get(0)
+						+" Program "+workoutProgram.get(0)+" Level "+workoutLevel.get(0)+"</u></i></b>"));
+//				setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,workoutDateInString));
+				//TODO: can make custom row, show workouts that are completed/not completed
+				setListAdapter(new ArrayAdapter<String>(this,R.layout.my_workout_row,workoutDateInString));
+				
 			}
 		}								  
 		
@@ -394,6 +439,74 @@ public class MyWorkout extends Activity {
      		myText.setVisibility(View.VISIBLE);
      	}*/
     }	
+	
+	public void getWorkoutFromDB(){
+		DatabaseHelper dbh;
+		dbh = new DatabaseHelper(this);		
+		SQLiteDatabase db = dbh.getReadableDatabase();
+		
+		Cursor c = db.query(DatabaseHelper.MY_PROGRAM_TABLE_NAME, new String[] {
+				DatabaseHelper.program, DatabaseHelper.level,DatabaseHelper.aerobic,
+				DatabaseHelper.date,DatabaseHelper.eventID,DatabaseHelper.programname},
+				null, null, null, null, null,null);
+
+		workoutProgram = new ArrayList<Integer>();
+		workoutLevel = new ArrayList<Integer>();
+		workoutAerobic = new ArrayList<Boolean>();
+		workoutDate = new ArrayList<Long>();
+		workoutEventID = new ArrayList<Long>();
+		workoutProgramName = new ArrayList<String>();
+		workoutDateInString = new ArrayList<String>();
+		
+		while (c.moveToNext()) { // table has data (rows) in it			
+
+			int columnIndex = c.getColumnIndex(DatabaseHelper.program);
+			workoutProgram.add(c.getInt(columnIndex));
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.level);
+			workoutLevel.add(c.getInt(columnIndex));
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.aerobic);
+			boolean myAerobic=(c.getInt(columnIndex)>0);
+			workoutAerobic.add(myAerobic);			
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.date);
+			long myDate=c.getLong(columnIndex);
+			workoutDate.add(myDate);
+			//workoutDateInString.add(String.valueOf(c.getLong(columnIndex)));
+			if(myAerobic){
+				workoutDateInString.add(DateFormat.getDateInstance(DateFormat.LONG).format(myDate)+ "- Aerobic Session");
+			}else{
+				workoutDateInString.add(DateFormat.getDateInstance(DateFormat.LONG).format(myDate)+ "- Interval Session");
+			}
+			 
+			columnIndex = c.getColumnIndex(DatabaseHelper.eventID);
+			workoutEventID.add(c.getLong(columnIndex));	
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.programname);
+			workoutProgramName.add(c.getString(columnIndex));
+		} 			
+
+			/*Toast.makeText(this,
+					"No saved workouts in database.",
+					Toast.LENGTH_LONG).show();*/
+		
+		db.close();
+	}
+	
+	
+	public void onListItemClick(ListView parent, View v, int position,long id) {
+		//workoutListTitle.setText(workoutDateInString.get(position));
+		
+		Intent in = new Intent(MyWorkout.this, StartWorkout.class);
+		in.putExtra("program",workoutProgram.get(position));
+		in.putExtra("level",workoutLevel.get(position));
+		in.putExtra("aerobic",workoutAerobic.get(position));
+		in.putExtra("date",workoutDate.get(position));
+		in.putExtra("eventID",workoutEventID.get(position));
+		in.putExtra("programname",workoutProgramName.get(position));
+		startActivity(in);
+	}
 	
 	// Method called when the "Get Workout" button is Pushed
 	public void getWorkoutPushed(View view) {		

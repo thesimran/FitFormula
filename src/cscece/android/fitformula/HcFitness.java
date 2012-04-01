@@ -185,7 +185,9 @@ public class HcFitness extends Activity {
 		    renderer.setZoomEnabled(false, false);
 		    //renderer.setZoomRate(1.1f);
 		    renderer.setBarSpacing(-0.85f);
-		    		    
+		    
+			//TODO: Achievements
+		    
 		    //Add the view!
 	        chartView = ChartFactory.getBarChartView(this, buildBarDataset(titles, values), renderer,Type.DEFAULT);
 	        chartView.setId(2);
@@ -255,7 +257,7 @@ public class HcFitness extends Activity {
 	        programText.setId(6);
 	        programText.setText(Html.fromHtml("<b><big>Recommended Workout:</big></b><br>According to your health and fitness assessment, we recommend the " +
 	        		"<i><u><b>"+programName+
-	        		"</b></u></i> program starting at level <i><u><b>"+level+"</b></u></i>.<br>"));	        
+	        		"</b></u></i> Program <i><u><b>"+program+"</b></u></i> starting at level <i><u><b>"+level+"</b></u></i>.<br>"));	        
 	        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
 	        relParams.addRule(RelativeLayout.BELOW,vo2Text.getId());
 	        mRelative.addView(programText,relParams);
@@ -335,9 +337,10 @@ public class HcFitness extends Activity {
     	ContentValues values = new ContentValues();		
 		int rowIndex = 1;
 		SQLiteDatabase db = dbh.getWritableDatabase();		
-		Log.d("db","program:"+program+" level:"+level+" bmiProblem:"+bmiProblem+" cvdRiskProblem:"+cvdRiskProblem+" vo2Problem:"+vo2Problem);
+		Log.d("db","programname: "+programName+" program:"+program+" level:"+level+" bmiProblem:"+bmiProblem+" cvdRiskProblem:"+cvdRiskProblem+" vo2Problem:"+vo2Problem);
 		values.put(DatabaseHelper.program, program);
-		values.put(DatabaseHelper.level, level);		
+		values.put(DatabaseHelper.level, level);	
+		values.put(DatabaseHelper.programname, programName);
 		db.update(DatabaseHelper.USER_TABLE_NAME, values, "_id = "
 				+ rowIndex, null);
 		db.close();
