@@ -1,10 +1,15 @@
 package cscece.android.fitformula;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Window;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -23,6 +28,23 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+		long date;
+    	//get the current date/time
+    	date = System.currentTimeMillis();
+		int myHR = getIntent().getExtras().getInt("hr");
+    	//Save heart rate to DB
+    	ContentValues values = new ContentValues();
+		DatabaseHelper dbh;
+		dbh = new DatabaseHelper(this);
+		SQLiteDatabase db = dbh.getWritableDatabase();
+    	values.put(DatabaseHelper.heartrate, myHR);
+    	values.put(DatabaseHelper.date, date);
+    	db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
+		values.clear();
+		db.close();
+		
 		//requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.step_vid_layout);
 		//getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
@@ -41,19 +63,39 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 		//Turn Audio off
 		audio = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		audio.setStreamMute(AudioManager.STREAM_MUSIC,true);
-		
-		//Start Video!
-		mVideoView.start();
-		
-		Toast
-        .makeText(this, "Please observe the proper stepping motion." , Toast.LENGTH_LONG)
-        .show();
-		
-		Toast
-        .makeText(this, "Press the 'Back' button to skip the video." , Toast.LENGTH_LONG)
-        .show();
-
+				
 	}
+	
+	@Override
+	public void onResume(){
+    	super.onResume();
+
+    	new AlertDialog.Builder(this)
+		.setTitle("Step Test")
+		.setMessage(R.string.st_inst_string)
+		.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				// Start Video!
+				mVideoView.start();
+
+				Toast.makeText(StepVideo.this, "Please observe the proper stepping motion.",
+						Toast.LENGTH_LONG).show();
+
+				Toast.makeText(StepVideo.this, "Press the 'Back' button to skip the video.",
+						Toast.LENGTH_LONG).show();
+			}
+		})
+		.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int whichButton) {
+				cancelSelected();
+			}
+		})
+		.show();		
+	}
+	
+	private void cancelSelected(){
+    	finish();
+    }
 	
 	@Override
 	public void onPause(){

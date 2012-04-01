@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,6 +17,7 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -76,7 +79,7 @@ public class FitTestHR extends Activity {
 		setContentView(mPreview);
 		addContentView(mDrawOnTop, new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
-
+		//mDrawOnTop.startReadingHR=true;
 		// Find the total number of cameras available
 		numberOfCameras = Camera.getNumberOfCameras();
 
@@ -98,7 +101,7 @@ public class FitTestHR extends Activity {
         .setCancelable(true)
         .setPositiveButton("Begin!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	//TODO: do something after click begin?
+            	mDrawOnTop.startReadingHR=true;
             }
         })
         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -159,7 +162,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 		super(context);
 		mDrawOnTop = drawOnTop;
 		mFinished = false;
-
+		
 		mSurfaceView = new SurfaceView(context);
 		addView(mSurfaceView);
 
@@ -319,6 +322,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 	}
 
 	private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
+		//TODO: use this function
 		final double ASPECT_TOLERANCE = 0.1;
 		double targetRatio = (double) w / h;
 		if (sizes == null)
@@ -402,7 +406,6 @@ class DrawOnTop extends View {
 	int[] Hyv; // H for highpass, L for lowpass
 	int[] Lxv;
 	int[] Lyv;
-	boolean beatStart=false;
 	ArrayList<Long> beatRecord=new ArrayList<Long>();
 	private final static int beatRecordLength = 10; 	
 	private final static int pulseDataLength = 256;
@@ -419,6 +422,8 @@ class DrawOnTop extends View {
 	long startTime;
 	boolean peakReached=false,troughReached=false;
 	boolean firstBeat=false, startBeat=false; 
+	public boolean startReadingHR;
+	Bitmap redHeart;
 	
 	public DrawOnTop(Context context) {
 		super(context);
@@ -451,11 +456,13 @@ class DrawOnTop extends View {
 		mBitmap = null;
 		mYUVData = null;
 		mRGBData = null;
+		
+		redHeart = BitmapFactory.decodeResource(getResources(), R.drawable.redheart);
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		if (mBitmap != null) {
+		if (mBitmap != null && startReadingHR) {
 			int canvasWidth = canvas.getWidth();
 			int canvasHeight = canvas.getHeight();
 			int newImageWidth = canvasWidth;
@@ -466,6 +473,8 @@ class DrawOnTop extends View {
 			decodeYUV420SP(mRGBData, mYUVData, mImageWidth, mImageHeight);	
 			
 			//w176 h144
+			//w720 h480
+			Log.d("width","width"+mImageWidth+"height"+mImageHeight);
 			int redMean=0,greenMean=0,blueMean=0;
 			int pix;
 			//vertically-centered line right side, 3/4 to end
@@ -585,16 +594,16 @@ class DrawOnTop extends View {
 					else if (((System.nanoTime()-peakTime)/1000000)>=250){ //omitting HRs higher than 240 bpm
 						if(((System.nanoTime()-peakTime)/1000000)<=1500){ //omitting HRs lower than 40 bpm
 							beatCount++;
+							//canvas.drawCircle(100, 100, 50, mPaintGreen);//draw green circle
+				            canvas.drawBitmap(redHeart, 100, 80, null);
 							if(beatCount>=3 && startBeat==false){ //omit first 2 beats as time for user to settle
 								beatCount=1;
-								rate += ((System.nanoTime()-peakTime)/1000000);
-								canvas.drawCircle(100, 100, 50, mPaintGreen);//draw green circle
+								rate += ((System.nanoTime()-peakTime)/1000000);								
 								startBeat=true;
 								Log.d("time","hit 3rd beat");
 
 							}else if(startBeat==true){
-								rate += ((System.nanoTime()-peakTime)/1000000);							
-								canvas.drawCircle(100, 100, 50, mPaintGreen);//draw green circle
+								rate += ((System.nanoTime()-peakTime)/1000000);															
 							}
 							//Log.d("time",""+(System.nanoTime()-peakTime)/1000000);
 						}									     					  				     
@@ -624,20 +633,18 @@ class DrawOnTop extends View {
 				
 			int timeElapsed= (int)((System.currentTimeMillis()-startTime)/1000);
 			if(timeElapsed>=15 && startBeat){ //stop reading HR after 15 sec
-				((Activity)getContext()).finish();
+				startReadingHR=false;
+				doneHR((int)beatsPerMinute);
+				//((Activity)getContext()).finish();
 			}
 			if(timeElapsed>=50){ //catching when startTime not initialized
 				timeElapsed=0;
 			}
-			imageMeanStr = "Time: "+timeElapsed+ " s Count: " +beatCount+" Pulse Rate: "+beatsPerMinute+ " beats/min";
-			canvas.drawText(imageMeanStr, marginWidth + 10 - 1, 30 - 1,
-					mPaintBlack);
-			canvas.drawText(imageMeanStr, marginWidth + 10 + 1, 30 - 1,
-					mPaintBlack);
-			canvas.drawText(imageMeanStr, marginWidth + 10 + 1, 30 + 1,
-					mPaintBlack);
-			canvas.drawText(imageMeanStr, marginWidth + 10 - 1, 30 + 1,
-					mPaintBlack);
+			if (startBeat){
+				imageMeanStr = "Time: "+timeElapsed+ "s Beats: " +beatCount+" Heart Rate: "+beatsPerMinute+ " beats/min";
+			}else{
+				imageMeanStr = "Time: "+timeElapsed+ "s Beats: 0 Heart Rate: "+beatsPerMinute+ " beats/min";
+			}
 			canvas.drawText(imageMeanStr, marginWidth + 10, 30, mPaintYellow);
 									
 		} // end if statement
@@ -645,6 +652,57 @@ class DrawOnTop extends View {
 		super.onDraw(canvas);
 
 	} // end onDraw method
+	
+	public void doneHR(int myHR){
+		final int thisHR=myHR;
+		new AlertDialog.Builder(getContext())
+				.setTitle("Heart Rate Complete")
+				.setMessage(Html.fromHtml("Your resting heart rate is <u><b><i>"+myHR+" beats/minute</i></b></u>. If you would like to take " +
+						"another reading, please click 'Retry'. Otherwise click 'Continue'"))
+				.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						leavingHR(thisHR);
+					}
+				})
+				.setNegativeButton("Retry",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int whichButton) {
+						/* User clicked Cancel so do some stuff */
+						beatCount=0;
+						peak=0; trough=0;	
+						peakTime=0; lastCheck=0; lastPeakTime=0; rate=0;
+						beatsPerMinute=0;
+						toastTime=0;
+						avgTimePerBeat=0;
+						startTime=0;
+						peakReached=false; troughReached=false;
+						firstBeat=false; startBeat=false;
+						
+						startReadingHR=true;						
+					}
+				})
+				.show();
+	}
+	
+	public void leavingHR(int myHR){
+		String nextActivity = ((Activity) getContext()).getIntent().getExtras().getString("nextactivity");
+		
+		String className=getContext().getPackageName()+"."+nextActivity;
+		Log.d("intent",className);
+		Class<?> c = null;
+        if(className != null) {
+            try {
+                c = Class.forName(className );
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        
+        Intent in = new Intent(getContext(), c);
+        in.putExtra("hr",myHR);
+        getContext().startActivity(in);
+        ((Activity) getContext()).finish();
+	}
 	
 	public void rgbToDoubleArray(int[] rgb, int[][] rgbDoubleArray, int width,int height) {
 		

@@ -505,7 +505,8 @@ public class MyWorkout extends ListActivity {
 		in.putExtra("date",workoutDate.get(position));
 		in.putExtra("eventID",workoutEventID.get(position));
 		in.putExtra("programname",workoutProgramName.get(position));
-		startActivity(in);
+		startActivity(in);			
+
 	}
 	
 	// Method called when the "Get Workout" button is Pushed
