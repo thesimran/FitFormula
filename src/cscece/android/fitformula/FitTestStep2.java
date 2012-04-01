@@ -276,7 +276,6 @@ public class FitTestStep2 extends Activity {
 		userCursor.close();
 		
 		Log.d("TEST", "ecost"+getEnergyCost()+"weight" + weight+"hr"+hr+"age"+age);
-		//TODO: energy cost needs to be multiplied by time
 		vo2Max = 42.5 + 16.6 * getEnergyCost()* 1 - .12 * weight - .12 * hr - .24 * age;
 		
 		//save this to the DB

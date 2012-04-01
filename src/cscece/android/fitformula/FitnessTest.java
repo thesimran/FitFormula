@@ -300,7 +300,8 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	imm.hideSoftInputFromWindow(weightText.getWindowToken(), 0);
 
     	
-    	Intent i = new Intent(this, FitTest.class);
+    	//Intent i = new Intent(this, FitTest.class);
+    	Intent i = new Intent(this, FitTestHR.class);
     	startActivity(i);
     }//end of startTestPushed
     
