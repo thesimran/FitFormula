@@ -50,7 +50,6 @@ import android.widget.Toast;
 public class MyWorkout extends ListActivity {
 	private ImageView myImage;
 	private Button myButton;
-	private Button viewCalButton;
 	private TextView myText;
 	private CalendarView myCal;
 	public static Context context; 
@@ -96,7 +95,6 @@ public class MyWorkout extends ListActivity {
 		//myImage= (ImageView) findViewById(R.id.running_man);
 		myButton= (Button) findViewById(R.id.get_workout);
 		myText= (TextView) findViewById(R.id.workout_text);
-		viewCalButton=(Button) findViewById(R.id.view_calendar);
 		//myCal = (CalendarView) findViewById(R.id.my_calendar);
 		
         mPickDate = (Button) findViewById(R.id.make_calendar_event);
@@ -313,17 +311,17 @@ public class MyWorkout extends ListActivity {
 		
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("gottenSchedule", true);
+		editor.putBoolean("scheduleUpdated", true);
 		editor.commit();			
 		
 		//myImage.setVisibility(View.GONE);
 		myButton.setVisibility(View.GONE);
 		myText.setVisibility(View.GONE);		
 		mPickDate.setVisibility(View.GONE);
-		viewCalButton.setVisibility(View.VISIBLE);
-		viewCalButton.setGravity(Gravity.CENTER_HORIZONTAL);
+				
         //myCal.setVisibility(View.VISIBLE);*/
         
-		viewCalendar(viewCalButton);
+		viewCalendar(myButton);
 		//TODO: ability to delete calendar events and db entries
 	}
 	
@@ -396,7 +394,36 @@ public class MyWorkout extends ListActivity {
 		startActivity(intent);*/
 
 	}
-
+	@Override
+    protected void onStart() {
+        super.onStart();
+        
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);						
+		boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
+		boolean gottenSchedule = settings.getBoolean("gottenSchedule", false);
+		boolean scheduleUpdated = settings.getBoolean("scheduleUpdated", false);
+		if (gottenWorkout){
+			myText.setVisibility(View.GONE);
+	 		myButton.setVisibility(View.GONE);
+			if (!gottenSchedule){
+				mPickDate.setVisibility(View.VISIBLE);
+			}else{				
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putBoolean("scheduleUpdated", false); //make scheduleUpdated false so don't reload schedule every time
+				editor.commit();	
+					
+				getWorkoutFromDB();
+				setContentView(R.layout.my_workout_layout2);				
+				workoutListTitle=(TextView)findViewById(R.id.workout_list_title);				
+				workoutListTitle.setText(Html.fromHtml("<big>My Workout Sessions</big> <br><b><i><u>"+workoutProgramName.get(0)
+					+" Program "+workoutProgram.get(0)+" Level "+workoutLevel.get(0)+"</u></i></b>"));
+				//setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,workoutDateInString));
+				//TODO: can make custom row, show workouts that are completed/not completed
+				setListAdapter(new ArrayAdapter<String>(this,R.layout.my_workout_row,workoutDateInString));				
+			}
+		}								  			
+	}
+	
 	@Override
     protected void onResume() {
         super.onResume();
@@ -404,40 +431,30 @@ public class MyWorkout extends ListActivity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);						
 		boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
 		boolean gottenSchedule = settings.getBoolean("gottenSchedule", false);
+		boolean scheduleUpdated = settings.getBoolean("scheduleUpdated", false);
 		if (gottenWorkout){
 			myText.setVisibility(View.GONE);
 	 		myButton.setVisibility(View.GONE);
 			if (!gottenSchedule){
 				mPickDate.setVisibility(View.VISIBLE);
 			}else{
-				//viewCalButton.setVisibility(View.VISIBLE);
-				//viewCalButton.setGravity(Gravity.CENTER_HORIZONTAL);				
-				
-				getWorkoutFromDB();
-				setContentView(R.layout.my_workout_layout2);				
-				workoutListTitle=(TextView)findViewById(R.id.workout_list_title);				
-				workoutListTitle.setText(Html.fromHtml("<big>My Workout Sessions</big> <br><b><i><u>"+workoutProgramName.get(0)
+				if(scheduleUpdated){//if user has gotten their schedule and schedule has been updated, reload schedule info
+					SharedPreferences.Editor editor = settings.edit();
+					editor.putBoolean("scheduleUpdated", false); //make scheduleUpdated false so don't reload schedule every time
+					editor.commit();	
+					
+					getWorkoutFromDB();
+					setContentView(R.layout.my_workout_layout2);				
+					workoutListTitle=(TextView)findViewById(R.id.workout_list_title);				
+					workoutListTitle.setText(Html.fromHtml("<big>My Workout Sessions</big> <br><b><i><u>"+workoutProgramName.get(0)
 						+" Program "+workoutProgram.get(0)+" Level "+workoutLevel.get(0)+"</u></i></b>"));
-//				setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,workoutDateInString));
-				//TODO: can make custom row, show workouts that are completed/not completed
-				setListAdapter(new ArrayAdapter<String>(this,R.layout.my_workout_row,workoutDateInString));
-				
+					//setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,workoutDateInString));
+					//TODO: can make custom row, show workouts that are completed/not completed
+					setListAdapter(new ArrayAdapter<String>(this,R.layout.my_workout_row,workoutDateInString));
+				}
 			}
 		}								  
-		
-		/*For Spiral 4 demo
-     SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-     	boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
-     
-     	if(gottenWorkout==true){
-     	myImage.setImageResource(R.drawable.calendar);
- 		myText.setVisibility(View.INVISIBLE);
- 		//myButton.setVisibility(View.INVISIBLE);
-     	}
-     	else{
-     		myImage.setImageResource(R.drawable.logo_transparent);
-     		myText.setVisibility(View.VISIBLE);
-     	}*/
+			
     }	
 	
 	public void getWorkoutFromDB(){

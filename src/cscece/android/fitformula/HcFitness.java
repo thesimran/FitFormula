@@ -85,12 +85,39 @@ public class HcFitness extends Activity {
         mRelative = (RelativeLayout) findViewById(R.id.hc_relative);
                 
     }//end of onCreate
+        
     
     @Override
-    protected void onStart() {
-        super.onStart();
-     Log.d("db","onStart");
-     getUserData();
+    protected void onStart(){
+    	super.onStart();
+    	
+    	SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);						
+		boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
+		
+		if(gottenWorkout){
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putBoolean("biometricsUpdated", false); //make biometricsUpdated false so don't reload HC info every time
+			editor.commit();	
+			
+			getUserData();
+		}
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);						
+		boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
+		boolean biometricsUpdated = settings.getBoolean("biometricsUpdated", false);				    	
+		
+		if(gottenWorkout && biometricsUpdated){ //if user has gotten their workout and biometrics have been updated, reload HC info
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putBoolean("biometricsUpdated", false); //make biometricsUpdated false so don't reload HC info every time
+			editor.commit();	
+			
+			getUserData();
+		}        
     }
     
     public void getUserData (){
@@ -145,12 +172,7 @@ public class HcFitness extends Activity {
 			
 			determineHealthFactors(dbh);								
 			determineHealthClass(dbh);
-			determineProgram(dbh);
-
-			SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
-	    	SharedPreferences.Editor editor = settings.edit();
-			editor.putBoolean("gottenWorkout", true);
-			editor.commit();									
+			determineProgram(dbh);										
 			
 			String[] titles = new String[] { "My CVD Risk", "Normal CVD Risk" };
 		    List<double[]> values = new ArrayList<double[]>();

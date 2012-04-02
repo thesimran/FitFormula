@@ -4,6 +4,7 @@ package cscece.android.fitformula;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -318,6 +319,11 @@ public class FitTestStep2 extends Activity {
         .makeText(FitTestStep2.this, "Test Complete", Toast.LENGTH_LONG)
         .show();
 		
+		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
+    	SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean("gottenWorkout", true);
+		editor.commit();	
+		
 		//Should bring us back to the FitnessTest Activity
 		FitnessTest.testComplete = true;
 		finish();
@@ -337,8 +343,8 @@ public class FitTestStep2 extends Activity {
 	public void cancelTest(View view){
 		
 		/*TODO: Spiral 4 Demo */
-		//testComplete(120); 
-		/***********************/
+		testComplete(120); 
+		/**********************************************************************************************/
 		
 		finishAndStartOver();
 		

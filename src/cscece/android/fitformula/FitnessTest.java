@@ -298,7 +298,11 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	imm.hideSoftInputFromWindow(ageText.getWindowToken(), 0);
     	imm.hideSoftInputFromWindow(heightText.getWindowToken(), 0);
     	imm.hideSoftInputFromWindow(weightText.getWindowToken(), 0);
-
+		
+		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
+    	SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean("biometricsUpdated", true);
+		editor.commit();	
     	
     	//Intent i = new Intent(this, FitTest.class);
     	Intent i = new Intent(this, FitTestHR.class);

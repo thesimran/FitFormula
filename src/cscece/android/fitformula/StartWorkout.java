@@ -52,7 +52,7 @@ public class StartWorkout extends Activity {
     	//Allow user to do workout only if scheduled for current day
 		if (mYear==c.get(Calendar.YEAR) && mMonth==c.get(Calendar.MONTH) && mDay==c.get(Calendar.DAY_OF_MONTH)){
 			startWorkoutButton.setEnabled(true);		
-			workoutAvail.setText("");
+			workoutAvail.setText(Html.fromHtml("<br><i><b>Start this workout today!</b></i>"));
 		}else{
 			startWorkoutButton.setEnabled(false);
 			workoutAvail.setText(Html.fromHtml("<br><i>Please wait until the scheduled date to complete this workout.</i>"));
