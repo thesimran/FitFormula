@@ -55,6 +55,8 @@ public class FitTestHR extends Activity {
 	private AlertDialog alertDialog;
 	private View dialogLayout;
 	
+	public static final int RESULT_OK=1;
+	
 	// The first rear facing camera
 	int defaultCameraId;
 
@@ -474,7 +476,7 @@ class DrawOnTop extends View {
 			
 			//w176 h144
 			//w720 h480
-			Log.d("width","width"+mImageWidth+"height"+mImageHeight);
+			//Log.d("width","width"+mImageWidth+"height"+mImageHeight);
 			int redMean=0,greenMean=0,blueMean=0;
 			int pix;
 			//vertically-centered line right side, 3/4 to end
@@ -686,22 +688,31 @@ class DrawOnTop extends View {
 	public void leavingHR(int myHR){
 		String nextActivity = ((Activity) getContext()).getIntent().getExtras().getString("nextactivity");
 		
-		String className=getContext().getPackageName()+"."+nextActivity;
-		Log.d("intent",className);
-		Class<?> c = null;
-        if(className != null) {
-            try {
-                c = Class.forName(className );
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        
-        Intent in = new Intent(getContext(), c);
-        in.putExtra("hr",myHR);
-        getContext().startActivity(in);
-        ((Activity) getContext()).finish();
+		if(nextActivity.equals("FitTestStep2")){ //Taking HR from step test requires finish and HR sent back
+			Intent i=new Intent();
+			i.putExtra("hr",myHR);
+			((Activity) getContext()).setResult(FitTestHR.RESULT_OK,i);
+	        ((Activity) getContext()).finish();
+		} 
+		else {
+			String className = getContext().getPackageName() + "."
+					+ nextActivity;
+			Log.d("intent", className);
+			Class<?> c = null;
+			if (className != null) {
+				try {
+					c = Class.forName(className);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			Intent in = new Intent(getContext(), c);
+			in.putExtra("hr", myHR);
+			getContext().startActivity(in);
+			((Activity) getContext()).finish();
+		}
 	}
 	
 	public void rgbToDoubleArray(int[] rgb, int[][] rgbDoubleArray, int width,int height) {

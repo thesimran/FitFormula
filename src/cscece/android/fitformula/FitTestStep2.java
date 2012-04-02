@@ -3,6 +3,7 @@ package cscece.android.fitformula;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -44,6 +45,8 @@ public class FitTestStep2 extends Activity {
 	public final double[] ENERGY_COST_WOMEN = {1.63,1.49,1.49,1.32,1.05,1.05};
 	public final double[] ENERGY_COST_MEN = {2.28,2.38,2.01,1.83,1.63,1.35};
 	
+	public static final int FITTESTSTEP2_REQUEST_CODE = 1;
+	
 	//Constant Test Phase Data
 	public static final int NONE = 0;
 	public static final int WARM_UP = 1;
@@ -64,7 +67,7 @@ public class FitTestStep2 extends Activity {
 	TextView instructionText;
 	
 	//Current Test Phase
-	private static int currentPhase = NONE; 
+	private static int currentPhase = NONE; 	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,56 +84,58 @@ public class FitTestStep2 extends Activity {
 	@Override
 	public void onResume(){
 		
-		//We will use the SoundManager to play the metronome tone
-		//The SoundManager class uses the SoundPool class to play a selected tone
+		if(currentPhase==NONE){
+			setupValues();
+		}
+
+		super.onResume();
+	}
+	
+	public void setupValues() {
+		
+		// We will use the SoundManager to play the metronome tone
+		// The SoundManager class uses the SoundPool class to play a selected
+		// tone
 		mSoundManager = new SoundManager();
 		mSoundManager.initSounds(getBaseContext());
 		mSoundManager.addSound(1, R.raw.pace_tone);
-	
-		//set values for gender and age now
-		//These values are extracted from the DB
-		db= new DatabaseHelper(this);
-		userCursor=db
-                .getReadableDatabase()
-                .rawQuery("SELECT _id, gender, age "+
-                          "FROM " + DatabaseHelper.USER_TABLE_NAME,
-                          null);
-		hrCursor = db
-					.getReadableDatabase()
-					.rawQuery("SELECT _id, heartrate, date " + 
-								"FROM " + DatabaseHelper.HR_TABLE_NAME,
-								null);
-		
-		//should only be one row in the table
+
+		// set values for gender and age now
+		// These values are extracted from the DB
+		db = new DatabaseHelper(this);
+		userCursor = db.getReadableDatabase().rawQuery(
+				"SELECT _id, gender, age " + "FROM "
+						+ DatabaseHelper.USER_TABLE_NAME, null);
+		hrCursor = db.getReadableDatabase().rawQuery(
+				"SELECT _id, heartrate, date " + "FROM "
+						+ DatabaseHelper.HR_TABLE_NAME, null);
+
+		// should only be one row in the table
 		userCursor.moveToFirst();
 		gender = userCursor.getInt(1);
 		age = userCursor.getInt(2);
-		
-		//hr should come from the last entry, meaning it was taken from the latest date
+
+		// hr should come from the last entry, meaning it was taken from the
+		// latest date
 		hrCursor.moveToLast();
 		restingHr = hrCursor.getInt(1);
-		
-		//Closing
+		Log.d("hr", "restingHr" + restingHr);
+		// Closing
 		hrCursor.close();
 		userCursor.close();
 		db.close();
-		
-		pace = calcPace(age,gender);
-		if(age > 59){
-			//mad slow for the old people
+
+		if (age > 59) {
+			// mad slow for the old people
 			warmupPace = 66;
-			
-		}else{
-			warmupPace = calcPace(age+10,gender);
+
+		} else {
+			warmupPace = calcPace(age + 10, gender);
 		}
-		
+		pace = calcPace(age, gender);
+
 		interval = calcInterval(pace);
 		warmupInterval = calcInterval(warmupPace);
-		
-		/*Testing
-		testComplete(100);
-		*/
-		super.onResume();
 	}
 	
 	@Override
@@ -204,6 +209,22 @@ public class FitTestStep2 extends Activity {
 		
 	}
 	
+	@Override
+	public void onActivityResult(int requestCode,int resultCode,Intent data){
+	     super.onActivityResult(requestCode, resultCode, data);
+	     
+	     Log.d("hr","onActivityResult");
+	     if(requestCode==FITTESTSTEP2_REQUEST_CODE && resultCode==FitTestHR.RESULT_OK){
+	    	 int theHR = data.getIntExtra("hr", 200);
+	    	 phaseComplete(theHR);
+	     }else{
+	    	 Toast
+	         .makeText(FitTestStep2.this, "Error getting heart rate", Toast.LENGTH_LONG)
+	         .show();
+	    	 finish();
+	     }
+	}
+
 	public void phaseComplete(int hr){
 		
 		afterHr = hr;
@@ -214,11 +235,9 @@ public class FitTestStep2 extends Activity {
 			return;
 		}
 		
-		
-		
-		
 		boolean isDone = false;
 		int diff = afterHr - restingHr;
+		//int diff=26; //used for testing
 	
 		//Lets check to see if the new HR is too high	
 		if(beatIndex == 0){
@@ -276,7 +295,7 @@ public class FitTestStep2 extends Activity {
 		userCursor.close();
 		
 		Log.d("TEST", "ecost"+getEnergyCost()+"weight" + weight+"hr"+hr+"age"+age);
-		vo2Max = 42.5 + 16.6 * getEnergyCost()* 1 - .12 * weight - .12 * hr - .24 * age;
+		vo2Max = 42.5 + 16.6 * getEnergyCost() - .12 * weight - .12 * hr - .24 * age;
 		
 		//save this to the DB
 		int heartRate = hr;
@@ -305,20 +324,20 @@ public class FitTestStep2 extends Activity {
 	}
 	
 	private double getEnergyCost(){
-		if(gender == FitnessTest.MALE){
+		Log.d("hr","age"+age+"beatIndex"+beatIndex);
+		if(gender == FitnessTest.MALE){ //0
 			return ENERGY_COST_MEN[beatIndex];
-		}else{
+		}else{ //1
 			return ENERGY_COST_WOMEN[beatIndex];
 		}
-		
-		
+				
 	}
 	
 	//Listener for the 'Cancel Test' button
 	public void cancelTest(View view){
 		
 		/*TODO: Spiral 4 Demo */
-		testComplete(120); 
+		//testComplete(120); 
 		/***********************/
 		
 		finishAndStartOver();
@@ -405,7 +424,7 @@ public class FitTestStep2 extends Activity {
 		}else{//over 59
 			beatIndex = 5;
 		}
-		
+		Log.d("hr","theAge"+theAge+"beatIndex"+beatIndex);
 		//now look-up in the array
 		if(theGender == FitnessTest.MALE){
 			thePace = BEATS_MEN[beatIndex];
@@ -456,7 +475,7 @@ public class FitTestStep2 extends Activity {
 				Boolean each = true;
 				long begin = System.currentTimeMillis();
 				
-				//TODO: A better timing method will eventually be required.
+				//TODO: A better timing method will eventually be required. Use Timer/TimerTask/CountDownTimer with Handler or Runnable
 				for(int i=0; i < length; i++){
 	        	
 				  //This should make it exactly 3 minutes	
@@ -494,11 +513,14 @@ public class FitTestStep2 extends Activity {
 	        	/* TODO: Now that we are done the Warmup, we have to take the pulse again.
 	        	 * Since we have actually integrated the HR sensor into our app yet, we will supply
 	        	 * a dummy HR for now
-	        	 */
-	        	int dummyHr = 80;
-	        	/***************************************/
+	        	 
+	        	int dummyHr = 80;	        	
 	        	
-	        	phaseComplete(dummyHr);	
+	        	phaseComplete(dummyHr);*/
+	        		        	
+	        	Intent i = new Intent(FitTestStep2.this, FitTestHR.class);
+	    		i.putExtra("nextactivity", "FitTestStep2"); //Telling HR Class what is next activity
+	        	startActivityForResult(i, FITTESTSTEP2_REQUEST_CODE);
 	        	
 	        }
 	        
