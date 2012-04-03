@@ -134,6 +134,86 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 			break;
 		}
 	}
+
+    @Override
+    public void onStart(){
+    	super.onStart();
+    	
+    	DatabaseHelper dbh;
+		dbh = new DatabaseHelper(this);		
+		int data;
+		int rowIndex = 1;
+		SQLiteDatabase db = dbh.getReadableDatabase();
+		Cursor c = db.query(DatabaseHelper.USER_TABLE_NAME, new String[] {
+				DatabaseHelper.gender, DatabaseHelper.age,
+				DatabaseHelper.height, DatabaseHelper.weight,
+				DatabaseHelper.hypertension, DatabaseHelper.smoking,
+				DatabaseHelper.diabetes, DatabaseHelper.bloodpressure },
+				"_id = " + rowIndex, null, null, null, null);
+		
+		if (c.moveToNext()) { // table has data (rows) in it
+			Log.d("db", "userinfo table not empty");
+			// loading data from database
+			int columnIndex = c.getColumnIndex(DatabaseHelper.gender);
+			data = c.getInt(columnIndex);
+			Log.d("db", "gender " + data);
+			if(data==MALE){ //0
+				genderRadio.check(R.id.male);
+			}else{ //data==FEMALE //1
+				genderRadio.check(R.id.female);}			
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.age);
+			data = c.getInt(columnIndex);
+			Log.d("db", "age " + data);
+			ageText.setText(String.valueOf(data));					
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.height);
+			data = c.getInt(columnIndex); 
+			Log.d("db", "height " + data);
+			heightText.setText(String.valueOf(data));
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.weight);
+			data = c.getInt(columnIndex);
+			Log.d("db", "weight " + data);
+			weightText.setText(String.valueOf(data));
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.hypertension);
+			data = c.getInt(columnIndex);
+			Log.d("db", "hypertension " + data);
+			if(data==YES){ //1
+				hyperRadio.check(R.id.hyp_yes);
+			}else{ //data==NO //0
+				hyperRadio.check(R.id.hyp_no);}	
+
+			columnIndex = c.getColumnIndex(DatabaseHelper.smoking);
+			data = c.getInt(columnIndex);
+			Log.d("db", "smoking " + data);
+			if(data==YES){ //1
+				smokingRadio.check(R.id.smoke_yes);
+			}else{ //data==NO //0
+				smokingRadio.check(R.id.smoke_no);}	
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.diabetes);
+			data = c.getInt(columnIndex);
+			Log.d("db", "diabetes " + data);
+			if(data==YES){ //1
+				diabetesRadio.check(R.id.diabetes_yes);
+			}else{ //data==NO //0
+				diabetesRadio.check(R.id.diabetes_no);}	
+			
+			columnIndex = c.getColumnIndex(DatabaseHelper.bloodpressure);
+			data = c.getInt(columnIndex);
+			Log.d("db", "bloodpressure " + data);			
+			bloodRadio.check(R.id.blood_yes);
+			bloodLabel.setText(R.string.blood_string_yes);
+			bloodSpinner.setVisibility(View.GONE);
+			bloodEntry.setVisibility(View.VISIBLE);
+			bloodEntry.setText(String.valueOf(data));			
+			
+		}//else{ // table is empty			
+		//}
+		db.close();
+    }
     
     @Override
     public void onResume(){

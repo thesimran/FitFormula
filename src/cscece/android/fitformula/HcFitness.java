@@ -100,6 +100,9 @@ public class HcFitness extends Activity {
 			editor.commit();	
 			
 			getUserData();
+		}else{
+	        myTextView.setText("You have not yet done a Fitness Test, therefore your Health Center contains no data.  " +
+	        		"Please do the Fitness Test and then select a workout to begin your journey towards ultimate fitness prowess.");
 		}
     }
     
@@ -117,7 +120,10 @@ public class HcFitness extends Activity {
 			editor.commit();	
 			
 			getUserData();
-		}        
+		}else{
+	        myTextView.setText("You have not yet done a Fitness Test, therefore your Health Center contains no data.  " +
+	        		"Please do the Fitness Test and then select a workout to begin your journey towards ultimate fitness prowess.");
+		}
     }
     
     public void getUserData (){
@@ -287,7 +293,8 @@ public class HcFitness extends Activity {
 	        //TODO: clear chartView/contentView before it updates otherwise overlap old one		    
 			
 		}else{
-	        myTextView.setText("You have not yet done a Fitness Test, therefore your Health Center contains no data.  Please do the Fitness Test and then select a workout to begin your journey towards ultimate fitness prowess.");
+	        myTextView.setText("You have not yet done a Fitness Test, therefore your Health Center contains no data.  " +
+	        		"Please do the Fitness Test and then select a workout to begin your journey towards ultimate fitness prowess.");
 		}
 		db.close();
     }

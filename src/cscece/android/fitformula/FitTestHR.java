@@ -137,6 +137,7 @@ public class FitTestHR extends Activity {
 			mCamera.release();
 			mCamera = null;
 		}
+		finish();
 	}
 
 }

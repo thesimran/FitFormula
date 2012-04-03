@@ -34,13 +34,8 @@ public class HealthCenter extends TabActivity {
 	    setupTab(new TextView(this), "Weight", intent);
 	    intent = new Intent().setClass(this, HcHeartRate.class);
 	    setupTab(new TextView(this), "Heart Rate", intent);
-	    /*We're gonna leave the "Achievements" tab out for now.
-	     * Just because it one of the least important functional requirements
-	     * of our app.  We will get to it later. Go Spiral Method!
-	     * 
-	     * 
-	    	setupTab(new TextView(this), "Achivements");
-	     */
+	    intent = new Intent().setClass(this, HcAchievements.class);
+	    setupTab(new TextView(this), "Achievements", intent);	    
 	    
     }//end of onCreate
     
