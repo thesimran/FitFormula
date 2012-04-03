@@ -214,7 +214,8 @@ public class HcFitness extends Activity {
 		    //renderer.setZoomRate(1.1f);
 		    renderer.setBarSpacing(-0.85f);
 		    
-			//TODO: Achievements
+			
+		    mRelative.removeAllViews();
 		    
 		    //Add the view!
 	        chartView = ChartFactory.getBarChartView(this, buildBarDataset(titles, values), renderer,Type.DEFAULT);

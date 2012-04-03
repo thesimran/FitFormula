@@ -1,6 +1,5 @@
 package cscece.android.fitformula;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import org.achartengine.ChartFactory;
@@ -72,6 +71,10 @@ public class FirstWorkout extends Activity {
 		
 	}
 	
+	public void cancelWorkout (View view){
+		finish();
+	}
+		
 	//Listener for the 'Begin Warmup' button
 	public void startWorkout(View view){
 		//TODO: First, take heart rate, hard-coded for now
@@ -184,7 +187,7 @@ public class FirstWorkout extends Activity {
 	    chartView.setId(1);
 	    
 	    //chart
-	    RelativeLayout.LayoutParams relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 650);	        
+	    RelativeLayout.LayoutParams relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 550);	        
 	    relParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 	    mRelative.addView(chartView,relParams);	
 	    

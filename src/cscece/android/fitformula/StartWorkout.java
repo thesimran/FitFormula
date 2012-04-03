@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -71,8 +72,9 @@ public class StartWorkout extends Activity {
 	}
 	
 	public void startWorkout (View theButton){
-	    // TODO: launch workout
-
+	    // TODO: launch correct workout
+		Intent i = new Intent(this, FirstWorkout.class);		
+    	startActivity(i);
 	}
 
 	public void cancelWorkout (View theButton){

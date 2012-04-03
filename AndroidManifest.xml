@@ -84,7 +84,8 @@
           <activity 
               android:name="FitTestHR"
               android:screenOrientation="portrait" >          
-          </activity>  
+          </activity>
+          <activity android:name="FirstWorkout"></activity>  
             
     </application>
 
