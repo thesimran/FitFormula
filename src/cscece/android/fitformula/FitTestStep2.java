@@ -343,7 +343,7 @@ public class FitTestStep2 extends Activity {
 	public void cancelTest(View view){
 		
 		/*TODO: Spiral 4 Demo */
-		testComplete(120); 
+		testComplete(130); 
 		/**********************************************************************************************/
 		
 		finishAndStartOver();
