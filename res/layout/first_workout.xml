@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--  
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/background"
     android:orientation="vertical"
@@ -44,4 +45,50 @@
         android:layout_alignParentRight="true"
         android:onClick="startWorkout" />
     
-</RelativeLayout>
+</RelativeLayout> -->
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <TableRow>
+     
+    <TextView
+        android:id="@+id/first_workout_inst" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firstw_inst_str"
+    />
+   
+    </TableRow>
+    <!--  <TableRow>
+        
+    <TextView 
+        android:id="@+id/time_remaining"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/time_str"
+        android:textSize="20dip"
+
+     /> 
+      </TableRow> -->
+      <TableRow>
+     <Button
+        android:id="@+id/cancel_first_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:onClick="cancelWorkout" />
+    </TableRow>
+    <TableRow>
+     <Button
+        android:id="@+id/begin_first_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/begin_first_str"
+        android:onClick="startWorkout" />
+     
+     </TableRow>
+    
+</TableLayout>
