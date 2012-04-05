@@ -45,7 +45,7 @@
 	<string name="on_str">On</string>
 	<string name="off_str">Off</string>
 	<string name="notif_string">Notifications</string>
-	<string name="finger_inst">Fit Formula will now take your resting heart rate using the phone camera and adjacent LED light.  Lightly place your finger over the camera
+	<string name="finger_inst">Fit Formula will now take your heart rate using the phone camera and adjacent LED light.  Lightly place your finger over the camera
 	    lens, but do not push too hard, or it will not function properly.  Press BEGIN when you are ready!</string>
 	<string name="begin">Begin</string>
 	<string name="cancel">Cancel</string>

@@ -21,6 +21,7 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,41 +34,42 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class HcFitness extends Activity {
 
-	int gender;
-	int age;
-	int height;
-	int weight;
-	int hypertension;
-	int smoking;
-	int diabetes;
-	int bloodPressure;
+	private int gender;
+	private int age;
+	private int height;
+	private int weight;
+	private int hypertension;
+	private int smoking;
+	private int diabetes;
+	private int bloodPressure;
 	
-	double vo2;
-	double myBMI;
-	double risk;
-	double myCVDRisk;
-	double normalRisk;
-	double normalCVDRisk;
-	double heartAge;	
+	private double vo2;
+	private double myBMI;
+	private double risk;
+	private double myCVDRisk;
+	private double normalRisk;
+	private double normalCVDRisk;
+	private double heartAge;	
 	
-	String bmiClass;
-	String cvdRiskClass;
-	String vo2Class;
+	private String bmiClass;
+	private String cvdRiskClass;
+	private String vo2Class;
 	
-	int program;
-	int level;
-	String programName;
+	private int program;
+	private int level;
+	private String programName;
+	private long gotProgramDate;
 	
 	private RelativeLayout mRelative;
 	private View chartView;
-	private ViewGroup.LayoutParams params;
-	private TextView myTextView;
+	private TextView titleText;
 	private TextView cvdText;
 	private TextView bmiText;
 	private TextView vo2Text;	
@@ -80,7 +82,7 @@ public class HcFitness extends Activity {
         //TextView textview = new TextView(this);
         //textview.setText("This is the HcFitness tab");
         setContentView(R.layout.hc_fitness_layout);
-        myTextView = (TextView) findViewById(R.id.do_fitness_test_note);
+        titleText = (TextView) findViewById(R.id.do_fitness_test_note);
         //mLinear = (LinearLayout) findViewById(R.id.hc_linear);
         mRelative = (RelativeLayout) findViewById(R.id.hc_relative);
                 
@@ -100,9 +102,6 @@ public class HcFitness extends Activity {
 			editor.commit();	
 			
 			getUserData();
-		}else{
-	        myTextView.setText("You have not yet done a Fitness Test, therefore your Health Center contains no data.  " +
-	        		"Please do the Fitness Test and then select a workout to begin your journey towards ultimate fitness prowess.");
 		}
     }
     
@@ -120,9 +119,6 @@ public class HcFitness extends Activity {
 			editor.commit();	
 			
 			getUserData();
-		}else{
-	        myTextView.setText("You have not yet done a Fitness Test, therefore your Health Center contains no data.  " +
-	        		"Please do the Fitness Test and then select a workout to begin your journey towards ultimate fitness prowess.");
 		}
     }
     
@@ -180,124 +176,147 @@ public class HcFitness extends Activity {
 			determineHealthClass(dbh);
 			determineProgram(dbh);										
 			
-			String[] titles = new String[] { "My CVD Risk", "Normal CVD Risk" };
-		    List<double[]> values = new ArrayList<double[]>();
-		    
-		    String temp=String.format("%.2f",100*myCVDRisk);
-		    double temp2=Double.parseDouble(temp);		    		   
-		    values.add(new double[] { temp2 });
-		    temp=String.format("%.2f",100*normalCVDRisk);
-		    temp2=Double.parseDouble(temp);		    		    
-		    values.add(new double[] { temp2 });
-		    int[] colors = new int[] { Color.BLUE, Color.CYAN };
-		    XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
-		    double yMax=100;
-		    if(myCVDRisk>=normalCVDRisk){
-		    	yMax=(myCVDRisk*100)+(myCVDRisk*20);
-		    }else{
-		    	yMax=(normalCVDRisk*100)+(myCVDRisk*20);
-		    }
-		    setChartSettings(renderer, "My Cardiovascular Risk", "", "CVD Risk (%)", 0.5,
-		        1.5, 0, yMax, Color.GRAY, Color.LTGRAY);
-		    renderer.getSeriesRendererAt(0).setDisplayChartValues(true);
-		    renderer.getSeriesRendererAt(1).setDisplayChartValues(true);
-		    renderer.setXLabels(0);
-		    //renderer.setYLabels(5);
-		    renderer.setXLabelsAlign(Align.LEFT);
-		    renderer.setYLabelsAlign(Align.LEFT);
-		    renderer.setChartValuesTextSize(18.0f);
-		    //renderer.setChartValuesTextAlign(Align.LEFT);
-		    //SimpleSeriesRenderer.setChartValuesTextSize(12.0f);
-		    renderer.setPanEnabled(false, false);
-		    // renderer.setZoomEnabled(false);
-		    renderer.setZoomEnabled(false, false);
-		    //renderer.setZoomRate(1.1f);
-		    renderer.setBarSpacing(-0.85f);
-		    
-			
-		    mRelative.removeAllViews();
-		    
-		    //Add the view!
-	        chartView = ChartFactory.getBarChartView(this, buildBarDataset(titles, values), renderer,Type.DEFAULT);
-	        chartView.setId(2);
-	        //params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-	        params = new ViewGroup.LayoutParams(200, 200);
-	        //addContentView(chartView, params);
-	        	        
-	        myTextView.setText(Html.fromHtml("<br><b><u><big>My Health Report - "+ DateFormat.getDateInstance().format(new Date())+"</big></u></b><br>"));
-			myTextView.setId(1);
-			/*myTextView.setText("Blood Pressure: "+bloodPressure+" mmHg\nHeight: "+height+" cm\nWeight: "+weight+" kg\nBMI: "
-					 +String.format("%.1f",myBMI)+"\nRisk/Normal Risk: "+String.format("%.2f",risk)+"/"+String.format("%.2f",normalRisk)
-					 +"\nCVD Risk/Normal CVD Risk: "+String.format("%.2f",100*myCVDRisk)+"/"+String.format("%.2f",100*normalCVDRisk)
-					 +"%\nHeart Age/Age: "+String.format("%.0f",heartAge)+"/"+age);*/
-				        
-	        //Log.d("count",""+mRelative.getChildCount());
-			DisplayMetrics displaymetrics = new DisplayMetrics();
-	        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-	        int height = displaymetrics.heightPixels;
-	        int width = displaymetrics.widthPixels;
-	        int chartSize = (int)(width*0.8);
-	        Log.d("count","height"+height+"width"+width);	        
-	        RelativeLayout.LayoutParams relParams=new RelativeLayout.LayoutParams(chartSize,chartSize);	        
-	        relParams.addRule(RelativeLayout.BELOW,myTextView.getId());
-	        relParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-	        mRelative.addView(chartView,relParams);	        
-	        	   
-	        cvdText = new TextView(this);
-	        cvdText.setId(3);
-	        cvdText.setText(Html.fromHtml("<b><big>Cardiovascular Disease (CVD) Risk Score:</big></b><br>This score indicates the risk that you have for developing " +
-	        		"cardiovascular disease (eg. coronary death, " +
-	        		"myocardial infarction, stroke and heart failure) over the next 10 years. Your risk is <i><u><b>"+String.format("%.2f",100*myCVDRisk)+
-	        		"%</b></u></i>, which is considered <i><u><b>"+cvdRiskClass+"</b></u></i>. Your heart age is <i><u><b>"+String.format("%.0f",heartAge)+"</b></u></i>" +
-	        				", which reflects the age of your vascular system."+
-	        		"<br>Improving your dietary and exercise behaviour and quitting smoking will help lower your CVD risk score and heart age.<br>"));	        
-	        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
-	        relParams.addRule(RelativeLayout.BELOW,chartView.getId());
-	        mRelative.addView(cvdText,relParams);	        
-	        
-	        bmiText=new TextView(this);
-	        bmiText.setId(4);
-	        String lessThan = "&#60;";
-	        String greaterThan ="&#62;";
-	        bmiText.setText(Html.fromHtml("<b><big>Body Mass Index (BMI):</big></b><br>BMI assesses your health risk based on your " +
-	        		"height and weight. Your current BMI is <i><u><b>"+String.format("%.1f",myBMI)+
-	        		"</b></u></i>, which is considered <i><u><b>"+bmiClass+"</b></u></i>. The risk of developing weight-related health problems is minimal " +
-	        				"when your BMI is between 18.5 to 24.9. A high BMI ("+greaterThan+"25 overweight or obese) is associated with increased risk " +
-	        				"of health problems such as diabetes, heart disease, high blood pressure, gallbladder disease and some forms of cancer. " +
-	        				"A low BMI ("+lessThan+"18.5, underweight) is associated with health problems such as osteoporosis, under nutrition and eating disorders. " +
-	        				"Note: BMI applies to adults 18 years and over with the exception of pregnant and lactating women. BMI measurement may " +
-	        				"not apply if you are an athlete who has a large amount of muscle mass.<br>"));	        
-	        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
-	        relParams.addRule(RelativeLayout.BELOW,cvdText.getId());
-	        mRelative.addView(bmiText,relParams);
-	        
-	        vo2Text=new TextView(this);
-	        vo2Text.setId(5);
-	        vo2Text.setText(Html.fromHtml("<b><big>Aerobic Fitness:</big></b><br>Your predicted VO2 max is " +
-	        		"<i><u><b>"+String.format("%.1f",vo2)+
-	        		" ml/kg/min</b></u></i>, which is considered <i><u><b>"+vo2Class+"</b></u></i> relative to your age group. VO2 max refers " +
-	        				"to the maximum amount of oxygen" +
-	        				" that an individual can utilize during intense or maximal exercise. The more fit you are, the higher your VO2 max will be.<br>"));	        
-	        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
-	        relParams.addRule(RelativeLayout.BELOW,bmiText.getId());
-	        mRelative.addView(vo2Text,relParams);
-	        
-	        programText=new TextView(this); 
-	        programText.setId(6);
-	        programText.setText(Html.fromHtml("<b><big>Recommended Workout:</big></b><br>According to your health and fitness assessment, we recommend the " +
-	        		"<i><u><b>"+programName+
-	        		"</b></u></i> Program <i><u><b>"+program+"</b></u></i> starting at level <i><u><b>"+level+"</b></u></i>.<br>"));	        
-	        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
-	        relParams.addRule(RelativeLayout.BELOW,vo2Text.getId());
-	        mRelative.addView(programText,relParams);
-	        
-	        //TODO: clear chartView/contentView before it updates otherwise overlap old one		    
+			drawFitnessLayout();       	        	    
 			
 		}else{
-	        myTextView.setText("You have not yet done a Fitness Test, therefore your Health Center contains no data.  " +
-	        		"Please do the Fitness Test and then select a workout to begin your journey towards ultimate fitness prowess.");
+			titleText.setText(R.string.do_test_str);
 		}
 		db.close();
+    }
+    
+    public void drawFitnessLayout(){
+    	String[] titles = new String[] { "My CVD Risk", "Normal CVD Risk" };
+	    List<double[]> values = new ArrayList<double[]>();
+	    
+	    String temp=String.format("%.2f",100*myCVDRisk);
+	    double temp2=Double.parseDouble(temp);		    		   
+	    values.add(new double[] { temp2 });
+	    temp=String.format("%.2f",100*normalCVDRisk);
+	    temp2=Double.parseDouble(temp);		    		    
+	    values.add(new double[] { temp2 });
+	    int[] colors = new int[] { Color.BLUE, Color.CYAN };
+	    XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
+	    double yMax=100;
+	    if(myCVDRisk>=normalCVDRisk){
+	    	yMax=(myCVDRisk*100)+(myCVDRisk*20);
+	    }else{
+	    	yMax=(normalCVDRisk*100)+(myCVDRisk*20);
+	    }
+	    setChartSettings(renderer, "My Cardiovascular Risk", "", "CVD Risk (%)", 0.5,
+	        1.5, 0, yMax, Color.GRAY, Color.LTGRAY);
+	    renderer.getSeriesRendererAt(0).setDisplayChartValues(true);
+	    renderer.getSeriesRendererAt(1).setDisplayChartValues(true);
+	    renderer.setXLabels(0);
+	    //renderer.setYLabels(5);
+	    renderer.setXLabelsAlign(Align.LEFT);
+	    renderer.setYLabelsAlign(Align.LEFT);
+	    renderer.setChartValuesTextSize(18.0f);
+	    //renderer.setChartValuesTextAlign(Align.LEFT);
+	    //SimpleSeriesRenderer.setChartValuesTextSize(12.0f);
+	    renderer.setPanEnabled(false, false);
+	    // renderer.setZoomEnabled(false);
+	    renderer.setZoomEnabled(false, false);
+	    //renderer.setZoomRate(1.1f);
+	    renderer.setBarSpacing(-0.85f);
+	    
+		
+	    mRelative.removeAllViews();
+	    
+	    //Add the view!
+        chartView = ChartFactory.getBarChartView(this, buildBarDataset(titles, values), renderer,Type.DEFAULT);
+        chartView.setId(2); 
+        	        
+        //myTextView.setText(Html.fromHtml("<br><b><u><big>My Health Report - "+ DateFormat.getDateInstance().format(new Date())+"</big></u></b><br>"));
+        titleText.setText(Html.fromHtml("<br><b><u><big>My Health Report - "+ DateFormat.getDateInstance(DateFormat.LONG).format(gotProgramDate)+"</big></u></b><br>"));
+        titleText.setId(1);
+		RelativeLayout.LayoutParams relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
+        relParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        relParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        mRelative.addView(titleText,relParams);	  
+        
+		/*myTextView.setText("Blood Pressure: "+bloodPressure+" mmHg\nHeight: "+height+" cm\nWeight: "+weight+" kg\nBMI: "
+				 +String.format("%.1f",myBMI)+"\nRisk/Normal Risk: "+String.format("%.2f",risk)+"/"+String.format("%.2f",normalRisk)
+				 +"\nCVD Risk/Normal CVD Risk: "+String.format("%.2f",100*myCVDRisk)+"/"+String.format("%.2f",100*normalCVDRisk)
+				 +"%\nHeart Age/Age: "+String.format("%.0f",heartAge)+"/"+age);*/
+			        
+        //Log.d("count",""+mRelative.getChildCount());
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+        int chartSize = (int)(width*0.8);
+        Log.d("count","height"+height+"width"+width);	        
+        relParams=new RelativeLayout.LayoutParams(chartSize,chartSize);	        
+        relParams.addRule(RelativeLayout.BELOW,titleText.getId());
+        relParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        mRelative.addView(chartView,relParams);	        
+        	   
+        cvdText = new TextView(this);
+        cvdText.setId(3);
+        cvdText.setText(Html.fromHtml("<b><big>Cardiovascular Disease (CVD) Risk Score:</big></b><br>This score indicates the risk that you have for developing " +
+        		"cardiovascular disease (eg. coronary death, " +
+        		"myocardial infarction, stroke and heart failure) over the next 10 years. Your risk is <i><u><b>"+String.format("%.2f",100*myCVDRisk)+
+        		"%</b></u></i>, which is considered <i><u><b>"+cvdRiskClass+"</b></u></i>. Your heart age is <i><u><b>"+String.format("%.0f",heartAge)+"</b></u></i>" +
+        				", which reflects the age of your vascular system."+
+        		"<br>Improving your dietary and exercise behaviour and quitting smoking will help lower your CVD risk score and heart age.<br>"));	        
+        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
+        relParams.addRule(RelativeLayout.BELOW,chartView.getId());
+        mRelative.addView(cvdText,relParams);	        
+        
+        bmiText=new TextView(this);
+        bmiText.setId(4);
+        String lessThan = "&#60;";
+        String greaterThan ="&#62;";
+        bmiText.setText(Html.fromHtml("<b><big>Body Mass Index (BMI):</big></b><br>BMI assesses your health risk based on your " +
+        		"height and weight. Your current BMI is <i><u><b>"+String.format("%.1f",myBMI)+
+        		"</b></u></i>, which is considered <i><u><b>"+bmiClass+"</b></u></i>. The risk of developing weight-related health problems is minimal " +
+        				"when your BMI is between 18.5 to 24.9. A high BMI ("+greaterThan+"25 overweight or obese) is associated with increased risk " +
+        				"of health problems such as diabetes, heart disease, high blood pressure, gallbladder disease and some forms of cancer. " +
+        				"A low BMI ("+lessThan+"18.5, underweight) is associated with health problems such as osteoporosis, under nutrition and eating disorders. " +
+        				"Note: BMI applies to adults 18 years and over with the exception of pregnant and lactating women. BMI measurement may " +
+        				"not apply if you are an athlete who has a large amount of muscle mass.<br>"));	        
+        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
+        relParams.addRule(RelativeLayout.BELOW,cvdText.getId());
+        mRelative.addView(bmiText,relParams);
+        
+        vo2Text=new TextView(this);
+        vo2Text.setId(5);
+        vo2Text.setText(Html.fromHtml("<b><big>Aerobic Fitness:</big></b><br>Your predicted VO2 max is " +
+        		"<i><u><b>"+String.format("%.1f",vo2)+
+        		" ml/kg/min</b></u></i>, which is considered <i><u><b>"+vo2Class+"</b></u></i> relative to your age group. VO2 max refers " +
+        				"to the maximum amount of oxygen" +
+        				" that an individual can utilize during intense or maximal exercise. The more fit you are, the higher your VO2 max will be.<br>"));	        
+        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
+        relParams.addRule(RelativeLayout.BELOW,bmiText.getId());
+        mRelative.addView(vo2Text,relParams);
+        
+        programText=new TextView(this); 
+        programText.setId(6);
+        programText.setText(Html.fromHtml("<b><big>Recommended Workout:</big></b><br>According to your health and fitness assessment, we recommend the " +
+        		"<i><u><b>"+programName+
+        		"</b></u></i> Program <i><u><b>"+program+"</b></u></i> starting at level <i><u><b>"+level+"</b></u></i>.<br>"));	        
+        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
+        relParams.addRule(RelativeLayout.BELOW,vo2Text.getId());
+        mRelative.addView(programText,relParams);	 
+        
+        Button switchButton = new Button(this);
+        switchButton.setId(7);
+        switchButton.setText("Go to My Workout");
+        switchButton.setOnClickListener(new Button.OnClickListener() {  
+            public void onClick(View v)
+                {
+            	//	Switch Tabs
+          			FitFormula ParentActivity;
+          			ParentActivity = (FitFormula) HcFitness.this.getParent().getParent();
+          			ParentActivity.switchTab(0);
+          			//TODO: trigger schedule in My Workout?
+                }
+         });
+        relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
+        relParams.addRule(RelativeLayout.BELOW,programText.getId());
+        relParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        mRelative.addView(switchButton,relParams);	 
+              
     }
     
     public void determineProgram(DatabaseHelper dbh){
@@ -371,6 +390,8 @@ public class HcFitness extends Activity {
 		values.put(DatabaseHelper.program, program);
 		values.put(DatabaseHelper.level, level);	
 		values.put(DatabaseHelper.programname, programName);
+		gotProgramDate = System.currentTimeMillis();
+		values.put(DatabaseHelper.date, gotProgramDate);
 		db.update(DatabaseHelper.USER_TABLE_NAME, values, "_id = "
 				+ rowIndex, null);
 		db.close();

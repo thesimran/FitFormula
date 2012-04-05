@@ -83,6 +83,7 @@ public class MyWorkout extends ListActivity {
 	private ArrayList<String>workoutDateInString;
 	private ArrayList<Long> workoutEventID;
 	private ArrayList<String> workoutProgramName;
+	private ArrayList<Boolean> workoutIntro;
 	private TextView workoutListTitle;
 	
 	/** Called when the activity is first created. */
@@ -185,6 +186,7 @@ public class MyWorkout extends ListActivity {
 	public void makeWorkoutSchedule (int myYear, int myMonth, int myDay){
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		String calDisplayName = settings.getString ("calDisplayName", null);
+		
 		if (calDisplayName == null){
 			Log.d("email","calDisplayName is null");
 			new AlertDialog.Builder(MyWorkout.this)
@@ -252,19 +254,24 @@ public class MyWorkout extends ListActivity {
 		
 		Calendar beginTime = Calendar.getInstance();
 		beginTime.set(myYear, myMonth, myDay, 0, 0, 0);		
-		
+		boolean firstTime=settings.getBoolean("firstProgram", false);
+
+		if(firstTime){ //first time the user has used FF, so give introduction workout
+			makeCalendarEvent(beginTime,dbh, program, level, false, calID, true);
+			beginTime.add(Calendar.DAY_OF_MONTH, 2); //one day rest after introduction workout
+		}
 		for (int i = 0; i < numCycles; i++) {
 			if (restAlternate) {
 				boolean altRestTime=false;
 				for (int j = 0; j < numInterval; j++) {
 					if (altRestTime){
-						makeCalendarEvent(beginTime,dbh, program, level, false, calID);
+						makeCalendarEvent(beginTime,dbh, program, level, false, calID, false);
 						if (j<numInterval-1 || numAerobic >=1){ //do not add rest time if the last session of cycle
 							beginTime.add(Calendar.DAY_OF_MONTH, altRest);
 						}
 						altRestTime=!altRestTime;
 					}else{ //!altRestTime
-						makeCalendarEvent(beginTime,dbh, program, level, false, calID);
+						makeCalendarEvent(beginTime,dbh, program, level, false, calID, false);
 						if (j<numInterval-1 || numAerobic >=1){ //do not add rest time if the last session of cycle
 							beginTime.add(Calendar.DAY_OF_MONTH, rest);
 						}
@@ -273,13 +280,13 @@ public class MyWorkout extends ListActivity {
 				}
 				for (int k = 0; k < numAerobic; k++) {
 					if (altRestTime){
-						makeCalendarEvent(beginTime,dbh, program, level, true, calID);
+						makeCalendarEvent(beginTime,dbh, program, level, true, calID, false);
 						if (k<numAerobic-1){ //do not add rest time if the last session of cycle
 							beginTime.add(Calendar.DAY_OF_MONTH, altRest);
 						}
 						altRestTime=!altRestTime;
 					}else{ //!altRestTime
-						makeCalendarEvent(beginTime,dbh, program, level, true, calID);
+						makeCalendarEvent(beginTime,dbh, program, level, true, calID, false);
 						if (k<numAerobic-1){ //do not add rest time if the last session of cycle
 							beginTime.add(Calendar.DAY_OF_MONTH, rest);
 						}
@@ -291,13 +298,13 @@ public class MyWorkout extends ListActivity {
 				for (int j = 0; j < numInterval; j++) {
 					Log.d("email",""+beginTime.get(Calendar.DAY_OF_MONTH));
 
-					makeCalendarEvent(beginTime,dbh, program, level, false, calID);
+					makeCalendarEvent(beginTime,dbh, program, level, false, calID, false);
 					if (j<numInterval-1 || numAerobic >=1){ //do not add rest time if the last session of cycle
 						beginTime.add(Calendar.DAY_OF_MONTH, rest);								
 					}
 				}
 				for (int k = 0; k < numAerobic; k++) {
-					makeCalendarEvent(beginTime,dbh, program, level, true, calID);
+					makeCalendarEvent(beginTime,dbh, program, level, true, calID, false);
 					if (k<numAerobic-1){ //do not add rest time if the last session of cycle
 						beginTime.add(Calendar.DAY_OF_MONTH, rest);
 					}															
@@ -310,6 +317,7 @@ public class MyWorkout extends ListActivity {
 		db.close();
 		
 		SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean("firstProgram", false);
 		editor.putBoolean("gottenSchedule", true);
 		editor.putBoolean("scheduleUpdated", true);
 		editor.commit();			
@@ -338,7 +346,7 @@ public class MyWorkout extends ListActivity {
 		//TODO: create notifications of scheduled workout sessions
 	}
 	
-	public void makeCalendarEvent(Calendar beginTime,DatabaseHelper dbh, int myProgram, int myLevel, boolean aerobic, long mCalID){		
+	public void makeCalendarEvent(Calendar beginTime,DatabaseHelper dbh, int myProgram, int myLevel, boolean aerobic, long mCalID, boolean intro){		
 
 		long startMillis = 0;
 		// long endMillis = 0;
@@ -354,8 +362,11 @@ public class MyWorkout extends ListActivity {
 		ContentValues values = new ContentValues();
 		values.put(Events.DTSTART, startMillis+TimeZone.getDefault().getOffset(System.currentTimeMillis()));
 		values.put(Events.DTEND, startMillis+TimeZone.getDefault().getOffset(System.currentTimeMillis())); 
-		// values.put(Events.EVENT_LOCATION, "Gym");		
-		if(aerobic==true){
+		// values.put(Events.EVENT_LOCATION, "Gym");
+		if(intro==true){ 
+			values.put(Events.TITLE, "Introductory Workout Session");
+			values.put(Events.DESCRIPTION, "FitFormula Introductory Workout Session - Program "+ myProgram + " - Level " + myLevel);}
+		else if(aerobic==true){
 			values.put(Events.TITLE, "Workout Session - Aerobic");
 			values.put(Events.DESCRIPTION, "FitFormula Aerobic Workout Session - Program "+ myProgram + " - Level " + myLevel);}
 		else{//aerobic==false
@@ -380,6 +391,7 @@ public class MyWorkout extends ListActivity {
 		mValues.put(DatabaseHelper.date, startMillis);
 		mValues.put(DatabaseHelper.eventID, eventID);
 		mValues.put(DatabaseHelper.programname, programName);
+		mValues.put(DatabaseHelper.intro, intro);
 		db.insert(DatabaseHelper.MY_PROGRAM_TABLE_NAME, null, mValues);
 		db.close();
 		
@@ -464,7 +476,7 @@ public class MyWorkout extends ListActivity {
 		
 		Cursor c = db.query(DatabaseHelper.MY_PROGRAM_TABLE_NAME, new String[] {
 				DatabaseHelper.program, DatabaseHelper.level,DatabaseHelper.aerobic,
-				DatabaseHelper.date,DatabaseHelper.eventID,DatabaseHelper.programname},
+				DatabaseHelper.date,DatabaseHelper.eventID,DatabaseHelper.programname,DatabaseHelper.intro},
 				null, null, null, null, null,null);
 
 		workoutProgram = new ArrayList<Integer>();
@@ -474,6 +486,7 @@ public class MyWorkout extends ListActivity {
 		workoutEventID = new ArrayList<Long>();
 		workoutProgramName = new ArrayList<String>();
 		workoutDateInString = new ArrayList<String>();
+		workoutIntro = new ArrayList<Boolean>();
 		
 		while (c.moveToNext()) { // table has data (rows) in it			
 
@@ -487,11 +500,17 @@ public class MyWorkout extends ListActivity {
 			boolean myAerobic=(c.getInt(columnIndex)>0);
 			workoutAerobic.add(myAerobic);			
 			
+			columnIndex = c.getColumnIndex(DatabaseHelper.intro);
+			boolean myIntro=((c.getInt(columnIndex))>0);
+			workoutIntro.add(myIntro);
+			
 			columnIndex = c.getColumnIndex(DatabaseHelper.date);
 			long myDate=c.getLong(columnIndex);
 			workoutDate.add(myDate);
-			//workoutDateInString.add(String.valueOf(c.getLong(columnIndex)));
-			if(myAerobic){
+						
+			if(myIntro){
+				workoutDateInString.add(DateFormat.getDateInstance(DateFormat.LONG).format(myDate)+ "- Intro Session");
+			}else if(myAerobic){
 				workoutDateInString.add(DateFormat.getDateInstance(DateFormat.LONG).format(myDate)+ "- Aerobic Session");
 			}else{
 				workoutDateInString.add(DateFormat.getDateInstance(DateFormat.LONG).format(myDate)+ "- Interval Session");
@@ -522,6 +541,7 @@ public class MyWorkout extends ListActivity {
 		in.putExtra("date",workoutDate.get(position));
 		in.putExtra("eventID",workoutEventID.get(position));
 		in.putExtra("programname",workoutProgramName.get(position));
+		in.putExtra("intro",workoutIntro.get(position));
 		startActivity(in);			
 
 	}

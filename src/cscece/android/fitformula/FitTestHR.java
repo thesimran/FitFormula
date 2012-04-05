@@ -689,7 +689,8 @@ class DrawOnTop extends View {
 	public void leavingHR(int myHR){
 		String nextActivity = ((Activity) getContext()).getIntent().getExtras().getString("nextactivity");
 		
-		if(nextActivity.equals("FitTestStep2")){ //Taking HR from step test requires finish and HR sent back
+		if(nextActivity.equals("FitTestStep2") || nextActivity.equals("HcHeartRate")){ //Taking HR from step test requires finish and HR sent back
+			Log.d("hr","nextActivity");
 			Intent i=new Intent();
 			i.putExtra("hr",myHR);
 			((Activity) getContext()).setResult(FitTestHR.RESULT_OK,i);

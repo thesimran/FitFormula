@@ -12,6 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 2;
 	public static final String USER_TABLE_NAME = "userinfo";
 	public static final String HR_TABLE_NAME = "hrdata";
+	public static final String WEIGHT_TABLE_NAME = "weightdata";
 	public static final String MY_PROGRAM_TABLE_NAME = "myprogram";
 	public static final String FREQUENCY_TABLE_NAME = "frequency";
 	public static final String WARMUP_TABLE_NAME = "warmup";
@@ -44,12 +45,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //hrdata columns
     public static final String heartrate = "heartrate";
     public static final String date = "date";    
+    public static final String resting = "resting";
      
     //myprogram columns
     public static final String program = "program";    
     public static final String eventID = "eventID";
     public static final String programname = "programname";
     public static final String completed = "completed";
+    public static final String intro = "intro";
     
     //frequency columns
     public static final String numinterval="numinterval";
@@ -102,7 +105,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    				+ vo2class + " TEXT,"
 	    				+ program + " INTEGER,"
 	    				+ level + " INTEGER,"
-	    				+ programname + " TEXT"
+	    				+ programname + " TEXT,"
+	    				+ date + " BIGINT"
 	    				+ ");");	              
 	        }
 	        
@@ -115,6 +119,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    		db.execSQL("CREATE TABLE " + HR_TABLE_NAME + " ("
 	    				+ "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 	    				+ heartrate + " INTEGER,"
+	    				+ date + " BIGINT,"
+	    				+ resting + " BOOLEAN"
+	    				+ ");");	              
+	        }
+	        
+	        dbExist = checkDataBase(WEIGHT_TABLE_NAME);		  
+	        if(dbExist){
+	                //do nothing - database already exists
+	        	Log.d("db","weightdata table exists");
+	        }else{
+	        	Log.d("db","weightdata table does not exist");
+	    		db.execSQL("CREATE TABLE " + WEIGHT_TABLE_NAME + " ("
+	    				+ "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+	    				+ weight + " INTEGER,"
 	    				+ date + " BIGINT"	    				
 	    				+ ");");	              
 	        }
@@ -133,7 +151,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    				+ date + " BIGINT,"
 	    				+ eventID + " BIGINT,"
 	    				+ programname + " TEXT,"
-	    				+ completed + " BOOLEAN"
+	    				+ completed + " BOOLEAN,"
+	    				+ intro + " BOOLEAN"
 	    				+ ");");	               
 	        }
 	        dbExist = checkDataBase(FREQUENCY_TABLE_NAME);		  
@@ -260,6 +279,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				+ " to " + newVersion + ", which will destroy all old data");
 		db.execSQL("DROP TABLE IF EXISTS "+USER_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS "+HR_TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS "+WEIGHT_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS "+MY_PROGRAM_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS "+FREQUENCY_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS "+WARMUP_TABLE_NAME);

@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,9 +42,15 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 		SQLiteDatabase db = dbh.getWritableDatabase();
     	values.put(DatabaseHelper.heartrate, myHR);
     	values.put(DatabaseHelper.date, date);
+    	values.put(DatabaseHelper.resting, true);
     	db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
 		values.clear();
 		db.close();
+		
+		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
+    	SharedPreferences.Editor editor = settings.edit();		
+		editor.putBoolean("hrUpdated",true);
+		editor.commit();
 		
 		//requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.step_vid_layout);

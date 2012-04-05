@@ -24,6 +24,7 @@ public class StartWorkout extends Activity {
 	private long date;
 	private long eventID;
 	private String programName;
+	private boolean intro;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -38,6 +39,7 @@ public class StartWorkout extends Activity {
 		date = getIntent().getExtras().getLong("date");
 		eventID = getIntent().getExtras().getLong("eventID");		
 		programName = getIntent().getExtras().getString("programname");
+		intro = getIntent().getExtras().getBoolean("intro");
 		
 		workoutAvail=(TextView)findViewById(R.id.workout_availability);
 		startWorkoutButton=(Button)findViewById(R.id.start_workout_button);
@@ -61,7 +63,10 @@ public class StartWorkout extends Activity {
         
 		workoutDesc=(TextView)findViewById(R.id.start_workout_desc);
 		String dateString = (DateFormat.getDateInstance(DateFormat.LONG).format(date));
-		if(aerobic){
+		if(intro){
+			workoutDesc.setText(Html.fromHtml("<big>"+dateString+"</big><br><b><i><u>"+programName+" Program "+program
+					+" Level "+level+"</u></i></b><br>Intro Session"));
+		}else if(aerobic){
 			workoutDesc.setText(Html.fromHtml("<big>"+dateString+"</big><br><b><i><u>"+programName+" Program "+program
 				+" Level "+level+"</u></i></b><br>Aerobic Session"));	    	
 		}else{

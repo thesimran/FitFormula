@@ -363,7 +363,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     		return;
     		
     	}	
-    	if(weight == 0 ){    		    		
+    	if(weight <= 0 ){    		    		
     		Toast
             .makeText(this, "You must enter a valid weight. Please try again.", Toast.LENGTH_LONG)
             .show();
@@ -382,6 +382,8 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
     	SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("biometricsUpdated", true);
+		editor.putBoolean("weightUpdated",true);
+		editor.putBoolean("firstProgram",true);
 		editor.commit();	
     	
     	//Intent i = new Intent(this, FitTest.class);
@@ -509,6 +511,15 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 			db = dbh.getWritableDatabase();
 			db.insert(DatabaseHelper.USER_TABLE_NAME, null, values);
 		}
+		
+		db = dbh.getWritableDatabase();
+		values.clear();
+		
+		values.put(DatabaseHelper.weight, weight);
+		values.put(DatabaseHelper.date, System.currentTimeMillis());
+		
+		db.insert(DatabaseHelper.WEIGHT_TABLE_NAME, null, values);
+
 		db.close();
 	}	
 }

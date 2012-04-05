@@ -306,8 +306,9 @@ public class FitTestStep2 extends Activity {
 		SQLiteDatabase dbSQL = db.getWritableDatabase();
     	values.put(DatabaseHelper.heartrate, heartRate);
     	values.put(DatabaseHelper.date, date);
+    	values.put(DatabaseHelper.resting, false);
     	dbSQL.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
-		values.clear();
+		values.clear();				
 		
 		int rowIndex = 1;
 		values.put(DatabaseHelper.vo2, vo2Max);
@@ -322,6 +323,7 @@ public class FitTestStep2 extends Activity {
 		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
     	SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("gottenWorkout", true);
+		editor.putBoolean("hrUpdated", true);	
 		editor.commit();	
 		
 		//Should bring us back to the FitnessTest Activity
