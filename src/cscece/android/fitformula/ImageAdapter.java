@@ -49,7 +49,7 @@ public class ImageAdapter extends BaseAdapter {
 
     // references to our images
     public Integer[] mThumbIds = {
-            R.drawable.achievement_unlocked, R.drawable.achievement_unlocked, R.drawable.achievement_unlocked,
+            R.drawable.achievement_locked, R.drawable.achievement_locked, R.drawable.achievement_locked,
             R.drawable.achievement_locked, R.drawable.achievement_locked, R.drawable.achievement_locked,                        
             R.drawable.achievement_locked, R.drawable.achievement_locked, R.drawable.achievement_locked,
             R.drawable.achievement_locked, R.drawable.achievement_locked, R.drawable.achievement_locked,

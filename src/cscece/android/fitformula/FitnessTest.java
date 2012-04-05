@@ -384,6 +384,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 		editor.putBoolean("biometricsUpdated", true);
 		editor.putBoolean("weightUpdated",true);
 		editor.putBoolean("firstProgram",true);
+		editor.putBoolean("achievementsUpdated",true);
 		editor.commit();	
     	
     	//Intent i = new Intent(this, FitTest.class);
@@ -512,9 +513,15 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 			db.insert(DatabaseHelper.USER_TABLE_NAME, null, values);
 		}
 		
-		db = dbh.getWritableDatabase();
+		int achieveNum=0; //update achievement db to unlock achievement 0, (Entered biometrics)
+		db = dbh.getWritableDatabase();		
 		values.clear();
-		
+		values.put(DatabaseHelper.achieved, true);
+		values.put(DatabaseHelper.date, System.currentTimeMillis());
+		db.update(DatabaseHelper.ACHIEVEMENTS_TABLE_NAME, values, DatabaseHelper.achievementnumber+" = "
+				+ achieveNum, null);
+			
+		values.clear();		//add weight and date to weightdata db
 		values.put(DatabaseHelper.weight, weight);
 		values.put(DatabaseHelper.date, System.currentTimeMillis());
 		

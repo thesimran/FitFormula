@@ -315,6 +315,12 @@ public class FitTestStep2 extends Activity {
 		//dbSQL.insert(DatabaseHelper.USER_TABLE_NAME, null, values);
 		dbSQL.update(DatabaseHelper.USER_TABLE_NAME, values, "_id = "+ rowIndex, null);
 		values.clear();
+				
+    	int achieveNum=2;  //update achievement db to unlock achievement 2, (Finished the step test)
+    	values.put(DatabaseHelper.achieved, true);
+		values.put(DatabaseHelper.date, System.currentTimeMillis());
+		dbSQL.update(DatabaseHelper.ACHIEVEMENTS_TABLE_NAME, values, DatabaseHelper.achievementnumber+" = "
+				+ achieveNum, null);
 		
 		Toast
         .makeText(FitTestStep2.this, "Test Complete", Toast.LENGTH_LONG)
@@ -323,9 +329,11 @@ public class FitTestStep2 extends Activity {
 		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
     	SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("gottenWorkout", true);
-		editor.putBoolean("hrUpdated", true);	
+		editor.putBoolean("hrUpdated", true);
+		editor.putBoolean("achievementsUpdated", true);
 		editor.commit();	
 		
+		db.close();
 		//Should bring us back to the FitnessTest Activity
 		FitnessTest.testComplete = true;
 		finish();

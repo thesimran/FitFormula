@@ -14,6 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String HR_TABLE_NAME = "hrdata";
 	public static final String WEIGHT_TABLE_NAME = "weightdata";
 	public static final String MY_PROGRAM_TABLE_NAME = "myprogram";
+	public static final String ACHIEVEMENTS_TABLE_NAME = "achievements";
 	public static final String FREQUENCY_TABLE_NAME = "frequency";
 	public static final String WARMUP_TABLE_NAME = "warmup";
 	public static final String COOLDOWN_TABLE_NAME = "cooldown";
@@ -53,6 +54,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String programname = "programname";
     public static final String completed = "completed";
     public static final String intro = "intro";
+    
+    //achievements columns
+    public static final String achievementnumber = "achievementnumber";
+    public static final String achievementdescription = "achievementdescription";
+    public static final String achieved = "achieved";
     
     //frequency columns
     public static final String numinterval="numinterval";
@@ -155,6 +161,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    				+ intro + " BOOLEAN"
 	    				+ ");");	               
 	        }
+	        
+	        dbExist = checkDataBase(ACHIEVEMENTS_TABLE_NAME);		  
+	        if(dbExist){
+	                //do nothing - database already exists
+	        	Log.d("db","achievements table exists");
+	        }else{
+	        	Log.d("db","achievements table does not exist");
+	    		db.execSQL("CREATE TABLE " + ACHIEVEMENTS_TABLE_NAME + " ("
+	    				+ "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+	    				+ achievementnumber + " INTEGER,"	    				
+	    				+ achievementdescription + " TEXT,"	    				
+	    				+ achieved + " BOOLEAN,"
+	    				+ date + " BIGINT"	    				
+	    				+ ");");	               
+	        }
+	        
 	        dbExist = checkDataBase(FREQUENCY_TABLE_NAME);		  
 	        if(dbExist){
 	                //do nothing - database already exists
@@ -281,6 +303,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS "+HR_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS "+WEIGHT_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS "+MY_PROGRAM_TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS "+ACHIEVEMENTS_TABLE_NAME);		
 		db.execSQL("DROP TABLE IF EXISTS "+FREQUENCY_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS "+WARMUP_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS "+COOLDOWN_TABLE_NAME);

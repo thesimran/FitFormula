@@ -44,12 +44,20 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
     	values.put(DatabaseHelper.date, date);
     	values.put(DatabaseHelper.resting, true);
     	db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
-		values.clear();
+
+    	values.clear();		
+    	int achieveNum=1;  //update achievement db to unlock achievement 1, (Got a resting heart rate)
+    	values.put(DatabaseHelper.achieved, true);
+		values.put(DatabaseHelper.date, System.currentTimeMillis());
+		db.update(DatabaseHelper.ACHIEVEMENTS_TABLE_NAME, values, DatabaseHelper.achievementnumber+" = "
+				+ achieveNum, null);
+		
 		db.close();
 		
 		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
     	SharedPreferences.Editor editor = settings.edit();		
 		editor.putBoolean("hrUpdated",true);
+		editor.putBoolean("achievementsUpdated", true);
 		editor.commit();
 		
 		//requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
