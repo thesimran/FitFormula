@@ -86,7 +86,7 @@ public class FirstWorkout extends Activity {
 		mRelative = (RelativeLayout)findViewById(R.id.workout_relative);
 		
 		
-		timeRemaining = new TextView(context);//(TextView)findViewById(R.id.time_remaining);
+		timeRemaining = new TextView(context);
         timeRemaining.setId(2);
         //20 minutes left -- start
         timeRemaining.setText("20:00");
@@ -295,7 +295,7 @@ public class FirstWorkout extends Activity {
 				long millLeft = m[0];
 				//update global/total time left variable
 				globalTimeLeft = millLeft;
-				Log.d("globalTimeLeft:",""+ globalTimeLeft);
+				//Log.d("globalTimeLeft:",""+ globalTimeLeft);
 				//Convert milliseconds left to minutes and seconds left to show the user
 				int secondsTotal = (int) millLeft / 1000;
 				int seconds = secondsTotal % 60;
