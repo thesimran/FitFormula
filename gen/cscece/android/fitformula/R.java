@@ -22,28 +22,29 @@ public final class R {
         public static final int capture=0x7f020004;
         public static final int fitness_testing_icon_not_selected=0x7f020005;
         public static final int fitness_testing_icon_selected=0x7f020006;
-        public static final int hc_background=0x7f020007;
-        public static final int health_center_selected=0x7f020008;
-        public static final int healthcenter_not_selected=0x7f020009;
-        public static final int hr_pic=0x7f02000a;
-        public static final int ic_launcher=0x7f02000b;
-        public static final int ic_tab_artists_grey=0x7f02000c;
-        public static final int ic_tab_artists_white=0x7f02000d;
-        public static final int ic_tab_ftest=0x7f02000e;
-        public static final int ic_tab_hc=0x7f02000f;
-        public static final int ic_tab_myworkout=0x7f020010;
-        public static final int ic_tab_settings=0x7f020011;
-        public static final int logo_transparent=0x7f020012;
-        public static final int redheart=0x7f020013;
-        public static final int settings_not_selected=0x7f020014;
-        public static final int settings_selected=0x7f020015;
-        public static final int tab_bg_selected=0x7f020016;
-        public static final int tab_bg_selector=0x7f020017;
-        public static final int tab_bg_unselected=0x7f020018;
-        public static final int tab_divider=0x7f020019;
-        public static final int tab_text_selector=0x7f02001a;
-        public static final int workout_not_selected=0x7f02001b;
-        public static final int workout_selected=0x7f02001c;
+        public static final int guy=0x7f020007;
+        public static final int hc_background=0x7f020008;
+        public static final int health_center_selected=0x7f020009;
+        public static final int healthcenter_not_selected=0x7f02000a;
+        public static final int hr_pic=0x7f02000b;
+        public static final int ic_launcher=0x7f02000c;
+        public static final int ic_tab_artists_grey=0x7f02000d;
+        public static final int ic_tab_artists_white=0x7f02000e;
+        public static final int ic_tab_ftest=0x7f02000f;
+        public static final int ic_tab_hc=0x7f020010;
+        public static final int ic_tab_myworkout=0x7f020011;
+        public static final int ic_tab_settings=0x7f020012;
+        public static final int logo_transparent=0x7f020013;
+        public static final int redheart=0x7f020014;
+        public static final int settings_not_selected=0x7f020015;
+        public static final int settings_selected=0x7f020016;
+        public static final int tab_bg_selected=0x7f020017;
+        public static final int tab_bg_selector=0x7f020018;
+        public static final int tab_bg_unselected=0x7f020019;
+        public static final int tab_divider=0x7f02001a;
+        public static final int tab_text_selector=0x7f02001b;
+        public static final int workout_not_selected=0x7f02001c;
+        public static final int workout_selected=0x7f02001d;
     }
     public static final class id {
         public static final int age=0x7f080017;
@@ -172,7 +173,8 @@ public final class R {
     }
     public static final class raw {
         public static final int pace_tone=0x7f040000;
-        public static final int steps=0x7f040001;
+        public static final int step_test=0x7f040001;
+        public static final int steps=0x7f040002;
     }
     public static final class string {
         public static final int age_string=0x7f060007;
