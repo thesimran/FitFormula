@@ -4,19 +4,20 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dip"
     >
      
     <TextView
         android:id="@+id/step2_inst" 
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/step2_inst_str"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        
         android:gravity="center"
+        android:textSize="18dip"
         
     />
-     
      <Button
         android:id="@+id/cancel_test_button"
         android:layout_width="wrap_content"
@@ -34,5 +35,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:onClick="startWarmup" />
-    
+<!--  
+     <TextView
+         android:id="@+id/step_time_remaining"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/step2_inst"
+         android:layout_toRightOf="@+id/cancel_test_button"
+         android:paddingTop="25dip"
+         android:text="@string/step_time_str"
+         android:textSize="28dip" />
+    -->
 </RelativeLayout>

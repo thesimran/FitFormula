@@ -66,6 +66,7 @@ public class FitTestStep2 extends Activity {
 	
 	//TextViews
 	TextView instructionText;
+	TextView timeLeftView;
 	
 	//Current Test Phase
 	private static int currentPhase = NONE; 	
@@ -77,7 +78,7 @@ public class FitTestStep2 extends Activity {
 		setContentView(R.layout.fit_test_step2);
 		//getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
 		instructionText = (TextView)findViewById(R.id.step2_inst);
-	
+		//TODO: timeLeftView = (TextView)findViewById(R.id.step_time_remaining);
 		
 		
 	}//end of onCreate
@@ -353,7 +354,7 @@ public class FitTestStep2 extends Activity {
 	public void cancelTest(View view){
 		
 		/*TODO: Spiral 4 Demo */
-		testComplete(130); 
+		//testComplete(130); 
 		/**********************************************************************************************/
 		
 		finishAndStartOver();

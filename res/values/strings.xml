@@ -68,5 +68,6 @@
 	<string name="time_str">8:00</string>
 	<string name="dont_start_workout_str">Back</string>
 	<string name="start_workout_str">Begin Workout Now</string>
+	<string name="step_time_str">3:00</string>
 	    
 </resources>

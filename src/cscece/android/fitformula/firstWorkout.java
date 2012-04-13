@@ -34,7 +34,10 @@ public class FirstWorkout extends Activity {
 	public final int PHASE_ONE = 1;
 	public final int PHASE_TWO = 2;
 	private final int DEFAULT_INTENSITY = 53; //50-55%
-	
+	public final int EASY = 1;
+	public final int JUST_RIGHT = 2;
+	public final int TOO_HARD = 3;
+
 	private TextView instructionText;
 	private TextView timeRemaining;
 	private WorkoutTimeTask firstPhase;
@@ -44,7 +47,7 @@ public class FirstWorkout extends Activity {
 	public ViewGroup.LayoutParams params;
 	private RelativeLayout mRelative;
 	public AlertDialog alert;
-	
+
 	//global values -- to be used to preserve progress state (and color) in the chartView
 	private double[] theValues =  new double[X_AXIS_LENGTH];
 	private boolean isFirstRender;
@@ -53,39 +56,39 @@ public class FirstWorkout extends Activity {
 	private double percentComplete;
 	private int currentIntensity;
 	private static int currentPhase;
-	
+
 	/*Required to preserve the total time remaining when changing phases
 	 * For now, this is a workaround for the problem of not being able
 	 * to pause an AsyncTask.  Although, to implement the 'Pause Workout'
 	 * feature, an alternate process must be used.
 	 */
 	private long globalTimeLeft;
-	
-	
+
+
 	@Override
 	public void onCreate(Bundle icicle){
 		super.onCreate(icicle); 
 		setContentView(R.layout.first_workout);
 		context = this;
 		instructionText =(TextView)findViewById(R.id.first_workout_inst);
-		
+
 	}
-	
+
 	public void cancelWorkout (View view){
 		finish();
 	}
-		
+
 	//Listener for the 'Begin Warmup' button
 	public void startWorkout(View view){
 		//TODO: First, take heart rate, hard-coded for now
 		int heartRate = 65;
 		/***********************/
-		
+
 		//new layout!
 		setContentView(R.layout.workout_started);
 		mRelative = (RelativeLayout)findViewById(R.id.workout_relative);
-		
-		
+
+
 		timeRemaining = new TextView(context);
         timeRemaining.setId(2);
         //20 minutes left -- start
@@ -102,27 +105,27 @@ public class FirstWorkout extends Activity {
         
         //and render
 		reRender(theColor,theValues);
-		
+
 
 		//start time/progress task
 		firstPhase =(WorkoutTimeTask) new WorkoutTimeTask().execute(WORKOUT_DURATION);
-		
+
 	}
-	
+
 	/* v[] must be length of 11 (X_AXIS_LENGTH), a value of 0 indicated lack of progress	
 	 * 
 	 */
 	public void reRender(int c, double[] v){ 
-		
+
 		int color = c;
-		
+
 		List<double[]> values = new ArrayList<double[]>();
 		//dummy values for line series that is not used
 		double[] dummyVals = {0,0,0,0,0,0,0,0,0,0,0};
 		values.add(dummyVals);
-		
+
 		double[] realValues = v;
-		
+
 		List<double[]> x = new ArrayList<double[]>();
 	    x.add(new double[] { 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 });		
 	    String[] titles = new String[] { "Progress" };
@@ -183,14 +186,14 @@ public class FirstWorkout extends Activity {
 	    // now we have to manually adjust the layout so that the user can see the time remaining
 	    // and the graph at the same time
 	    params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 600);
-	   
+
 	    chartView.setId(1);
-	    
+
 	    //chart
 	    RelativeLayout.LayoutParams relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 550);	        
 	    relParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 	    mRelative.addView(chartView,relParams);	
-	    
+
 	    //time remaining TextView
 	    relParams=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);	        
 	    relParams.addRule(RelativeLayout.BELOW,chartView.getId());
@@ -199,18 +202,18 @@ public class FirstWorkout extends Activity {
         
 	    isFirstRender = false;
 	}
-	
-	
-	
+
+
+
 	public void switchColor(int c){
 		int theColor = c;
 		reRender(theColor,theValues);
 	}
-	
+
 	public void finishedFirstPhase(int hr){
-		
-		
-		
+
+
+
 		//Gotta give the user an AlertDialog to give feedback on how they feel
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("How is the workout so far?")
@@ -219,7 +222,7 @@ public class FirstWorkout extends Activity {
 		           public void onClick(DialogInterface dialog, int id) {
 		                //Up it by 10%
 		        	   currentIntensity += 10; // 60-65%
-		        	   
+
 		        	   startSecondPhase();
 		        	   //dialog.cancel();
 		           }
@@ -228,13 +231,13 @@ public class FirstWorkout extends Activity {
 		           public void onClick(DialogInterface dialog, int id) {
 		                //Keep current intensity
 		        	   currentIntensity -= 10; 
-		        	   
+
 		        	   startSecondPhase();
 		        	   //dialog.cancel();
-		        	   
+
 		           }
 		       })
-		       .setNeutralButton("A Challenge", new DialogInterface.OnClickListener() {
+		       .setNeutralButton("Just Right", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
 		                //Bring it down 10%
 		        	   currentIntensity = DEFAULT_INTENSITY; // did nothing/no change
@@ -244,18 +247,18 @@ public class FirstWorkout extends Activity {
 		       });
 		alert = builder.create();
 		alert.show();
-		
-		
+
+
 	}
-	
+
 	public void startSecondPhase(){
-		
+
 		currentPhase = PHASE_TWO;
-		
+
 		//start time/progress task -- 2nd phase
 		secondPhase = (WorkoutTimeTask) new WorkoutTimeTask().execute(globalTimeLeft);
-		
-		
+
+
 		Toast
         .makeText(FirstWorkout.this, "Continue at the indicated intensity...", Toast.LENGTH_LONG)
         .show();
@@ -263,16 +266,64 @@ public class FirstWorkout extends Activity {
 
 	}
 	
+	private void finishedWorkout(int hr){
+		
+		int finalHr = hr;
+		//TODO: save to DB
+		
+		
+		//Gotta give the user an AlertDialog to give feedback on how they feel
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("How would you rate your workout overall?")
+		       .setCancelable(false)
+		       .setPositiveButton("Easy", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		               
+		        	   saveAndQuit(EASY);
+		           }
+		       })
+		       .setNegativeButton("Too Hard", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   
+		        	   saveAndQuit(TOO_HARD);
+
+		           }
+		       })
+		       .setNeutralButton("Just Right", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   
+		        	   saveAndQuit(JUST_RIGHT);
+		           }
+		       });
+		alert = builder.create();
+		alert.show();
+
+	}
+	
+	private void saveAndQuit(int rat){
+		
+		int rating = rat;
+		//TODO: save to DB
+		
+		
+		Toast
+        .makeText(FirstWorkout.this, "Congratulations! You have completed your first workout!", Toast.LENGTH_LONG)
+        .show();
+		
+		finish();
+
+	}
+
 	class WorkoutTimeTask extends AsyncTask<Long, Long, Void> {
-	    	
-	    	
+
+
 			@Override
 	        protected Void doInBackground(Long... millis ) {
-				
+
 				long millisLeft= millis[0];
 				long rightNow = System.currentTimeMillis();
 				Long[] mLeft =  new Long[1];
-				
+
 				while(millisLeft > 0){
 					while(System.currentTimeMillis() < rightNow+1000){
 						// chill... for one thousand milliseconds 
@@ -287,11 +338,11 @@ public class FirstWorkout extends Activity {
 				}	
 				return(null);
 			}
-			
+
 			@SuppressWarnings("unchecked")
 	        @Override
 	        protected void onProgressUpdate(Long... m) {
-	          
+
 				long millLeft = m[0];
 				//update global/total time left variable
 				globalTimeLeft = millLeft;
@@ -305,12 +356,12 @@ public class FirstWorkout extends Activity {
 				}else{
 					timeRemaining.setText(minutes + ":0" + seconds);
 				}
-				
+
 				long millisElapsed = WORKOUT_DURATION[0] - millLeft;
 				percentComplete = (double)millisElapsed /(double)WORKOUT_DURATION[0];
-				
+
 				//Log.d("percentComplete",percentComplete + "");
-				
+
 				//lets work out the values
 				if(percentComplete > .1 && theValues[1] == 0){
 					theValues[1] = currentIntensity;
@@ -327,10 +378,6 @@ public class FirstWorkout extends Activity {
 				//dependent on user's feedback after this point
 				if (percentComplete > .5 && theValues[5] == 0 && currentPhase == PHASE_ONE){
 					
-		        	
-		        	//theValues[5] = currentIntensity;
-					
-					
 					this.cancel(true);
 				}
 				if (percentComplete > .5 && theValues[5] == 0 && currentPhase == PHASE_TWO){
@@ -342,11 +389,15 @@ public class FirstWorkout extends Activity {
 				if(percentComplete > .7 && theValues[7] == 0){
 					theValues[7] = currentIntensity;
 				}
-				//TODO: chill here for a bit
-				Log.d("here", "");
-				
-					
-					
+				if(percentComplete > .8 && theValues[8] == 0){
+					theValues[8] = currentIntensity;
+				}
+				if(percentComplete > .9 && theValues[9] == 0){
+					theValues[9] = currentIntensity;
+				}
+
+
+
 				//change the color of the current bar each second
 				if(theColor == DEFAULT_COLOR){
 					theColor = Color.YELLOW; //for now at least...
@@ -354,19 +405,23 @@ public class FirstWorkout extends Activity {
 					theColor = DEFAULT_COLOR;
 				}
 				switchColor(theColor);
-				
-	        	
+
+
 	        }
-	        
+
 	        @Override
 	        protected void onPostExecute(Void unused) {
 	        	
-	        	return;
-	
-	        }
-	        
-	        protected void onCancelled(){
+	        	theValues[10] = currentIntensity;
+	        	int heartRate = 100;
+	        	finishedWorkout(heartRate);
 	        	
+	        	return;
+
+	        }
+
+	        protected void onCancelled(){
+
 	        	//TODO: this is garbage. 
 	        	if(currentPhase == PHASE_ONE){
 	        		//TODO: Dummy HR -- insert HR code here
@@ -375,8 +430,8 @@ public class FirstWorkout extends Activity {
 	        		Toast.makeText(FirstWorkout.this, "First Phase Complete", Toast.LENGTH_LONG).show();
 	        		finishedFirstPhase(heartRate);
 	        	}
-	        	
-	        	
+
+
 	        }
 	}//end of WorkoutTimeTask		
 
