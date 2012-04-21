@@ -412,9 +412,9 @@ class DrawOnTop extends View {
 	ArrayList<Long> beatRecord=new ArrayList<Long>();
 	private final static int beatRecordLength = 10; 	
 	private final static int pulseDataLength = 256;
-	private final static int redMeanMin = 80;
-	private final static int greenMeanMax = 30; 
-	private final static int blueMeanMax = 20; 
+	private final static int redMeanMin = 0;//TODO: 80;
+	private final static int greenMeanMax = 255;//30; 
+	private final static int blueMeanMax = 255;//20; 
 	String imageMeanStr;
 	int beatCount=0;
 	int peak=0,trough=0;	
@@ -574,7 +574,7 @@ class DrawOnTop extends View {
 				barRect.right += barWidth;
 			} // bin
 			
-						
+					
 			if(redMean<= redMeanMin || greenMean>=greenMeanMax || blueMean>=blueMeanMax){ //colours not consistant with finger on camera
 				if((System.currentTimeMillis()-toastTime) >= 2000){ //show toast alert
 					toastTime=System.currentTimeMillis();

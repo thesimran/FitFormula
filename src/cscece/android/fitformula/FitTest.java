@@ -62,14 +62,7 @@ public class FitTest extends Activity {
     public void onResume(){
     	bar.setProgress(0);
     	
-    	/* TODO: Camera/flash code -- currently does not work
-    	cam = Camera.open();
-    	cam.startPreview();
-    	p = cam.getParameters();
-    	p.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY);
-    	p.setFlashMode(Parameters.FLASH_MODE_TORCH);
-    	cam.setParameters(p);
-    	*/
+    	
     	
     	builder.setView(dialogLayout)
         .setCancelable(true)

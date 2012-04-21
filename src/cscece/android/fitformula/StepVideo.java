@@ -34,7 +34,7 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 		long date;
     	//get the current date/time
     	date = System.currentTimeMillis();
-		int myHR = getIntent().getExtras().getInt("hr");
+		int myHR = 65;//TODO: debugging on Atrix -Simran -- getIntent().getExtras().getInt("hr");
     	//Save heart rate to DB
     	ContentValues values = new ContentValues();
 		DatabaseHelper dbh;

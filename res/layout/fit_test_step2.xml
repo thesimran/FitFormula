@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fit_test_relative"
     android:background="@drawable/background"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -35,13 +36,13 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:onClick="startWarmup" />
-<!--  
+	<!--  
      <TextView
          android:id="@+id/step_time_remaining"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_below="@+id/step2_inst"
-         android:layout_toRightOf="@+id/cancel_test_button"
+         android:layout_above="@+id/begin_warmup_button"
+         android:layout_centerHorizontal="true"
          android:paddingTop="25dip"
          android:text="@string/step_time_str"
          android:textSize="28dip" />

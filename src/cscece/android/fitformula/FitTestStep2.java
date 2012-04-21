@@ -1,6 +1,7 @@
 package cscece.android.fitformula;
 
 
+import cscece.android.fitformula.WorkoutTest2.WorkoutCountDownTimer;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -9,11 +10,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.RelativeLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +52,8 @@ public class FitTestStep2 extends Activity {
 	public final double[] ENERGY_COST_MEN = {2.28,2.38,2.01,1.83,1.63,1.35};
 	
 	public static final int FITTESTSTEP2_REQUEST_CODE = 1;
+	public final long INTERVAL = 1000;
+	public final long PHASE_LENGTH = 180000; //3 minutes in milliseconds
 	
 	//Constant Test Phase Data
 	public static final int NONE = 0;
@@ -64,6 +71,14 @@ public class FitTestStep2 extends Activity {
 	ToneTask warmupTask;
 	ToneTask afterWarmTask;
 	
+	//Flag
+	private boolean timesUp;
+	
+	//Countdown Timer
+	FitTestTimer theTimer;
+	
+	private RelativeLayout mRelative;
+	
 	//TextViews
 	TextView instructionText;
 	TextView timeLeftView;
@@ -74,11 +89,12 @@ public class FitTestStep2 extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		//TODO: requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.fit_test_step2);
-		//getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+		mRelative = (RelativeLayout)findViewById(R.id.fit_test_relative);
+		//TODO: getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
 		instructionText = (TextView)findViewById(R.id.step2_inst);
-		//TODO: timeLeftView = (TextView)findViewById(R.id.step_time_remaining);
+		timeLeftView = new TextView(this);
 		
 		
 	}//end of onCreate
@@ -138,11 +154,12 @@ public class FitTestStep2 extends Activity {
 
 		interval = calcInterval(pace);
 		warmupInterval = calcInterval(warmupPace);
-	}
+	}//end of setupValues()
 	
-	@Override
-	public void onPause(){
-	
+	// necessary checks performed by onPause(), onStop(), and onDestroy().  checkBeforeBouncing() is 
+	// called by all of the above three.
+	private void checkBeforeBouncing(){
+		
 		try{
 			if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
 			
@@ -159,54 +176,30 @@ public class FitTestStep2 extends Activity {
 		}catch(Exception e){
 			
 		}
-		db.close();
+		try{
+			db.close();
+		}catch(Exception e){
+			
+		}
+		
+	}
+	
+	@Override
+	public void onPause(){
+		checkBeforeBouncing();
 		super.onPause();
 		
 	}
 	
 	@Override
 	public void onStop(){
-	
-		try{
-			if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
-				
-				warmupTask.cancel(true);
-			}
-		}catch(Exception e){
-			
-		}	
-		try{	
-			if(afterWarmTask.getStatus() == AsyncTask.Status.RUNNING){
-				
-				afterWarmTask.cancel(true);
-			}
-		}catch(Exception e){
-			
-		}
-		db.close();
+		checkBeforeBouncing();
 		super.onStop();
 	}
 	
 	@Override
 	public void onDestroy(){
-		
-		try{
-			if(warmupTask.getStatus() == AsyncTask.Status.RUNNING){
-				
-				warmupTask.cancel(true);
-			}
-		}catch(Exception e){
-			
-		}	
-		try{
-			if(afterWarmTask.getStatus() == AsyncTask.Status.RUNNING){
-				
-				afterWarmTask.cancel(true);
-			}
-		}catch(Exception e){
-			
-		}
-		db.close();
+		checkBeforeBouncing();
 		super.onDestroy();
 		
 	}
@@ -391,9 +384,13 @@ public class FitTestStep2 extends Activity {
 		while(System.currentTimeMillis() <= now + 3000){
 			//wait
 		}
+		timeLeftView.setText("3:00");
 		instructionText.setText("Step to the beat!");
 		instructionText.setTextSize(50);
+		theTimer = new FitTestTimer(PHASE_LENGTH, INTERVAL);
 		afterWarmTask = (ToneTask) new ToneTask().execute(paceInterval);
+		timesUp = false;
+		theTimer.start();
 		
 		
 	}
@@ -406,16 +403,27 @@ public class FitTestStep2 extends Activity {
 		startButton.setVisibility(Button.GONE);
 		
 		//TODO: Should add some sort of graphic or something....
-		
 		instructionText.setText("Step to the beat!");
 		instructionText.setTextSize(50);
+		
+		//Add timeLeft display 
+		LayoutParams timeParams =  new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		timeParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		timeParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		timeLeftView.setText("3:00");
+		timeLeftView.setTextSize(40);
+		timeLeftView.setId(1);
+		mRelative.addView(timeLeftView,timeParams);
 		
 		
 		double dWarmupPace = (double) warmupPace;
 		Double[] paceInterval = {dWarmupPace,warmupInterval};
 		
 		currentPhase = WARM_UP;
-		//Play
+		//Play/Start
+		timesUp = false;
+		theTimer = new FitTestTimer(PHASE_LENGTH, INTERVAL);
+        theTimer.start();
 		warmupTask = (ToneTask) new ToneTask().execute(paceInterval);
 		
 		
@@ -477,6 +485,53 @@ public class FitTestStep2 extends Activity {
 		finishAndStartOver();
 		
 	}
+	
+	// CountDownTimer inner class
+	 	public class FitTestTimer extends CountDownTimer
+	 	{
+	 		
+			public FitTestTimer(long startTime, long interval)
+			{
+				super(startTime, interval);
+				
+			}
+
+
+			@Override
+			public void onTick(long millisUntilFinished)
+			{
+				long millisLeft = millisUntilFinished;
+				
+				//Convert milliseconds left to minutes and seconds left to show the user
+				int secondsTotal = (int) millisLeft / 1000;
+				int seconds = secondsTotal % 60;
+				int minutes = secondsTotal / 60;
+				if(seconds > 9){
+					timeLeftView.setText(minutes + ":" + seconds);
+				}else{
+					timeLeftView.setText(minutes + ":0" + seconds);
+				}
+			}
+			
+			@Override
+			public void onFinish()
+			{
+				timesUp = true;
+				//If the ToneTask is not done yet, then it should be, so we can end it here.
+				try{
+					warmupTask.cancel(true);
+				}catch(Exception e){
+					
+				}
+				
+				try{
+					afterWarmTask.cancel(true);
+				}catch(Exception e){
+					
+				}
+				
+			}
+	 	}	
 	
      //This task is in charge of playing the tone at a given interval
 	 class ToneTask extends AsyncTask<Double, Boolean, Void> {
@@ -543,10 +598,16 @@ public class FitTestStep2 extends Activity {
 	        
 	        protected void onCancelled(){
 	        	
-	        	Toast
-                .makeText(FitTestStep2.this, "Step Test Cancelled!", Toast.LENGTH_LONG)
-                .show();
+	        	// If cancelled by the timer...
+	        	if(timesUp){
+	        		timesUp = false;
+	        		onPostExecute(null);
+	        	}else{
 	        	
+	        		Toast
+	        		.makeText(FitTestStep2.this, "Step Test Cancelled!", Toast.LENGTH_LONG)
+	        		.show();
+	        	}
 	        }
 	    	
 	    }

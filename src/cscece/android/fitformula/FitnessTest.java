@@ -388,7 +388,8 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 		editor.commit();	
     	
     	//Intent i = new Intent(this, FitTest.class);
-    	Intent i = new Intent(this, FitTestHR.class);
+		//Intent i = new Intent(this, StepVideo.class);
+    	Intent i = new Intent(this, FitTestHR.class); 
 		i.putExtra("nextactivity", "StepVideo"); //Telling HR Class what is next activity
     	startActivity(i);
     }//end of startTestPushed
