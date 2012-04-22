@@ -37,11 +37,13 @@ public class FirstWorkout extends Activity {
 	public final int EASY = 1;
 	public final int JUST_RIGHT = 2;
 	public final int TOO_HARD = 3;
-
+	public final long INTERVAL = 1000; //Interval for the CountDownTimer -- 1 second = 1000 milliseconds 
 	private TextView instructionText;
 	private TextView timeRemaining;
-	private WorkoutTimeTask firstPhase;
-	private WorkoutTimeTask secondPhase;
+	//private WorkoutTimeTask firstPhase;
+	//private WorkoutTimeTask secondPhase;
+	private WorkoutCountDownTimer firstPhase;
+	private WorkoutCountDownTimer secondPhase;
 	public Context context;
 	public View chartView;
 	public ViewGroup.LayoutParams params;
@@ -108,7 +110,8 @@ public class FirstWorkout extends Activity {
 
 
 		//start time/progress task
-		firstPhase =(WorkoutTimeTask) new WorkoutTimeTask().execute(WORKOUT_DURATION);
+		//firstPhase =(WorkoutTimeTask) new WorkoutTimeTask().execute(WORKOUT_DURATION);
+		firstPhase = new WorkoutCountDownTimer(globalTimeLeft, INTERVAL);
 
 	}
 
@@ -256,7 +259,8 @@ public class FirstWorkout extends Activity {
 		currentPhase = PHASE_TWO;
 
 		//start time/progress task -- 2nd phase
-		secondPhase = (WorkoutTimeTask) new WorkoutTimeTask().execute(globalTimeLeft);
+		//secondPhase = (WorkoutTimeTask) new WorkoutTimeTask().execute(globalTimeLeft);
+		secondPhase = new WorkoutCountDownTimer(globalTimeLeft, INTERVAL);
 
 
 		Toast
@@ -313,7 +317,109 @@ public class FirstWorkout extends Activity {
 		finish();
 
 	}
+	
+	/* CountDownTimer inner class.
+	 * 
+	 * It should be noted that this extension of CountDownTimer is not the default
+	 * Android CountdDownTimer.  It is a modification to that class that allows us
+	 * to cancel the CountDownTimer from within the onTick() method.
+	 */
+ 	public class WorkoutCountDownTimer extends CountDownTimer
+ 	{
+ 		
+		public WorkoutCountDownTimer(long startTime, long interval)
+		{
+			super(startTime, interval);
+			//May not even have to put anything else in here, we'll see...
+		}
 
+
+		@Override
+		public void onTick(long millisUntilFinished)
+		{
+			long millLeft = millisUntilFinished;
+			//update global/total time left variable
+			globalTimeLeft = millLeft;
+			//Log.d("globalTimeLeft:",""+ globalTimeLeft);
+			//Convert milliseconds left to minutes and seconds left to show the user
+			int secondsTotal = (int) millLeft / 1000;
+			int seconds = secondsTotal % 60;
+			int minutes = secondsTotal / 60;
+			if(seconds > 9){
+				timeRemaining.setText(minutes + ":" + seconds);
+			}else{
+				timeRemaining.setText(minutes + ":0" + seconds);
+			}
+
+			long millisElapsed = WORKOUT_DURATION[0] - millLeft;
+			percentComplete = (double)millisElapsed /(double)WORKOUT_DURATION[0];
+
+			//Log.d("percentComplete",percentComplete + "");
+
+			//lets work out the values
+			if(percentComplete > .1 && theValues[1] == 0){
+				theValues[1] = currentIntensity;
+			}
+			if(percentComplete > .2 && theValues[2] == 0){
+				theValues[2] = currentIntensity;
+			}
+			if(percentComplete > .3 && theValues[3] == 0){
+				theValues[3] = currentIntensity;
+			}
+			if(percentComplete > .4 && theValues[4] == 0){
+				theValues[4] = currentIntensity;
+			}
+			//dependent on user's feedback after this point
+			if (percentComplete > .5 && theValues[5] == 0 && currentPhase == PHASE_ONE){
+				
+				//TODO: Dummy HR -- insert HR code here
+	        	int heartRate = 80;
+	        	/********************/
+        		Toast.makeText(FirstWorkout.this, "First Phase Complete", Toast.LENGTH_LONG).show();
+        		finishedFirstPhase(heartRate);
+				this.cancel();
+			}
+			if (percentComplete > .5 && theValues[5] == 0 && currentPhase == PHASE_TWO){
+				theValues[5] = currentIntensity;
+			}
+			if(percentComplete > .6 && theValues[6] == 0){
+				theValues[6] = currentIntensity;
+			}
+			if(percentComplete > .7 && theValues[7] == 0){
+				theValues[7] = currentIntensity;
+			}
+			if(percentComplete > .8 && theValues[8] == 0){
+				theValues[8] = currentIntensity;
+			}
+			if(percentComplete > .9 && theValues[9] == 0){
+				theValues[9] = currentIntensity;
+			}
+
+
+
+			//change the color of the current bar each second
+			if(theColor == DEFAULT_COLOR){
+				theColor = Color.YELLOW; //for now at least...
+			}else{
+				theColor = DEFAULT_COLOR;
+			}
+			switchColor(theColor);
+
+		}
+		
+		@Override
+		public void onFinish(){
+			
+			theValues[10] = currentIntensity;
+			/*TODO -- Confirm with Sam, we will probably remove this...*/
+        	int heartRate = 100;
+        	/********************/
+        	finishedWorkout(heartRate);
+		}
+ 	
+ 	}//end of WorkoutCountDownTimer class	
+	
+ 	/*
 	class WorkoutTimeTask extends AsyncTask<Long, Long, Void> {
 
 
@@ -424,15 +530,16 @@ public class FirstWorkout extends Activity {
 
 	        	//TODO: this is garbage. 
 	        	if(currentPhase == PHASE_ONE){
-	        		//TODO: Dummy HR -- insert HR code here
+	        		
 		        	int heartRate = 80;
-		        	/********************/
+		        	
 	        		Toast.makeText(FirstWorkout.this, "First Phase Complete", Toast.LENGTH_LONG).show();
 	        		finishedFirstPhase(heartRate);
 	        	}
 
 
 	        }
-	}//end of WorkoutTimeTask		
+	}//end of WorkoutTimeTask
+	*/		
 
 }
