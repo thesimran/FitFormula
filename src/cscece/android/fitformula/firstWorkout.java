@@ -11,6 +11,8 @@ import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import cscece.android.fitformula.WorkoutTest2.WorkoutCountDownTimer;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,7 +23,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +53,7 @@ public class FirstWorkout extends Activity {
 	public ViewGroup.LayoutParams params;
 	private RelativeLayout mRelative;
 	public AlertDialog alert;
+	private Button pauseButton;
 
 	//global values -- to be used to preserve progress state (and color) in the chartView
 	private double[] theValues =  new double[X_AXIS_LENGTH];
@@ -58,6 +63,11 @@ public class FirstWorkout extends Activity {
 	private double percentComplete;
 	private int currentIntensity;
 	private static int currentPhase;
+	//handing the stop and start of the timer
+	private static boolean innerCancel;
+	private static boolean hasBegun;
+	private static boolean isPaused;
+	
 
 	/*Required to preserve the total time remaining when changing phases
 	 * For now, this is a workaround for the problem of not being able
@@ -72,6 +82,8 @@ public class FirstWorkout extends Activity {
 		super.onCreate(icicle); 
 		setContentView(R.layout.first_workout);
 		context = this;
+		innerCancel = false;
+		hasBegun = false;
 		instructionText =(TextView)findViewById(R.id.first_workout_inst);
 
 	}
@@ -79,6 +91,148 @@ public class FirstWorkout extends Activity {
 	public void cancelWorkout (View view){
 		finish();
 	}
+	
+	@Override
+    public void onStop(){
+    	
+    	if(hasBegun){
+    	
+	    	if(!isPaused){
+	    		
+	    		if(currentPhase == PHASE_ONE){
+	    			firstPhase.cancel();
+	    		}else{
+	    			secondPhase.cancel();
+	    		}
+	    		
+	        	//call workoutPaused
+	        	pauseWorkout();
+	    		
+	    	}
+    	}
+    	super.onStop();
+    	
+    }
+    
+    @Override
+    public void onPause(){
+    	
+    	if(hasBegun){
+    	
+	    	if(!isPaused){
+	    		
+	    		if(currentPhase == PHASE_ONE){
+	    			firstPhase.cancel();
+	    		}else{
+	    			secondPhase.cancel();
+	    		}
+	        	pauseWorkout();
+	    		
+	    	}
+    	}
+    	
+    	super.onPause();
+    }
+    
+    @Override
+    public void onDestroy(){
+    	workoutCancelled();
+    	super.onDestroy();
+    }
+	
+	@Override
+	public void onBackPressed(){
+	    	
+    	if(hasBegun){
+    		areYouSure();
+    	}else{
+    		super.onBackPressed();
+    	}
+    	
+    }
+	    
+    //Listener for 'Pause Workout' button
+    public void onClick(View view) {
+    	
+    	//so first we have to cancel the timer
+    	if(currentPhase == PHASE_ONE){
+    		firstPhase.cancel();
+    	}else{
+    		secondPhase.cancel();
+    	}
+    	//call workoutPaused
+    	pauseWorkout();
+    	
+    }
+	    
+    private void pauseWorkout(){
+    	
+    	
+    	isPaused = true;
+    	
+    	//show an alert that stays up until the user is ready to resume
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("You have paused the workout.")
+		       .setCancelable(false)
+		       .setNeutralButton("Resume", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		              resumeWorkout();
+		           }
+		       });
+		alert = builder.create();
+		alert.show();
+    }
+    
+    //called when the user resumes the workout after pausing it
+    private void resumeWorkout(){
+    	
+    	isPaused = false;
+    	
+    	//start WorkoutTimer with totalTimeLeft as first parameter
+    	if(currentPhase == PHASE_ONE){
+	        firstPhase = new WorkoutCountDownTimer(globalTimeLeft, INTERVAL);
+	        firstPhase.start();
+    	}else{
+    		secondPhase = new WorkoutCountDownTimer(globalTimeLeft, INTERVAL);
+	        secondPhase.start();
+    	}
+    }
+    
+    private void workoutCancelled(){
+
+    	finish();
+    	
+    }
+    
+    private void areYouSure(){
+    	
+    	//Housekeeping
+    	if(currentPhase == PHASE_ONE){
+    		firstPhase.cancel();
+    	}else{
+    		secondPhase.cancel();
+    	}
+    	
+    	isPaused = true;
+    	
+    	//Bring up a dialog asking the user if they're sure they want to cancel the workout
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Are you sure that you would like to cancel the workout?" +
+				" If you do, you will not be able to resume from this point, you will have to restart the workout from the beginning")
+		       .setCancelable(false)
+		       .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		              workoutCancelled();
+		           }
+		       })
+		       .setNegativeButton("Resume Workout", new DialogInterface.OnClickListener() {
+		    	   public void onClick(DialogInterface dialog, int id) {
+		    		   resumeWorkout();
+		    	   }
+		       });
+		alert = builder.create();
+		alert.show();
+    }
 
 	//Listener for the 'Begin Warmup' button
 	public void startWorkout(View view){
@@ -87,7 +241,7 @@ public class FirstWorkout extends Activity {
 		/***********************/
 
 		//new layout!
-		setContentView(R.layout.workout_started);
+		setContentView(R.layout.workout_started2);
 		mRelative = (RelativeLayout)findViewById(R.id.workout_relative);
 
 
@@ -96,6 +250,12 @@ public class FirstWorkout extends Activity {
         //20 minutes left -- start
         timeRemaining.setText("20:00");
         timeRemaining.setTextSize(30);
+        
+        // Pause Button widget
+        pauseButton = new Button(context);
+        pauseButton.setId(3);
+        pauseButton.setText("Pause Workout");
+        pauseButton.setOnClickListener((OnClickListener) view);
         
         // initialize progress variables
         percentComplete = 0;
@@ -108,14 +268,15 @@ public class FirstWorkout extends Activity {
         //and render
 		reRender(theColor,theValues);
 
-
 		//start time/progress task
-		//firstPhase =(WorkoutTimeTask) new WorkoutTimeTask().execute(WORKOUT_DURATION);
+		hasBegun = true;
+		isPaused = false;
 		firstPhase = new WorkoutCountDownTimer(globalTimeLeft, INTERVAL);
+		firstPhase.start();
 
 	}
 
-	/* v[] must be length of 11 (X_AXIS_LENGTH), a value of 0 indicated lack of progress	
+	/* v[] must be length of 11 (X_AXIS_LENGTH), a value of 0 indicates lack of progress	
 	 * 
 	 */
 	public void reRender(int c, double[] v){ 
@@ -202,6 +363,12 @@ public class FirstWorkout extends Activity {
 	    relParams.addRule(RelativeLayout.BELOW,chartView.getId());
 	    relParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 	    mRelative.addView(timeRemaining,relParams);
+	    
+	    //Now lets add the pause button
+	    relParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+	    relParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+	    relParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+	    mRelative.addView(pauseButton,relParams);
         
 	    isFirstRender = false;
 	}
@@ -372,11 +539,12 @@ public class FirstWorkout extends Activity {
 			//dependent on user's feedback after this point
 			if (percentComplete > .5 && theValues[5] == 0 && currentPhase == PHASE_ONE){
 				
-				//TODO: Dummy HR -- insert HR code here
+				//TODO: Dummy HR 
 	        	int heartRate = 80;
 	        	/********************/
         		Toast.makeText(FirstWorkout.this, "First Phase Complete", Toast.LENGTH_LONG).show();
         		finishedFirstPhase(heartRate);
+        		//innerCancel = true;
 				this.cancel();
 			}
 			if (percentComplete > .5 && theValues[5] == 0 && currentPhase == PHASE_TWO){
@@ -395,7 +563,7 @@ public class FirstWorkout extends Activity {
 				theValues[9] = currentIntensity;
 			}
 
-
+			Log.d("test","percent complete: " + percentComplete);
 
 			//change the color of the current bar each second
 			if(theColor == DEFAULT_COLOR){
@@ -416,6 +584,7 @@ public class FirstWorkout extends Activity {
         	/********************/
         	finishedWorkout(heartRate);
 		}
+		
  	
  	}//end of WorkoutCountDownTimer class	
 	

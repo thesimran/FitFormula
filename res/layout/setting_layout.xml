@@ -56,7 +56,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:shrinkColumns="true" >
+    android:shrinkColumns="true"
+    android:padding="8dip" >
 
     <TableRow>
 
@@ -68,7 +69,7 @@
             android:gravity="center"
             android:paddingBottom="20dip"
             android:text="@string/gen_settings_string"
-            android:textSize="15dip"
+            android:textSize="24dip"
             android:textStyle="bold" />
     </TableRow>
 
@@ -79,6 +80,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:textSize="15dip"
             android:text="@string/units_w_str" />
 
         <RadioGroup
@@ -107,7 +109,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/units_h_string" />
+            android:text="@string/units_h_string"
+            android:textSize="15dip" />
 
         <RadioGroup
             android:id="@+id/unit_h_radio"
@@ -135,7 +138,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/audio_cues_string" />
+            android:text="@string/audio_cues_string"
+            android:textSize="15dip" />
 
         <RadioGroup
             android:id="@+id/audio_rg"
@@ -163,7 +167,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/notif_string" />
+            android:text="@string/notif_string"
+            android:textSize="15dip" />
 
         <RadioGroup
             android:id="@+id/notif_rg"
@@ -183,7 +188,7 @@
                 android:text="@string/off_str" />
         </RadioGroup>
     </TableRow>
-    
+    <!-- TODO: This portion will not be used for now because it is only part of the ICS version 
 	<TableRow>
             <TextView
                 android:id="@+id/email_label"
@@ -217,5 +222,5 @@
                 android:drawSelectorOnTop="true" 
                 />                               
             
-	</TableRow>
+	</TableRow> -->
 </TableLayout>

@@ -16,10 +16,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView; 
 import android.widget.Toast;
-import android.provider.CalendarContract.Calendars;
+//import android.provider.CalendarContract.Calendars;
 
-public class Settings extends Activity implements AdapterView.OnItemSelectedListener{
+public class Settings extends Activity //TODO: ICS version. implements AdapterView.OnItemSelectedListener
+{
 	
+	/*TODO: ICS version
 	private Spinner emailSpinner;
 	private Spinner calendarSpinner;
 
@@ -40,6 +42,7 @@ public class Settings extends Activity implements AdapterView.OnItemSelectedList
 	  private static final int PROJECTION_ID_INDEX = 0;
 	  private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
 	  private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
+	*/
 	
 	/** Called when the activity is first created. */
     @Override
@@ -47,7 +50,9 @@ public class Settings extends Activity implements AdapterView.OnItemSelectedList
         super.onCreate(icicle);              
         setContentView(R.layout.setting_layout);
    
-        emailArray = new ArrayList<String>();
+        /*TODO:
+         emailArray = new ArrayList<String>();
+         
 
         Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
 		for (Account account : accounts) {
@@ -69,9 +74,11 @@ public class Settings extends Activity implements AdapterView.OnItemSelectedList
 			.makeText(this, "There are no Google accounts associated with this device. Please add a Google account to your device to get a workout schedule.", Toast.LENGTH_LONG)
 			.show();
 		}
-	     
+	   */  
     }//end of onCreate
 
+    /*TODO: ICS version
+     
 	public void onItemSelected(AdapterView<?> parent, View v, int position,long id) {
 		Log.d("email","onItemSelected"+parent.getId());
 		if(parent.getId() == R.id.email_spinner){
@@ -148,5 +155,6 @@ public class Settings extends Activity implements AdapterView.OnItemSelectedList
 		}
 
 	}
+	*/
 
 }

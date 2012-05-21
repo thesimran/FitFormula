@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
   
-    <uses-sdk android:targetSdkVersion="15" 
+    <uses-sdk android:targetSdkVersion="10" 
      android:minSdkVersion="10" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.FLASHLIGHT"/>
@@ -31,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+         
          <activity
             android:name=".MyWorkout"
             android:label="@string/app_name" >

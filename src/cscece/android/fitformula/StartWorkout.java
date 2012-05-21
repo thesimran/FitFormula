@@ -78,8 +78,8 @@ public class StartWorkout extends Activity {
 	
 	public void startWorkout (View theButton){
 	    // TODO: launch correct workout
-		//Intent i = new Intent(this, FirstWorkout.class);
-		Intent i = new Intent(this, WorkoutTest2.class);
+		Intent i = new Intent(this, FirstWorkout.class);
+		//Intent i = new Intent(this, WorkoutTest2.class);
     	startActivity(i);
 	}
 

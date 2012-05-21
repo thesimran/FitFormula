@@ -96,9 +96,7 @@ public class WorkoutTest2 extends Activity implements View.OnClickListener{
     
     @Override
     public void onResume(){
-    	/*Don't need extra anything here...yet.
-    	 * But I'm still trying to find out for sure.
-    	 */
+    	
     	super.onResume();
     }
     
@@ -144,7 +142,6 @@ public class WorkoutTest2 extends Activity implements View.OnClickListener{
     
     private void workoutCancelled(){
 
-    	//Must check to make sure that the static variables are reset after the Activity is finished()
     	finish();
     	
     }
@@ -160,12 +157,12 @@ public class WorkoutTest2 extends Activity implements View.OnClickListener{
 		builder.setMessage("Are you sure that you would like to cancel the workout?" +
 				" If you do, you will not be able to resume from this point, you will have to restart the workout from the beginning")
 		       .setCancelable(false)
-		       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		       .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
 		              workoutCancelled();
 		           }
 		       })
-		       .setNegativeButton("No, Resume Workout.", new DialogInterface.OnClickListener() {
+		       .setNegativeButton("Resume Workout", new DialogInterface.OnClickListener() {
 		    	   public void onClick(DialogInterface dialog, int id) {
 		    		   resumeWorkout();
 		    	   }
@@ -292,7 +289,7 @@ public class WorkoutTest2 extends Activity implements View.OnClickListener{
         for (int i = 0; i < length; i++) {
           ((XYSeriesRenderer) renderer.getSeriesRendererAt(i)).setFillPoints(true);
         }
-        RendererClass.setChartSettings(renderer, "Workout Progress", "Percent Complete", "Intensity", 0, 100, 0, 100,
+        RendererClass.setChartSettings(renderer, "Workout Progress", "Percent Complete", "Intensity", -2, 100, 0, 100,
             Color.LTGRAY, Color.LTGRAY);
         renderer.setXLabels(12);
         renderer.setYLabels(10);

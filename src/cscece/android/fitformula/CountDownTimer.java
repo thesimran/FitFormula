@@ -109,6 +109,9 @@ public abstract class CountDownTimer {
      * Callback fired when the time is up.
      */
     public abstract void onFinish();
+    
+    // Callback for when cancelled
+    //public abstract void onCancelled();
 
 
     private static final int MSG = 1;

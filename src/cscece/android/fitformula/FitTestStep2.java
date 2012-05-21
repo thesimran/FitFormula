@@ -346,11 +346,11 @@ public class FitTestStep2 extends Activity {
 	//Listener for the 'Cancel Test' button
 	public void cancelTest(View view){
 		
-		/*TODO: Spiral 4 Demo */
-		//testComplete(130); 
+		/*TODO: Demo */
+		testComplete(130); 
 		/**********************************************************************************************/
 		
-		finishAndStartOver();
+		//finishAndStartOver();
 		
 	}
 	

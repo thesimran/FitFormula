@@ -28,8 +28,8 @@ import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
-import android.provider.CalendarContract.Events;
+//import android.provider.CalendarContract;
+//import android.provider.CalendarContract.Events;
 import android.text.Html;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
@@ -39,7 +39,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
+//import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -51,7 +51,7 @@ public class MyWorkout extends ListActivity {
 	private ImageView myImage;
 	private Button myButton;
 	private TextView myText;
-	private CalendarView myCal;
+	//private CalendarView myCal;
 	public static Context context; 
 	
     private Button mPickDate;
@@ -187,6 +187,7 @@ public class MyWorkout extends ListActivity {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		String calDisplayName = settings.getString ("calDisplayName", null);
 		
+		/*TODO - ICS version
 		if (calDisplayName == null){
 			Log.d("email","calDisplayName is null");
 			new AlertDialog.Builder(MyWorkout.this)
@@ -200,6 +201,7 @@ public class MyWorkout extends ListActivity {
 			return;
 		}		
 		calID=settings.getLong("calID", -1);
+		*/
 		
 		DatabaseHelper dbh;
 		dbh = new DatabaseHelper(this);		
@@ -337,11 +339,16 @@ public class MyWorkout extends ListActivity {
 		mPickDate.setVisibility(View.GONE);
 				
         //myCal.setVisibility(View.VISIBLE);*/
-        
+        /*TODO: ICS version
 		viewCalendar(myButton);
+		*/
+		//TODO: temorary fix for GB version
+		onStart();
 		//TODO: ability to delete calendar events and db entries
 	}
 	
+	//Only applicable in ICS version
+	/*
 	public void viewCalendar (View theButton){
 		long startMillis = System.currentTimeMillis();
 		Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
@@ -353,7 +360,7 @@ public class MyWorkout extends ListActivity {
 		Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
 		startActivity(intent);
 		//TODO: create notifications of scheduled workout sessions
-	}
+	}*/
 	
 	public void makeCalendarEvent(Calendar beginTime,DatabaseHelper dbh, int myProgram, int myLevel, boolean aerobic, long mCalID, boolean intro){		
 
@@ -367,6 +374,7 @@ public class MyWorkout extends ListActivity {
 		// endTime.set(myYear, myMonth, myDay); //months start at 0
 		// endMillis = endTime.getTimeInMillis();
 
+		/* TODO: ICS version
 		ContentResolver cr = getContentResolver();
 		ContentValues values = new ContentValues();
 		values.put(Events.DTSTART, startMillis+TimeZone.getDefault().getOffset(System.currentTimeMillis()));
@@ -390,7 +398,8 @@ public class MyWorkout extends ListActivity {
 		// get the event ID that is the last element in the Uri
 		long eventID = Long.parseLong(uri.getLastPathSegment());
 		//Log.d("email", "eventID:" + eventID);
-
+		* 
+		*/
 		ContentValues mValues = new ContentValues();
 		SQLiteDatabase db = dbh.getWritableDatabase();
 
@@ -398,7 +407,9 @@ public class MyWorkout extends ListActivity {
 		mValues.put(DatabaseHelper.level, myLevel);
 		mValues.put(DatabaseHelper.aerobic, aerobic);
 		mValues.put(DatabaseHelper.date, startMillis);
+		/*TODO: ICS version
 		mValues.put(DatabaseHelper.eventID, eventID);
+		*/
 		mValues.put(DatabaseHelper.programname, programName);
 		mValues.put(DatabaseHelper.intro, intro);
 		db.insert(DatabaseHelper.MY_PROGRAM_TABLE_NAME, null, mValues);
