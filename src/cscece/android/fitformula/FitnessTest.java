@@ -34,6 +34,8 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 	public static final int MIN_AGE = 15;
 	public static final int MAX_AGE = 69;
 	
+	public static final int RESULT_OK=1;
+	
 	//Private
 	private RadioGroup genderRadio;
 	private RadioGroup hyperRadio;
@@ -62,6 +64,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 	public int diabetes;
 	public int bloodPressure;
 	public int restingHr;
+	private boolean takeHr;
 	
 	//Static to indicate that the test has just been completed!
 	public static boolean testComplete = false;
@@ -80,7 +83,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     private void init(){
     	//set title
         //FitFormula.title.setText("Fitness Test"); -- still a work in progress
-        
+        takeHr = false;
         //TODO: Pull biometric data from database if exists
         //Gender
         //no gender initially
@@ -148,10 +151,12 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 			//bloodEntry.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.5f));			    
 			break;
 		case R.id.hr_no:
+			takeHr = true;
 			restingHrLabel.setVisibility(View.GONE);
 			hrEntry.setVisibility(View.GONE);
 			break;
 		case R.id.hr_yes:
+			takeHr = false;
 			restingHrLabel.setVisibility(View.VISIBLE);
 			hrEntry.setVisibility(View.VISIBLE);
 			break;
@@ -258,7 +263,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	//We now have to check all the user entered values to see
     	// if they comply. And then we can store them for later use in the step test
     	// and eventually into the workoutManager
-    	boolean takeHr = false;
+    	
     	
     	//First lets collect the radio button selections
     	//Gender:
@@ -395,12 +400,9 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	}
     	
     	//HR
-    	if(hrRadio.getCheckedRadioButtonId() == R.id.hr_no){
-    		//Do HRActivity
-    		takeHr = true;
-    	}else{
+    	if(!takeHr){
     		//Skip HRActivity and save value in DB
-    		takeHr = false;
+    		
     		try{
     			restingHr = Integer.parseInt(hrEntry.getText().toString());
     		}catch(Exception e){
@@ -443,7 +445,10 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 	    	startActivity(i);
 		}else{
 			//Manual HR entry, skip HRActivity
-			
+			//TODO All I have to do for now?
+			Intent i=new Intent(this, FitTestStep2.class);
+			startActivity(i);
+		
 		}
     }//end of startTestPushed
     
@@ -534,7 +539,6 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 				Log.d("db", "bloodpressure is different");
 				values.put(DatabaseHelper.bloodpressure, bloodPressure);
 			}
-
 			if (values.size() >= 1) {
 				Log.d("db", "values have updated");
 				db = dbh.getWritableDatabase();
@@ -580,6 +584,16 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 		values.put(DatabaseHelper.date, System.currentTimeMillis());
 		
 		db.insert(DatabaseHelper.WEIGHT_TABLE_NAME, null, values);
+		
+		//Add HR value if supplied by user manually
+		if(!takeHr){
+			values.clear();
+			values.put(DatabaseHelper.heartrate, restingHr);
+			values.put(DatabaseHelper.resting, true);
+			values.put(DatabaseHelper.date, System.currentTimeMillis());
+			
+			db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
+		}	
 
 		db.close();
 	}	

@@ -52,6 +52,7 @@ public class FitTestStep2 extends Activity {
 	public final double[] ENERGY_COST_MEN = {2.28,2.38,2.01,1.83,1.63,1.35};
 	
 	public static final int FITTESTSTEP2_REQUEST_CODE = 1;
+	public static final int FITNESS_TEST_REQUEST_CODE = 2;
 	public final long INTERVAL = 1000;
 	public final long PHASE_LENGTH = 180000; //3 minutes in milliseconds
 	

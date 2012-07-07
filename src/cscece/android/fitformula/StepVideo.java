@@ -102,15 +102,16 @@ public class StepVideo extends Activity implements MediaPlayer.OnCompletionListe
 		})
 		.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int whichButton) {
-				cancelSelected();
+				finish();
 			}
 		})
 		.show();		
 	}
 	
+	/*
 	private void cancelSelected(){
     	finish();
-    }
+    }*/
 	
 	@Override
 	public void onPause(){
