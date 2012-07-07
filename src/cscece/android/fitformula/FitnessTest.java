@@ -40,12 +40,15 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 	private RadioGroup smokingRadio;
 	private RadioGroup diabetesRadio;
 	private RadioGroup bloodRadio;
+	private RadioGroup hrRadio;
 	private EditText ageText;
 	private EditText heightText;
 	private EditText weightText;
 	private Spinner bloodSpinner;
 	private EditText bloodEntry;
+	private EditText hrEntry;
 	private TextView bloodLabel;
+	private TextView restingHrLabel;
 	
 	private static final String[] bloodRanges={"Low", "Normal", "High"};
 	
@@ -58,6 +61,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 	public int smoking;
 	public int diabetes;
 	public int bloodPressure;
+	public int restingHr;
 	
 	//Static to indicate that the test has just been completed!
 	public static boolean testComplete = false;
@@ -69,7 +73,12 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
         super.onCreate(icicle);
         setContentView(R.layout.fitness_test_layout);
         Log.d("db","oncreate");
-        //set title
+        init();
+        
+    }//end of onCreate
+    
+    private void init(){
+    	//set title
         //FitFormula.title.setText("Fitness Test"); -- still a work in progress
         
         //TODO: Pull biometric data from database if exists
@@ -114,7 +123,13 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
         bloodSpinner.setAdapter(aa);
         bloodSpinner.setSelection(1);
         
-    }//end of onCreate
+        //Heart Rate
+        restingHr = 0;
+        restingHrLabel = (TextView)findViewById(R.id.resting_hr);
+        hrRadio = (RadioGroup)findViewById(R.id.hr_radio);
+        hrEntry = (EditText)findViewById(R.id.hr_entry);
+        hrRadio.setOnCheckedChangeListener(this);
+    }
     
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		switch (checkedId) {
@@ -132,7 +147,16 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 			//bloodSpinner.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.0f));
 			//bloodEntry.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.5f));			    
 			break;
+		case R.id.hr_no:
+			restingHrLabel.setVisibility(View.GONE);
+			hrEntry.setVisibility(View.GONE);
+			break;
+		case R.id.hr_yes:
+			restingHrLabel.setVisibility(View.VISIBLE);
+			hrEntry.setVisibility(View.VISIBLE);
+			break;
 		}
+		
 	}
 
     @Override
@@ -231,10 +255,10 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 
     //Called when the "Start Fitness Test Now" button is pushed
     public void startTestPushed(View view){
-    	
     	//We now have to check all the user entered values to see
     	// if they comply. And then we can store them for later use in the step test
     	// and eventually into the workoutManager
+    	boolean takeHr = false;
     	
     	//First lets collect the radio button selections
     	//Gender:
@@ -370,6 +394,30 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     		return;
     	}
     	
+    	//HR
+    	if(hrRadio.getCheckedRadioButtonId() == R.id.hr_no){
+    		//Do HRActivity
+    		takeHr = true;
+    	}else{
+    		//Skip HRActivity and save value in DB
+    		takeHr = false;
+    		try{
+    			restingHr = Integer.parseInt(hrEntry.getText().toString());
+    		}catch(Exception e){
+    			pleaseEnterTextAlert();
+    			return;
+    		}
+    		//TODO Are these good constraints?
+    		if(restingHr < 30 || restingHr > 160){
+    			Toast
+                .makeText(this, "You must enter a valid resting HR. Please try again.", Toast.LENGTH_LONG)
+                .show();
+        		return;
+    		}
+    		
+    		
+    	}
+    	
     	//Save biometrics into DB here! 
     	addUserInfoToDB();    	
 
@@ -387,11 +435,16 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 		editor.putBoolean("achievementsUpdated",true);
 		editor.commit();	
     	
-    	//Intent i = new Intent(this, FitTest.class);
-		//Intent i = new Intent(this, StepVideo.class);
-    	Intent i = new Intent(this, FitTestHR.class); 
-		i.putExtra("nextactivity", "StepVideo"); //Telling HR Class what is next activity
-    	startActivity(i);
+		if(takeHr){
+	    	//Intent i = new Intent(this, FitTest.class);
+			//Intent i = new Intent(this, StepVideo.class);
+	    	Intent i = new Intent(this, FitTestHR.class); 
+			i.putExtra("nextactivity", "StepVideo"); //Telling HR Class what is next activity
+	    	startActivity(i);
+		}else{
+			//Manual HR entry, skip HRActivity
+			
+		}
     }//end of startTestPushed
     
     public void pleaseEnterTextAlert(){

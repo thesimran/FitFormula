@@ -217,7 +217,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="@string/blood_string" />
+                android:text="@string/blood_string"
+                 />
 
             <RadioGroup
                 android:id="@+id/blood_radio"
@@ -244,9 +245,10 @@
                 android:textSize="16dip"
                 android:id="@+id/blood_label_no"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dip"
                 android:layout_weight="0.5"
-                android:text="@string/blood_string_no" />
+                android:text="@string/blood_string_no"
+                 />
 
             <Spinner 
                 android:id="@+id/blood_spinner"
@@ -266,6 +268,55 @@
                 android:visibility="gone"
                 />
             
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:textSize="16dip"
+                android:id="@+id/know_resting_hr"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/know_hr_str" 
+                android:layout_marginTop="6dip"/>
+            	
+            
+             <RadioGroup
+                android:id="@+id/hr_radio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/hr_no"
+                    android:checked="true"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:id="@+id/hr_yes"
+                    android:checked="false"
+                    android:text="@string/yes" />
+            </RadioGroup>
+            
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:textSize="16dip"
+                android:id="@+id/resting_hr"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/enter_hr"
+                android:visibility="gone" />
+            
+            <EditText
+                android:id="@+id/hr_entry"
+                android:layout_width="0dp"                
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"  
+                android:inputType="number"
+                android:maxLength="3"
+                android:visibility="gone" />
         </TableRow>
         
         <TableRow>

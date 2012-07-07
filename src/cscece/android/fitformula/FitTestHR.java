@@ -705,7 +705,7 @@ class DrawOnTop extends View {
 				try {
 					c = Class.forName(className);
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}

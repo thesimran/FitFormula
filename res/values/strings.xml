@@ -69,5 +69,7 @@
 	<string name="dont_start_workout_str">Back</string>
 	<string name="start_workout_str">Begin Workout Now</string>
 	<string name="step_time_str">3:00</string>
+	<string name="know_hr_str">Do you know your resting heart rate?</string>
+	<string name="enter_hr">Enter your resting HR:</string>
 	    
 </resources>
