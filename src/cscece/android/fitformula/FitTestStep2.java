@@ -330,7 +330,7 @@ public class FitTestStep2 extends Activity {
 		
 		db.close();
 		//Should bring us back to the FitnessTest Activity
-		FitnessTest.testComplete = true;
+		//FitnessTest.testComplete = true;
 		finish();
 	}
 	

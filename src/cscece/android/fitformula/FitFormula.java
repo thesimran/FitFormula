@@ -40,7 +40,8 @@ public class FitFormula extends TabActivity {
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 
-	    intent = new Intent().setClass(this, HealthCenter.class);
+	    //Switched to HealthCenter2 for this FF version
+	    intent = new Intent().setClass(this, HealthCenter2.class);
 	    spec = tabHost.newTabSpec("health_center").setIndicator("Health Center",
 	                      res.getDrawable(R.drawable.ic_tab_hc))
 	                  .setContent(intent);

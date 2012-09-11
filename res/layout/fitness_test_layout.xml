@@ -269,6 +269,7 @@
                 />
             
         </TableRow>
+        <!--  
         <TableRow>
             <TextView
                 android:textSize="16dip"
@@ -299,7 +300,9 @@
             </RadioGroup>
             
         </TableRow>
-        <TableRow>
+       --> 
+        <TableRow
+           android:paddingBottom="25dip">
             <TextView
                 android:textSize="16dip"
                 android:id="@+id/resting_hr"
@@ -307,7 +310,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="@string/enter_hr"
-                android:visibility="gone" />
+                />
             
             <EditText
                 android:id="@+id/hr_entry"
@@ -315,21 +318,44 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"  
                 android:inputType="number"
-                android:maxLength="3"
-                android:visibility="gone" />
+                android:maxLength="3" />
+        </TableRow>
+       	<TableRow android:id="@+id/how_much_excercise">
+
+            <TextView
+                android:textSize="16dip"
+                android:id="@+id/how_much_excercise_label"
+                android:layout_width="0dp"
+                android:layout_height="150dip"
+                android:layout_weight="0.5"
+                android:text="@string/how_much_exercise_str"
+                 />
+
+            <Spinner 
+                android:id="@+id/exercise_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_marginTop="55dip"
+                android:drawSelectorOnTop="true"
+                android:entries="@array/excercise_array_str"
+		    	android:entryValues="@array/exercise_mins_values"
+		    	android:defaultValue="30" />
+            
         </TableRow>
         
         <TableRow>
 
             <Button
-                android:id="@+id/start_fit_test"
+                android:id="@+id/fit_test_next_but"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="@string/start_fit_test_string"
-                android:onClick="startTestPushed"
+                android:text="@string/next_str"
+                android:onClick="nextPushed"
                 android:layout_marginTop="25dip"
                 android:layout_marginBottom="25dip" />
         </TableRow>
+        
     </TableLayout>
 
 </ScrollView> 

@@ -41,7 +41,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String cvdriskclass = "cvdriskclass";
     public static final String heartage = "heartage";
     public static final String vo2 = "vo2";
-    public static final String vo2class = "vo2class";    
+    public static final String vo2class = "vo2class";   
+    public static final String regularExercise = "regularExercise"; 
     
     //hrdata columns
     public static final String heartrate = "heartrate";
@@ -112,6 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    				+ program + " INTEGER,"
 	    				+ level + " INTEGER,"
 	    				+ programname + " TEXT,"
+	    				+ regularExercise + " INTEGER,"
 	    				+ date + " BIGINT"
 	    				+ ");");	              
 	        }

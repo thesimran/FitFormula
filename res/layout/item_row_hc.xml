@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+     >
+	<TextView
+	    android:id="@+id/hc_item_title"
+	    android:layout_alignParentTop="true"
+	    android:layout_alignParentLeft="true"
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:layout_margin="5dp"
+	    android:text="Physical Activity Level: "
+	    android:textStyle="bold"
+	     android:textAppearance="?android:attr/textAppearanceMedium"
+	    >	    
+	</TextView> 
+	
+	<ImageView
+        android:id="@+id/img_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/navigation_next_item_dark" >
+    </ImageView>
+    
+	<TextView
+	    android:id="@+id/hc_actual_age"
+	    android:layout_below="@id/hc_item_title"
+	    android:layout_alignParentLeft="true"
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:layout_margin="5dp"
+	    android:text="Actual Age: "
+	    android:textStyle="bold"
+	    android:textSize="15dp"
+	    android:visibility="gone"
+	    >	    
+	</TextView> 
+	
+	<TextView
+	    android:id="@+id/hc_heart_age"
+	    android:layout_below="@id/hc_actual_age"
+	    android:layout_alignParentLeft="true"
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:layout_margin="5dp"
+	    android:text="Heart Age: "
+	    android:textStyle="bold"
+	    android:textSize="15dp"
+	    android:visibility="gone"
+	    >	    
+	</TextView> 
+    
+
+</RelativeLayout>

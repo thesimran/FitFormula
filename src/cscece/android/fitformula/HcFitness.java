@@ -113,7 +113,7 @@ public class HcFitness extends Activity {
 		boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
 		boolean biometricsUpdated = settings.getBoolean("biometricsUpdated", false);				    	
 		
-		if(gottenWorkout && biometricsUpdated){ //if user has gotten their workout and biometrics have been updated, reload HC info
+		if(gottenWorkout && biometricsUpdated){ //if user has got their workout and biometrics have been updated, reload HC info
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("biometricsUpdated", false); //make biometricsUpdated false so don't reload HC info every time
 			editor.commit();	

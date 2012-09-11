@@ -21,7 +21,6 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.TabHost.TabContentFactory;
 
-@SuppressWarnings("deprecation")
 public class HealthCenter extends TabActivity {
 	private TabHost tabHost;
 

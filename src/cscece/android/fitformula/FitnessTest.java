@@ -12,15 +12,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +48,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 	private EditText hrEntry;
 	private TextView bloodLabel;
 	private TextView restingHrLabel;
+	private Spinner regularExerciseSpinner;
 	
 	private static final String[] bloodRanges={"Low", "Normal", "High"};
 	
@@ -64,10 +62,11 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 	public int diabetes;
 	public int bloodPressure;
 	public int restingHr;
-	private boolean takeHr;
+	public int regularExercise;
+	//private boolean takeHr;
 	
 	//Static to indicate that the test has just been completed!
-	public static boolean testComplete = false;
+	//public static boolean testComplete = false;
 	
 	
 	/** Called when the activity is first created. */
@@ -83,7 +82,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     private void init(){
     	//set title
         //FitFormula.title.setText("Fitness Test"); -- still a work in progress
-        takeHr = false;
+        //takeHr = false;
         //TODO: Pull biometric data from database if exists
         //Gender
         //no gender initially
@@ -129,9 +128,12 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
         //Heart Rate
         restingHr = 0;
         restingHrLabel = (TextView)findViewById(R.id.resting_hr);
-        hrRadio = (RadioGroup)findViewById(R.id.hr_radio);
         hrEntry = (EditText)findViewById(R.id.hr_entry);
         hrRadio.setOnCheckedChangeListener(this);
+        
+        //Regular Exercise
+        regularExerciseSpinner = (Spinner)findViewById(R.id.exercise_spinner);
+       
     }
     
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -149,16 +151,6 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 			bloodEntry.setVisibility(View.VISIBLE);
 			//bloodSpinner.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.0f));
 			//bloodEntry.setLayoutParams(new TableRow.LayoutParams(0,LayoutParams.WRAP_CONTENT,0.5f));			    
-			break;
-		case R.id.hr_no:
-			takeHr = true;
-			restingHrLabel.setVisibility(View.GONE);
-			hrEntry.setVisibility(View.GONE);
-			break;
-		case R.id.hr_yes:
-			takeHr = false;
-			restingHrLabel.setVisibility(View.VISIBLE);
-			hrEntry.setVisibility(View.VISIBLE);
 			break;
 		}
 		
@@ -246,24 +238,25 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     
     @Override
     public void onResume(){
-    	
+    	/*TODO
     	if(testComplete){
     		testComplete = false;
     		//switch to HealthCenter Tab
     		FitFormula ParentActivity;
     		ParentActivity = (FitFormula) this.getParent();
     		ParentActivity.switchTab(2);
-    	}
+    	}*/
     	
     	super.onResume();
     }
 
-    //Called when the "Start Fitness Test Now" button is pushed
-    public void startTestPushed(View view){
+    //Called when the "Next" button is pushed
+    public void nextPushed(View view){
     	//We now have to check all the user entered values to see
     	// if they comply. And then we can store them for later use in the step test
     	// and eventually into the workoutManager
     	
+    	int regularExercisePosition;
     	
     	//First lets collect the radio button selections
     	//Gender:
@@ -400,25 +393,34 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	}
     	
     	//HR
-    	if(!takeHr){
-    		//Skip HRActivity and save value in DB
-    		
-    		try{
-    			restingHr = Integer.parseInt(hrEntry.getText().toString());
-    		}catch(Exception e){
-    			pleaseEnterTextAlert();
-    			return;
-    		}
-    		//TODO Are these good constraints?
-    		if(restingHr < 30 || restingHr > 160){
-    			Toast
-                .makeText(this, "You must enter a valid resting HR. Please try again.", Toast.LENGTH_LONG)
-                .show();
-        		return;
-    		}
-    		
-    		
-    	}
+		try{
+			restingHr = Integer.parseInt(hrEntry.getText().toString());
+		}catch(Exception e){
+			pleaseEnterTextAlert();
+			return;
+		}
+		//TODO Are these good constraints?
+		if(restingHr < 30 || restingHr > 160){
+			Toast
+            .makeText(this, "You must enter a valid resting HR. Please try again.", Toast.LENGTH_LONG)
+            .show();
+    		return;
+		}	
+    
+    	
+    	//Regular Exercise
+    	 regularExercisePosition = regularExerciseSpinner.getSelectedItemPosition();
+    	 if(regularExercisePosition == 0){
+    		 regularExercise = 30;
+    	 }else if(regularExercisePosition == 1){
+    		 regularExercise = 90;
+    	 }else if(regularExercisePosition == 2){
+    		 regularExercise = 120;
+    	 }else if(regularExercisePosition == 3){
+    		 regularExercise = 150;
+    	 }else{
+    		 regularExercise = 151;
+    	 }
     	
     	//Save biometrics into DB here! 
     	addUserInfoToDB();    	
@@ -434,10 +436,11 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 		editor.putBoolean("biometricsUpdated", true);
 		editor.putBoolean("weightUpdated",true);
 		editor.putBoolean("firstProgram",true);
-		editor.putBoolean("achievementsUpdated",true);
-		editor.commit();	
+		editor.putBoolean("achievementsUpdated",true);	
     	
-		if(takeHr){
+		//Left over from class FF version..
+		/*
+		if(hrNo.isChecked()){
 	    	//Intent i = new Intent(this, FitTest.class);
 			//Intent i = new Intent(this, StepVideo.class);
 	    	Intent i = new Intent(this, FitTestHR.class); 
@@ -449,7 +452,25 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 			Intent i=new Intent(this, FitTestStep2.class);
 			startActivity(i);
 		
-		}
+		}*/
+		
+		Toast
+        .makeText(this, "Test Complete", Toast.LENGTH_LONG)
+        .show();
+		
+		//achievemetns nshit
+		editor.putBoolean("gottenWorkout", true);
+		editor.putBoolean("hrUpdated", true);
+		editor.putBoolean("achievementsUpdated", true);
+		editor.commit();	
+		
+		//TODO next activity is "Health Report"
+		//switch to HealthCenter Tab
+		FitFormula ParentActivity;
+		ParentActivity = (FitFormula) this.getParent();
+		ParentActivity.switchTab(2);
+		
+		
     }//end of startTestPushed
     
     public void pleaseEnterTextAlert(){
@@ -539,6 +560,13 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 				Log.d("db", "bloodpressure is different");
 				values.put(DatabaseHelper.bloodpressure, bloodPressure);
 			}
+			columnIndex = c.getColumnIndex(DatabaseHelper.regularExercise);
+			data = c.getInt(columnIndex);
+			Log.d("db", "regularExercise " + data);
+			if (!(data == regularExercise)) {
+				Log.d("db", "regularExercise is different");
+				values.put(DatabaseHelper.regularExercise, regularExercise);
+			}
 			if (values.size() >= 1) {
 				Log.d("db", "values have updated");
 				db = dbh.getWritableDatabase();
@@ -555,6 +583,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 			values.put(DatabaseHelper.smoking, smoking);
 			values.put(DatabaseHelper.diabetes, diabetes);
 			values.put(DatabaseHelper.bloodpressure, bloodPressure);
+			values.put(DatabaseHelper.regularExercise, regularExercise);
 			
 			/*values.put(DatabaseHelper.bmi, 0);
 			values.put(DatabaseHelper.bmiclass, "");
@@ -585,15 +614,13 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 		
 		db.insert(DatabaseHelper.WEIGHT_TABLE_NAME, null, values);
 		
-		//Add HR value if supplied by user manually
-		if(!takeHr){
-			values.clear();
-			values.put(DatabaseHelper.heartrate, restingHr);
-			values.put(DatabaseHelper.resting, true);
-			values.put(DatabaseHelper.date, System.currentTimeMillis());
-			
-			db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
-		}	
+		//Add HR value
+		values.clear();
+		values.put(DatabaseHelper.heartrate, restingHr);
+		values.put(DatabaseHelper.resting, true);
+		values.put(DatabaseHelper.date, System.currentTimeMillis());
+		db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
+		
 
 		db.close();
 	}	

@@ -71,5 +71,20 @@
 	<string name="step_time_str">3:00</string>
 	<string name="know_hr_str">Do you know your resting heart rate?</string>
 	<string name="enter_hr">Enter your resting HR:</string>
-	    
+	<string name="how_much_exercise_str">How many minutes per week do you workout at a moderate or high intensity? (e.g. jogging, brisk walking)</string>
+	<string-array name="excercise_array_str">
+		<item>&#60;30</item>
+		<item>31&#8211;90</item>
+		<item>91&#8211;120</item>
+		<item>121&#8211;150</item>
+		<item>151&#62;</item>	
+	</string-array>
+	<string name="next_str">Next</string>
+	<string-array name="hc_list_array">
+	    <item>Physical Activty Level: Below Average</item>
+	    <item>Cardiovascular risk: empty</item>
+	    <item>Body Mass Index: empty</item>
+	</string-array>    
+	
+	   
 </resources>
