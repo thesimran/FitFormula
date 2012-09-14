@@ -431,12 +431,22 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	imm.hideSoftInputFromWindow(heightText.getWindowToken(), 0);
     	imm.hideSoftInputFromWindow(weightText.getWindowToken(), 0);
 		
+    	/*
+    	 * 
 		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
     	SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("biometricsUpdated", true);
 		editor.putBoolean("weightUpdated",true);
 		editor.putBoolean("firstProgram",true);
-		editor.putBoolean("achievementsUpdated",true);	
+		editor.putBoolean("achievementsUpdated",true);
+		*
+		*/
+    	FitFormulaApp.persistence.setBiometricsUpdated(true);
+    	FitFormulaApp.persistence.setWeightUpdated(true);
+    	FitFormulaApp.persistence.setFirstProgram(true);
+    	FitFormulaApp.persistence.setAchievementsUpdated(true);
+    	//TODO YOU ARE HERE!!!!!!!!!!!!!!
+    	
     	
 		//Left over from class FF version..
 		/*

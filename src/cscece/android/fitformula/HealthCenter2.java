@@ -1,12 +1,18 @@
 package cscece.android.fitformula;
 
+import java.util.ArrayList;
+
+import cscece.android.fitformula.adapters.HcAdapter;
+import cscece.android.fitformula.objects.HcListItem;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -31,10 +37,12 @@ import android.widget.AdapterView.OnItemClickListener;
  * @author the_simran
  *
  */
-public class HealthCenter2 extends Activity implements OnItemClickListener{
+public class HealthCenter2 extends Activity implements OnItemClickListener, OnItemSelectedListener {
 	
 	private boolean hasCompletedTest;
 	private ListView mListView;
+	private HcAdapter listAdapter;
+	private ArrayList<HcListItem> hcList;
 
 	
 	@Override
@@ -63,17 +71,37 @@ public class HealthCenter2 extends Activity implements OnItemClickListener{
 	
 	private void populateList(){
 		mListView.setOnItemClickListener(this);
-		//TODO this may be wrong..
+        mListView.setOnItemSelectedListener(this);
+		
+        //TODO this may be wrong..
 		//mAdapter.bindView(mListView, this, mCursor);
+        
+        hcList = new ArrayList<HcListItem>();
+        //TODO get data from DB!
+        listAdapter = new HcAdapter(hcList, this);
+        mListView.setAdapter(listAdapter);
 		
 		
 	}
 	
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 		
-		
+		//TODO Do some stuff
 		
 	}
 	
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+		
+		
+		//TODO Also do some stuff here...
+		
+		//ImageView img_arrow = (ImageView) view.findViewById(R.id.img_arrow);
+		//img_arrow.forceLayout();
+		
+	}
+	
+	public void onNothingSelected(AdapterView<?> parent) {
+		
+	}
 	
 }

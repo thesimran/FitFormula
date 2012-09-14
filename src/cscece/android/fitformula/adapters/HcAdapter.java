@@ -68,8 +68,6 @@ public class HcAdapter extends BaseAdapter {
 	    }
 
 	    return hcList.size();
-
-	    
 	}
 
 	public static class ViewHolder{
