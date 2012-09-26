@@ -12,7 +12,7 @@ public class FitFormulaApp extends Application {
 	
 	public static Persistence persistence;
 	
-	private FitFormulaApp() {
+	public FitFormulaApp() {
         instance = this;
       
     }

@@ -44,6 +44,7 @@ public class HcAdapter extends BaseAdapter {
             holder.title = (TextView) vi.findViewById(R.id.hc_item_title);
             holder.actualAge = (TextView) vi.findViewById(R.id.hc_actual_age);
             holder.heartAge = (TextView) vi.findViewById(R.id.hc_heart_age);
+          
             vi.setTag(holder);
         } else {
         	holder = (ViewHolder)vi.getTag();
@@ -52,10 +53,15 @@ public class HcAdapter extends BaseAdapter {
         HcListItem item = hcList.get(position);
         
         holder.title.setText(item.getTitle());
-        
-        if(item.getType() == HcListItem.TYPE_CARDIO){
+        int type = item.getType();
+        if(type == HcListItem.TYPE_BMI || type == HcListItem.TYPE_PAL){
+        	holder.actualAge.setVisibility(View.GONE);
+        	holder.heartAge.setVisibility(View.GONE);
+        }else{
         	holder.actualAge.setText(item.getActualAge());
         	holder.heartAge.setText(item.getHeartAge());
+        	holder.actualAge.setVisibility(View.VISIBLE);
+        	holder.heartAge.setVisibility(View.VISIBLE);
         }
         
 		return vi;

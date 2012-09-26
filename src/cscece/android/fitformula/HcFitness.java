@@ -82,7 +82,7 @@ public class HcFitness extends Activity {
         //TextView textview = new TextView(this);
         //textview.setText("This is the HcFitness tab");
         setContentView(R.layout.hc_fitness_layout);
-        titleText = (TextView) findViewById(R.id.do_fitness_test_note);
+      //  titleText = (TextView) findViewById(R.id.do_fitness_test_note);
         //mLinear = (LinearLayout) findViewById(R.id.hc_linear);
         mRelative = (RelativeLayout) findViewById(R.id.hc_relative);
                 

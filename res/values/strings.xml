@@ -85,6 +85,17 @@
 	    <item>Cardiovascular risk: empty</item>
 	    <item>Body Mass Index: empty</item>
 	</string-array>    
+	<string name="hc_recommend_str">Based on your health, we recommend a workout that will help your BMI and at the same time improve your fitness level.</string>
+	<string name="hc_question_str">Are you ok with this fitness goal?</string>
+	<string name="hc_workout_str">Get my workout now</string>
+	<string name="phys_desc_str">To achieve health benefits, adults aged 18-64 years should accumulate at least 150 minutes of moderate to vigorous intensity 
+	    aerobic physical activity per week, in bouts of 10 minutes or more.\n\n10 minutes of activity can help reduce the risk of:
+	    \nHypertension\nObesity\nType 2 Diabetes\nHeart Disease\nCertain types of cancer\nStroke
+	</string>
+	<string name="cardio_desc_str">This score indicates the risk that you have for developing cardiovascular diesease (eg. coronary death, myocardial 
+	    infarction, stroke and heart failure) over the next 10 years.  Your heart age refelcts the age of your vascualr system.\n\nImproving your dietary
+	    and exercise behaviour, while also quitting smoking will help lower your CVD risk score and heart age.
+	</string>
 	
 	   
 </resources>

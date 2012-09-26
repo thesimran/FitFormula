@@ -39,7 +39,6 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 	private RadioGroup smokingRadio;
 	private RadioGroup diabetesRadio;
 	private RadioGroup bloodRadio;
-	private RadioGroup hrRadio;
 	private EditText ageText;
 	private EditText heightText;
 	private EditText weightText;
@@ -49,6 +48,12 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 	private TextView bloodLabel;
 	private TextView restingHrLabel;
 	private Spinner regularExerciseSpinner;
+	private double heartAge;
+	private double normalRisk;
+	private double normalCVDRisk;
+	private double myBMI;
+	private String bmiClass;
+	private String cvdRiskClass;
 	
 	private static final String[] bloodRanges={"Low", "Normal", "High"};
 	
@@ -129,7 +134,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
         restingHr = 0;
         restingHrLabel = (TextView)findViewById(R.id.resting_hr);
         hrEntry = (EditText)findViewById(R.id.hr_entry);
-        hrRadio.setOnCheckedChangeListener(this);
+        //hrRadio.setOnCheckedChangeListener(this);
         
         //Regular Exercise
         regularExerciseSpinner = (Spinner)findViewById(R.id.exercise_spinner);
@@ -410,17 +415,20 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	
     	//Regular Exercise
     	 regularExercisePosition = regularExerciseSpinner.getSelectedItemPosition();
+    	 /*
     	 if(regularExercisePosition == 0){
-    		 regularExercise = 30;
+    		 regularExercise = 0;
     	 }else if(regularExercisePosition == 1){
-    		 regularExercise = 90;
+    		 regularExercise = 1;
     	 }else if(regularExercisePosition == 2){
-    		 regularExercise = 120;
+    		 regularExercise = 2;
     	 }else if(regularExercisePosition == 3){
     		 regularExercise = 150;
     	 }else{
     		 regularExercise = 151;
     	 }
+    	 */
+    	 regularExercise = regularExercisePosition;
     	
     	//Save biometrics into DB here! 
     	addUserInfoToDB();    	
@@ -430,49 +438,19 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	imm.hideSoftInputFromWindow(ageText.getWindowToken(), 0);
     	imm.hideSoftInputFromWindow(heightText.getWindowToken(), 0);
     	imm.hideSoftInputFromWindow(weightText.getWindowToken(), 0);
-		
-    	/*
-    	 * 
-		SharedPreferences settings = getSharedPreferences(MyWorkout.PREFS_NAME, 0);
-    	SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean("biometricsUpdated", true);
-		editor.putBoolean("weightUpdated",true);
-		editor.putBoolean("firstProgram",true);
-		editor.putBoolean("achievementsUpdated",true);
-		*
-		*/
+	
     	FitFormulaApp.persistence.setBiometricsUpdated(true);
     	FitFormulaApp.persistence.setWeightUpdated(true);
     	FitFormulaApp.persistence.setFirstProgram(true);
-    	FitFormulaApp.persistence.setAchievementsUpdated(true);
-    	//TODO YOU ARE HERE!!!!!!!!!!!!!!
-    	
-    	
-		//Left over from class FF version..
-		/*
-		if(hrNo.isChecked()){
-	    	//Intent i = new Intent(this, FitTest.class);
-			//Intent i = new Intent(this, StepVideo.class);
-	    	Intent i = new Intent(this, FitTestHR.class); 
-			i.putExtra("nextactivity", "StepVideo"); //Telling HR Class what is next activity
-	    	startActivity(i);
-		}else{
-			//Manual HR entry, skip HRActivity
-			//TODO All I have to do for now?
-			Intent i=new Intent(this, FitTestStep2.class);
-			startActivity(i);
-		
-		}*/
 		
 		Toast
         .makeText(this, "Test Complete", Toast.LENGTH_LONG)
         .show();
 		
 		//achievemetns nshit
-		editor.putBoolean("gottenWorkout", true);
-		editor.putBoolean("hrUpdated", true);
-		editor.putBoolean("achievementsUpdated", true);
-		editor.commit();	
+		FitFormulaApp.persistence.setGotWorkout(true);
+		FitFormulaApp.persistence.setHrUpdated(true);
+		FitFormulaApp.persistence.setAchievementsUpdated(true);
 		
 		//TODO next activity is "Health Report"
 		//switch to HealthCenter Tab
@@ -497,6 +475,86 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     	alert.show();
     }
     
+    private void calcRisk(){
+    	
+    	double risk;
+    	double myCVDRisk;
+    	
+    	myBMI = weight/(height*height/10000.0); //kg/m^2					
+		Log.d("db","gender"+gender+"hyp"+hypertension+"myBMI"+myBMI+"weight"+weight+"height"+height); 
+		if(gender == 0){ //male==0
+			if (hypertension ==1){ //yes==1
+				risk= (Math.log(age)*3.11296)+(Math.log(bloodPressure)*1.92672)+(smoking*0.70953)+(Math.log(myBMI)*0.79277)+(diabetes*0.5316);
+				myCVDRisk=(1 - Math.pow(0.88431,Math.exp(risk-23.9388)));					
+				
+				double numerator= Math.exp(-((Math.log(bloodPressure)*1.85508)+(smoking*0.70953)+(Math.log(myBMI)*0.79277)+(diabetes*0.5316)-23.9388)/3.11296);					
+				double denominator= Math.pow(-Math.log(0.8843),(1/3.11296));
+				double term= Math.pow(-Math.log(1-myCVDRisk),(1/3.11296));
+				//Log.d("db","num"+numerator+"denom"+denominator+"coeff"+coefficient);
+				heartAge = numerator/denominator*term;
+				 
+			}else{ //no==0
+				risk= (Math.log(age)*3.11296)+(Math.log(bloodPressure)*1.85508)+(smoking*0.70953)+(Math.log(myBMI)*0.79277)+(diabetes*0.5316);
+				myCVDRisk=(1 - Math.pow(0.88431,Math.exp(risk-23.9388)));
+				
+				double numerator= Math.exp(-((Math.log(bloodPressure)*1.85508)+(smoking*0.70953)+(Math.log(myBMI)*0.79277)+(diabetes*0.5316)-23.9388)/3.11296);					
+				double denominator= Math.pow(-Math.log(0.8843),(1/3.11296));
+				double term= Math.pow(-Math.log(1-myCVDRisk),(1/3.11296));
+				//Log.d("db","num"+numerator+"denom"+denominator+"coeff"+coefficient);
+				heartAge = numerator/denominator*term;			
+			}
+			normalRisk= (Math.log(age)*3.11296) + (Math.log(125)*1.85508) + (Math.log(22.5)*0.79277);
+			normalCVDRisk = 1-Math.pow(0.88431,Math.exp(normalRisk-23.9388));
+			
+		}else{ //female==1
+			if (hypertension ==1){ //yes==1
+				risk= (Math.log(age)*2.72107)+(Math.log(bloodPressure)*2.88267)+(smoking*0.61868)+(Math.log(myBMI)*0.51125)+(diabetes*0.77763);
+				myCVDRisk=(1 - Math.pow(0.94833,Math.exp(risk-26.0145)));
+				
+				double numerator= Math.exp(-((Math.log(bloodPressure)*2.81291)+(smoking*0.61868)+(Math.log(myBMI)*0.51125)+(diabetes*0.77763)-26.0145)/2.72107);					
+				double denominator= Math.pow(-Math.log(0.94833),(1/2.72107));
+				double term= Math.pow(-Math.log(1-myCVDRisk),(1/2.72107));
+				//Log.d("db","num"+numerator+"denom"+denominator+"coeff"+coefficient);
+				heartAge = numerator/denominator*term;										 	
+				 
+			}else{ //no==0
+				risk= (Math.log(age)*2.72107)+(Math.log(bloodPressure)*2.81291)+(smoking*0.61868)+(Math.log(myBMI)*0.51125)+(diabetes*0.77763);
+				myCVDRisk=(1 - Math.pow(0.94833,Math.exp(risk-26.0145)));
+				
+				double numerator= Math.exp(-((Math.log(bloodPressure)*2.81291)+(smoking*0.61868)+(Math.log(myBMI)*0.51125)+(diabetes*0.77763)-26.0145)/2.72107);					
+				double denominator= Math.pow(-Math.log(0.94833),(1/2.72107));
+				double term= Math.pow(-Math.log(1-myCVDRisk),(1/2.72107));
+				//Log.d("db","num"+numerator+"denom"+denominator+"coeff"+coefficient);
+				heartAge = numerator/denominator*term;
+									 
+			}
+			normalRisk= (Math.log(age)*2.72107) + (Math.log(125)*2.81291) + (Math.log(22.5)*0.51125);
+			normalCVDRisk = 1-Math.pow(0.94833,Math.exp(normalRisk-26.0145));
+			
+		}
+		
+		//BMI
+		if (myBMI < 18.5) {
+			bmiClass="underweight";
+		}else if (myBMI >= 18.5 && myBMI < 25) {
+			bmiClass="normal weight";
+		}else if (myBMI>= 25 && myBMI < 30){
+			bmiClass="overweight";
+		}else{ //myBMI>=30
+			bmiClass="obese";
+		}
+		
+		//CVD Risk
+		if (myCVDRisk < 0.10){
+			cvdRiskClass="low";
+		}else if (myCVDRisk >= 0.10 && myCVDRisk < 0.20){
+			cvdRiskClass="moderate";
+		}else { //myCVDRisk>=0.20
+			cvdRiskClass="high";
+		}
+
+    }
+    
 	public void addUserInfoToDB() {
 		DatabaseHelper dbh;
 		dbh = new DatabaseHelper(this);
@@ -508,8 +566,15 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 				DatabaseHelper.gender, DatabaseHelper.age,
 				DatabaseHelper.height, DatabaseHelper.weight,
 				DatabaseHelper.hypertension, DatabaseHelper.smoking,
-				DatabaseHelper.diabetes, DatabaseHelper.bloodpressure },
+				DatabaseHelper.diabetes, DatabaseHelper.bloodpressure, 
+				DatabaseHelper.regularExercise, DatabaseHelper.normalcvdrisk,
+				DatabaseHelper.normalrisk, DatabaseHelper.bmi,
+				DatabaseHelper.bmiclass, DatabaseHelper.cvdriskclass},
 				"_id = " + rowIndex, null, null, null, null);
+		
+		//calculate heart age and other risks
+		calcRisk();
+		
 
 		if (c.moveToNext()) { // table has data (rows) in it
 			Log.d("db", "userinfo table not empty");
@@ -577,6 +642,41 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 				Log.d("db", "regularExercise is different");
 				values.put(DatabaseHelper.regularExercise, regularExercise);
 			}
+			columnIndex = c.getColumnIndex(DatabaseHelper.normalcvdrisk);
+			data = c.getInt(columnIndex);
+			Log.d("db", "normalcvdRisk " + data);
+			if (!(data == normalCVDRisk)) {
+				Log.d("db", "normalcvdrisk is different");
+				values.put(DatabaseHelper.normalcvdrisk, normalCVDRisk);
+			}
+			columnIndex = c.getColumnIndex(DatabaseHelper.normalrisk);
+			data = c.getInt(columnIndex);
+			Log.d("db", "normalrisk " + data);
+			if (!(data == normalRisk)) {
+				Log.d("db", "normalRisk is different");
+				values.put(DatabaseHelper.normalrisk, normalRisk);
+			}
+			columnIndex = c.getColumnIndex(DatabaseHelper.bmi);
+			data = c.getInt(columnIndex);
+			Log.d("db", "bmi " + data);
+			if (!(data == myBMI)) {
+				Log.d("db", "bmi is different");
+				values.put(DatabaseHelper.bmi, myBMI);
+			}
+			columnIndex = c.getColumnIndex(DatabaseHelper.bmiclass);
+			String dataStr = c.getString(columnIndex);
+			Log.d("db", "bmiclass " + data);
+			if ((dataStr == null) || (!dataStr.equals(bmiClass))) {
+				Log.d("db", "bmiclass is different");
+				values.put(DatabaseHelper.bmiclass, bmiClass);
+			}
+			columnIndex = c.getColumnIndex(DatabaseHelper.cvdriskclass);
+			dataStr = c.getString(columnIndex);
+			Log.d("db", "cvdriskclass " + data);
+			if ((dataStr == null) || (!dataStr.equals(cvdRiskClass))) {
+				Log.d("db", "cvdriskclass is different");
+				values.put(DatabaseHelper.cvdriskclass, cvdRiskClass);
+			}
 			if (values.size() >= 1) {
 				Log.d("db", "values have updated");
 				db = dbh.getWritableDatabase();
@@ -594,6 +694,11 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 			values.put(DatabaseHelper.diabetes, diabetes);
 			values.put(DatabaseHelper.bloodpressure, bloodPressure);
 			values.put(DatabaseHelper.regularExercise, regularExercise);
+			values.put(DatabaseHelper.normalcvdrisk, normalCVDRisk);
+			values.put(DatabaseHelper.normalrisk, normalRisk);
+			values.put(DatabaseHelper.bmi, myBMI);
+			values.put(DatabaseHelper.bmiclass, bmiClass);
+			values.put(DatabaseHelper.cvdriskclass, cvdRiskClass);
 			
 			/*values.put(DatabaseHelper.bmi, 0);
 			values.put(DatabaseHelper.bmiclass, "");
@@ -630,8 +735,9 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
 		values.put(DatabaseHelper.resting, true);
 		values.put(DatabaseHelper.date, System.currentTimeMillis());
 		db.insert(DatabaseHelper.HR_TABLE_NAME, null, values);
-		
-
+	
 		db.close();
+		
+		FitFormulaApp.persistence.setHasCompletedTest(true);
 	}	
 }

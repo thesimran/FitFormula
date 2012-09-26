@@ -15,7 +15,12 @@ public class Persistence {
 	public static final String KEY_BIOMETRICS_UPDATED = "biometricsUpdated";
 	public static final String KEY_WEIGHT_UPDATED = "weightUpdated";
 	public static final String KEY_FIRST_PROGRAM = "firstProgram";
+	
+	//Achievements
+	public static final String KEY_ACH_GOT_WORKOUT = "gottenWorkout";
+	public static final String KEY_ACH_HR_UPDATED = "hrUpdated";
 	public static final String KEY_ACHIEVEMENTS_UPDATED = "achievementsUpdated";
+	
 	
 	public Persistence(Context context){
 		mContext = context;
@@ -71,5 +76,25 @@ public class Persistence {
 	public boolean getAchievementsUpdated(){
 		//returns false by default
 		return shared_prefs.getBoolean(KEY_ACHIEVEMENTS_UPDATED, false);
+	}
+	
+	public void setGotWorkout(boolean gotIt){	
+		prefs_editor.putBoolean(KEY_ACH_GOT_WORKOUT, gotIt);
+		prefs_editor.commit();
+	}
+	
+	public boolean getGotWorkout(){
+		//returns false by default
+		return shared_prefs.getBoolean(KEY_ACH_GOT_WORKOUT, false);
+	}
+	
+	public void setHrUpdated(boolean updated){	
+		prefs_editor.putBoolean(KEY_ACH_HR_UPDATED, updated);
+		prefs_editor.commit();
+	}
+	
+	public boolean getHrUpdated(){
+		//returns false by default
+		return shared_prefs.getBoolean(KEY_ACH_HR_UPDATED, false);
 	}
 }

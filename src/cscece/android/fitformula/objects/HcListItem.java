@@ -3,7 +3,7 @@ package cscece.android.fitformula.objects;
 public class HcListItem {
 	//constant Strings
 	private static final String PHYS_ACT_LEVEL = "Physical Activity Level: ";
-	private static final String CARDIO_RISK = "Cardiovascular Risk: ";
+	public static final String CARDIO_RISK = "Cardiovascular Risk: ";
 	private static final String BMI = "Body Mass Index: ";
 	private static final String ACTUAL_AGE = "Actual Age: ";
 	private static final String HEART_AGE = "Heart Age: ";
@@ -20,10 +20,6 @@ public class HcListItem {
 	private static final int AVG_INT = 3;
 	private static final int ABOVE_AVG_INT = 4;
 	
-	private static final String BMI_UNDERWEIGHT = "Underweight";
-	private static final String BMI_NORMAL = "Normal";
-	private static final String BMI_OVERWEIGHT = "Overweight";
-	
 	private static final int BMI_UNDERWEIGHT_INT = 0;
 	private static final int BMI_NORMAL_INT = 1;
 	private static final int BMI_OVERWEIGHT_INT = 2;
@@ -36,12 +32,13 @@ public class HcListItem {
 	
 	private int type;
 	private String title;
+	private String cvdClass;
 	private String actualAge;
 	private String heartAge;
 	
 	
 	/**
-	 * Constructor for type 0 and type 2 items.
+	 * Constructor for type 0 items.
 	 * 
 	 * @param type
 	 * @param value
@@ -55,10 +52,26 @@ public class HcListItem {
 			this.type = type;
 			if(type == TYPE_PAL){
 				title = PHYS_ACT_LEVEL + palLevelToString(level);
-			}else if(type == TYPE_BMI){
-				title = BMI + bmiLevelToString(level);
-			}
-				
+			}else{
+				throw new IllegalArgumentException("You must supply a type -- int and a level -- int param!");
+			}	
+		}	
+	}
+	
+	/**
+	 * Constructor for type 2 items.
+	 * 
+	 * @param type
+	 * @param bmiCLass
+	 */
+	public HcListItem(int type, String bmiClass) throws IllegalArgumentException{
+		
+		if(type == TYPE_CARDIO){
+			//incorrect
+			throw new IllegalArgumentException("You must supply more arguments for a TYPE_CARDIO item!");
+		}else{
+			this.type = type;
+			title = BMI + bmiClass;
 		}
 		
 	}
@@ -70,31 +83,18 @@ public class HcListItem {
 	 * @param value1
 	 * @param value2
 	 */
-	public HcListItem(int type, int actualAge, int heartAge) throws IllegalArgumentException{
+	public HcListItem(int type, String cvdClass, int actualAge, int heartAge) throws IllegalArgumentException{
 		if(type == TYPE_CARDIO){
-			this.type = type;
-			//TODO this may change... 
-			this.title = CARDIO_RISK + "Moderate";
-			this.actualAge = HEART_AGE +  actualAge;
-			this.heartAge = ACTUAL_AGE + heartAge;	
+			this.type = type; 
+			this.title = CARDIO_RISK + cvdClass;
+			this.actualAge = ACTUAL_AGE +  actualAge;
+			this.heartAge = HEART_AGE + heartAge;	
 		}else{
 			//incorrect
 			throw new IllegalArgumentException("You must only supply two arguments for TYPE_PAL and TYPE_BMI items!");
 		}
 	}
 	
-	private String bmiLevelToString(int level){
-		
-		if(level == BMI_UNDERWEIGHT_INT){
-			return BMI_UNDERWEIGHT;
-		}else if(level == BMI_NORMAL_INT){
-			return BMI_NORMAL;
-		}else if(level == BMI_OVERWEIGHT_INT){
-			return BMI_OVERWEIGHT;
-		}else{
-			return "None";
-		}
-	}
 	
 	private String palLevelToString(int level){
 		

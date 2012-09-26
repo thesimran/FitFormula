@@ -12,6 +12,7 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import cscece.android.fitformula.WorkoutTest2.WorkoutCountDownTimer;
+import cscece.android.fitformula.utils.ChartRenderer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -299,12 +300,12 @@ public class FirstWorkout extends Activity {
         int[] colors = new int[] { Color.argb(0, 0, 210, 250)};
         PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE };
         
-        XYMultipleSeriesRenderer renderer = RendererClass.buildRenderer(colors, styles);
+        XYMultipleSeriesRenderer renderer = ChartRenderer.buildRenderer(colors, styles);
         int length = renderer.getSeriesRendererCount();
         for (int i = 0; i < length; i++) {
           ((XYSeriesRenderer) renderer.getSeriesRendererAt(i)).setFillPoints(true);
         }
-        RendererClass.setChartSettings(renderer, "Workout Progress", "Percent Complete", "Intensity", 0, 100, 0, 100,
+        ChartRenderer.setChartSettings(renderer, "Workout Progress", "Percent Complete", "Intensity", 0, 100, 0, 100,
             Color.LTGRAY, Color.LTGRAY);
         renderer.setXLabels(12);
         renderer.setYLabels(10);
@@ -331,7 +332,7 @@ public class FirstWorkout extends Activity {
         
         progressRenderer.setColor(color);
 
-        XYMultipleSeriesDataset dataset = RendererClass.buildDataset(titles, x, values);
+        XYMultipleSeriesDataset dataset = ChartRenderer.buildDataset(titles, x, values);
         dataset.addSeries(0, progressSeries);
         renderer.addSeriesRenderer(0, progressRenderer);
         progressRenderer.setDisplayChartValues(false);

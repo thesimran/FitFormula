@@ -1,4 +1,4 @@
-package cscece.android.fitformula;
+package cscece.android.fitformula.utils;
 
 import java.util.Date;
 import java.util.List;
@@ -14,7 +14,9 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
-public class RendererClass {
+import android.graphics.Color;
+
+public class ChartRenderer {
 
     
     /**
@@ -25,7 +27,7 @@ public class RendererClass {
      * @param yValues the values for the Y axis
      * @return the XY multiple dataset
      */
-    protected static XYMultipleSeriesDataset buildDataset(String[] titles, List<double[]> xValues,
+    public static XYMultipleSeriesDataset buildDataset(String[] titles, List<double[]> xValues,
         List<double[]> yValues) {
       XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
       addXYSeries(dataset, titles, xValues, yValues, 0);
@@ -54,7 +56,7 @@ public class RendererClass {
      * @param styles the series point styles
      * @return the XY multiple series renderers
      */
-    protected static XYMultipleSeriesRenderer buildRenderer(int[] colors, PointStyle[] styles) {
+    public static XYMultipleSeriesRenderer buildRenderer(int[] colors, PointStyle[] styles) {
       XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
       setRenderer(renderer, colors, styles);
       return renderer;
@@ -90,7 +92,7 @@ public class RendererClass {
      * @param axesColor the axes color
      * @param labelsColor the labels color
      */
-    protected static void setChartSettings(XYMultipleSeriesRenderer renderer, String title, String xTitle,
+    public static void setChartSettings(XYMultipleSeriesRenderer renderer, String title, String xTitle,
         String yTitle, double xMin, double xMax, double yMin, double yMax, int axesColor,
         int labelsColor) {
       renderer.setChartTitle(title);
@@ -102,6 +104,10 @@ public class RendererClass {
       renderer.setYAxisMax(yMax);
       renderer.setAxesColor(axesColor);
       renderer.setLabelsColor(labelsColor);
+      renderer.setGridColor(Color.TRANSPARENT);
+      renderer.setBackgroundColor(Color.TRANSPARENT);
+      renderer.setMarginsColor(Color.TRANSPARENT);
+      renderer.setApplyBackgroundColor(true);
     }
 
     /**
@@ -190,7 +196,7 @@ public class RendererClass {
      * @param values the values
      * @return the XY multiple bar dataset
      */
-    protected static XYMultipleSeriesDataset buildBarDataset(String[] titles, List<double[]> values) {
+    public static XYMultipleSeriesDataset buildBarDataset(String[] titles, List<double[]> values) {
       XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
       int length = titles.length;
       for (int i = 0; i < length; i++) {
@@ -211,7 +217,7 @@ public class RendererClass {
      * @param colors the series renderers colors
      * @return the bar multiple series renderer
      */
-    protected static XYMultipleSeriesRenderer buildBarRenderer(int[] colors) {
+    public static XYMultipleSeriesRenderer buildBarRenderer(int[] colors) {
       XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
       renderer.setAxisTitleTextSize(16);
       renderer.setChartTitleTextSize(20);

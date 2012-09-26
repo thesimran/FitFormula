@@ -11,15 +11,55 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
         android:text="Health Report"
-        android:textSize="30dp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="30dp" />
 
-	<ListView
-	    android:id="@+id/hc_listview"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentLeft="true"
-	    android:layout_below="@id/hc_heading" >
-	</ListView>
+    <ListView
+        android:id="@+id/hc_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/hc_heading"
+        android:visibility="gone" >
+    </ListView>
+
+    <Button
+        android:id="@+id/hc_workout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/hc_workout_str"
+        android:onClick="getMyWorkout" />
+
+    <TextView
+        android:id="@+id/hc_recommend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/hc_listview"
+        android:layout_marginTop="100dp"
+        android:text="@string/hc_recommend_str"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:id="@+id/hc_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/hc_workout_button"
+        android:layout_marginBottom="33dp"
+        android:text="@string/hc_question_str"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginLeft="5dp" />
+
+    <Spinner
+        android:id="@+id/hc_confirm_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/hc_question"
+        android:layout_alignBottom="@+id/hc_question"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>
