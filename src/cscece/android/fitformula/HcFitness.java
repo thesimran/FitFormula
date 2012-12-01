@@ -19,6 +19,8 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import cscece.android.fitformula.utils.DatabaseHelper;
+
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;

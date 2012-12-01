@@ -16,9 +16,9 @@ public class FitFormula extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
-	    requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+	    //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 	    setContentView(R.layout.main);
-	    getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+	    //getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
 	    Resources res = getResources(); // Resource object to get Drawables
 	    tabHost = getTabHost();  // The activity TabHost
 	    TabHost.TabSpec spec;  // Resusable TabSpec for each tab

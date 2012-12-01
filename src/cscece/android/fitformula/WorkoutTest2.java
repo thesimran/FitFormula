@@ -15,6 +15,7 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import cscece.android.fitformula.utils.ChartRenderer;
+import cscece.android.fitformula.utils.DatabaseHelper;
 
 
 import android.app.Activity;

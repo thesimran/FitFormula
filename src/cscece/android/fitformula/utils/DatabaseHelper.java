@@ -1,4 +1,4 @@
-package cscece.android.fitformula;
+package cscece.android.fitformula.utils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -243,6 +243,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    				+ aerobic + " BOOLEAN"
 	    				+ ");");	               
 	        }
+	        
+	        /*
 	        dbExist = checkDataBase(PROGRAM2_TABLE_NAME);		  
 	        if(dbExist){
 	                //do nothing - database already exists
@@ -259,6 +261,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    				+ aerobic + " BOOLEAN"
 	    				+ ");");	               
 	        }
+	        
 	        dbExist = checkDataBase(PROGRAM3_TABLE_NAME);		  
 	        if(dbExist){
 	                //do nothing - database already exists
@@ -274,7 +277,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	    				+ duration + " INTEGER,"
 	    				+ aerobic + " BOOLEAN"
 	    				+ ");");	               
-	        }
+	        }*/
   
 	}
 	

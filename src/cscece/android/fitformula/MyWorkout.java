@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import cscece.android.fitformula.utils.DBAdapter;
+import cscece.android.fitformula.utils.DatabaseHelper;
+
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -111,7 +114,7 @@ public class MyWorkout extends ListActivity {
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
 
-		
+		/*
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		boolean savedWorkouts = settings.getBoolean("savedNewWorkouts", false);
 		boolean gottenWorkout = settings.getBoolean("gottenWorkout", false);
@@ -124,8 +127,18 @@ public class MyWorkout extends ListActivity {
 			editor.putBoolean("savedNewWorkouts", true);
 			editor.commit();
 		}
+		*/
+        
+        //New Database (DBAdapter)
+        init();
 
 	}// end of onCreate
+	
+	private void init(){
+		DBAdapter db = new DBAdapter(this);
+		db.open();
+		db.close();
+	}
 	
 	// the callback received when the user "sets" the date in the dialog
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -576,6 +589,7 @@ public class MyWorkout extends ListActivity {
 
 	}// end of getWorkoutPushed
 
+	//TODO wow that is ugly
 	public void initiateWorkoutsInDB() {
 		ContentValues values = new ContentValues();
 		String data = "";
@@ -977,6 +991,7 @@ public class MyWorkout extends ListActivity {
 		db.insert(DatabaseHelper.PROGRAM1_TABLE_NAME, null, values);
 		values.clear();
 		
+		/*
 		// Program 2
 		db.delete(DatabaseHelper.PROGRAM2_TABLE_NAME, null, null);
 		//Program 2 - Level 1, Aerobic -- N/A
@@ -1176,7 +1191,7 @@ public class MyWorkout extends ListActivity {
 		values.put(DatabaseHelper.aerobic, false);
 		db.insert(DatabaseHelper.PROGRAM3_TABLE_NAME, null, values);
 		values.clear();
-		
+		*/
 		db.close();
 	}
 

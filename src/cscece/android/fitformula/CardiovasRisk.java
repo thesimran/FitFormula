@@ -8,6 +8,7 @@ import org.achartengine.chart.BarChart.Type;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
 import cscece.android.fitformula.utils.ChartRenderer;
+import cscece.android.fitformula.utils.DatabaseHelper;
 
 import android.app.Activity;
 import android.database.Cursor;

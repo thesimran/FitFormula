@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
+	
+	<!--  
     <TextView
         android:id="@+id/hc_heading"
         android:layout_width="wrap_content"
@@ -13,13 +14,19 @@
         android:text="Health Report"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="30dp" />
-
+		-->
+	
+	<com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar"
+        />
+	
     <ListView
         android:id="@+id/hc_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/hc_heading"
+        android:layout_below="@id/actionbar"
         android:visibility="gone" >
     </ListView>
 
@@ -60,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/hc_question"
         android:layout_alignBottom="@+id/hc_question"
-        android:layout_alignParentRight="true" />
-
+        android:layout_alignParentRight="true"
+        android:entries="@array/yes_no_array"
+        />
 </RelativeLayout>

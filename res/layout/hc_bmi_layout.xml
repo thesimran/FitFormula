@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        >
+
+	<RelativeLayout 
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent" >
+    
+    
+	    <TextView
+	        android:id="@+id/bmi_heading"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="14dp"
+	        android:text="BMI"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textSize="30dp" />
+	    
+	    <ProgressBar 
+	        android:id="@+id/bmi_progress_bar"
+	        style="?android:attr/progressBarStyleHorizontal"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_below="@id/bmi_heading"
+	    	android:layout_centerHorizontal="true"
+	    	android:layout_margin="30dp" />
+	    
+	    <TextView
+	        android:id="@+id/your_bmi"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/bmi_progress_bar"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginLeft="30dp"
+	        android:layout_marginRight="30dp"
+	        android:text="Your BMI level is: (currently unavailable)"
+	        />
+	
+	    <TextView
+	        android:id="@+id/bmi_desc"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:layout_below="@+id/your_bmi"
+	        android:layout_centerHorizontal="true"
+	        android:layout_margin="30dp"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/bmi_desc_str"
+	        />
+   
+	</RelativeLayout>
+
+ </ScrollView>

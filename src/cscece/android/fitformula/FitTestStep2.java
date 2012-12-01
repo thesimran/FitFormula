@@ -2,6 +2,7 @@ package cscece.android.fitformula;
 
 
 import cscece.android.fitformula.WorkoutTest2.WorkoutCountDownTimer;
+import cscece.android.fitformula.utils.DatabaseHelper;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;

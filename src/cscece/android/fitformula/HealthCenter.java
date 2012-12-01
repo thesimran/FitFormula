@@ -1,5 +1,6 @@
 package cscece.android.fitformula;
 
+import cscece.android.fitformula.utils.DatabaseHelper;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.ContentValues;

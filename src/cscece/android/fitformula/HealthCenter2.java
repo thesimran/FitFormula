@@ -2,9 +2,15 @@ package cscece.android.fitformula;
 
 import java.util.ArrayList;
 
+import com.markupartist.android.widget.ActionBar;
+
+import cscece.android.fitformula.PlanOverviewActivity.BackAction;
 import cscece.android.fitformula.adapters.HcAdapter;
 import cscece.android.fitformula.objects.HcListItem;
+import cscece.android.fitformula.utils.DBAdapter;
+import cscece.android.fitformula.utils.DatabaseHelper;
 import android.app.Activity;
+import android.app.LauncherActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -52,18 +58,22 @@ public class HealthCenter2 extends Activity implements OnItemClickListener, OnIt
 	private String cvdRiskClass;
 	private Spinner hcSpinner;
 	
-	private static final String[] yesNo = {"Yes", "No"};
+	//Corresponds to Spinner item positions/indices
+	private final static int YES = 0;
+	private final static int NO = 1;
 	
+	private void setUpActionBar() {
+    	
+    	final ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+    	actionBar.setTitle(R.string.health_report);
+    }
+
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.health_center2_layout);
-		
 		//init spinner yo
 		hcSpinner= (Spinner)findViewById(R.id.hc_confirm_spinner);
-        ArrayAdapter<String> aa = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, yesNo);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        hcSpinner.setAdapter(aa);
         hcSpinner.setSelection(0);
 	
 	}
@@ -141,13 +151,36 @@ public class HealthCenter2 extends Activity implements OnItemClickListener, OnIt
 		columnIndex = c.getColumnIndex(DatabaseHelper.cvdriskclass);
 		cvdRiskClass = c.getString(columnIndex);
 		
+		c.close();
 		dbh.close();
 		
 	}
 	
 	//Listener for the "Get my Workout now" button
 	public void getMyWorkout(View v){
-		//TODO some shit
+		DBAdapter db;
+		long todaysDate;
+		
+		//Check if the user is ok with this fitness goal
+		int position = hcSpinner.getSelectedItemPosition();
+		if(position == YES){
+			/* Insert a new workout into the database or replace the current one
+			 * if no progress.
+			 */
+			db = new DBAdapter(this);
+			db.open();
+			todaysDate = System.currentTimeMillis();
+			db.insertNewStandardProgram(todaysDate);
+			
+			db.close();
+			//Start the next Activity
+			Intent planOverviewIntent = new Intent(this, PlanOverviewActivity.class);
+			planOverviewIntent.putExtra(PlanOverviewActivity.KEY_VIEW, PlanOverviewActivity.VIEW_OVERVIEW);
+			startActivity(planOverviewIntent);
+		}/*else{
+			TODO what do we do now?
+			
+		}*/	
 	}
 	
 	public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
@@ -155,12 +188,12 @@ public class HealthCenter2 extends Activity implements OnItemClickListener, OnIt
 		if(pos == 0){
 			//Physical Activity Level
 			i = new Intent(this, PhysActLevel.class);
-		}else /*if(pos == 1)*/{
+		}else if(pos == 1){
 			//Cardiovascular risk
 			i =  new Intent(this, CardiovasRisk.class);
-		}/*else{
-			//i = new Intent(this, Bmi.class);
-		}*/
+		}else{
+			i = new Intent(this, Bmi.class);
+		}
 		
 		startActivity(i);
 		//TODO transitions not working!
@@ -171,7 +204,7 @@ public class HealthCenter2 extends Activity implements OnItemClickListener, OnIt
 	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		
 		
-		//TODO Also do some stuff here...
+		//TODO Also do some stuff here...Colors nstuff, looks shitty right now when you select an item...
 		
 		//ImageView img_arrow = (ImageView) view.findViewById(R.id.img_arrow);
 		//img_arrow.forceLayout();

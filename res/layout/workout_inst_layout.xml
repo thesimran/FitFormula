@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background" >
+
+    <com.markupartist.android.widget.ActionBar
+        android:id="@+id/actionbar"
+        style="@style/ActionBar"
+         />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actionbar"
+        >
+ 		<RelativeLayout
+ 		    android:layout_height="wrap_content"
+ 		    android:layout_width="match_parent"
+ 		    >
+ 		    
+		    <TextView
+		        android:id="@+id/workout_inst_length"
+		        android:layout_height="wrap_content"
+		        android:layout_width="match_parent"
+		        android:layout_alignParentTop="true"
+		        android:layout_marginTop="35dp"
+		        android:layout_margin="12dp"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:text="@string/workout_length"
+		        />
+		    <TextView 
+		        android:id="@+id/workout_inst_description"
+		        android:layout_height="wrap_content"
+		        android:layout_width="match_parent"
+		        android:layout_below="@id/workout_inst_length"
+		        android:layout_marginTop="20dp"
+		        android:paddingBottom="60dp"
+		        android:layout_margin="12dp"
+		       	android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:text="@string/workout_inst_description"
+		        />
+		    
+		    
+	    </RelativeLayout>
+    </ScrollView> 
+
+    <RelativeLayout
+        android:id="@+id/button_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent">
+
+        <Button
+	        android:id="@+id/next_btn"
+	        android:layout_height="wrap_content"
+	        android:layout_width="90dp"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentRight="true"
+	        android:text="@string/next_str"
+	        android:onClick="next"
+	        />
+    </RelativeLayout>
+
+</RelativeLayout>   

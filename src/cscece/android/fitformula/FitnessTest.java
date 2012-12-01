@@ -1,5 +1,6 @@
 package cscece.android.fitformula;
 
+import cscece.android.fitformula.utils.DatabaseHelper;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -164,7 +165,7 @@ public class FitnessTest extends Activity implements RadioGroup.OnCheckedChangeL
     @Override
     public void onStart(){
     	super.onStart();
-    	
+    	//TODO don't use this database class anymore!!!
     	DatabaseHelper dbh;
 		dbh = new DatabaseHelper(this);		
 		int data;

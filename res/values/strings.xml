@@ -84,7 +84,11 @@
 	    <item>Physical Activty Level: Below Average</item>
 	    <item>Cardiovascular risk: empty</item>
 	    <item>Body Mass Index: empty</item>
-	</string-array>    
+	</string-array>
+	<string-array name="yes_no_array">
+	    <item>Yes</item>
+	    <item>No</item>
+	</string-array>     
 	<string name="hc_recommend_str">Based on your health, we recommend a workout that will help your BMI and at the same time improve your fitness level.</string>
 	<string name="hc_question_str">Are you ok with this fitness goal?</string>
 	<string name="hc_workout_str">Get my workout now</string>
@@ -96,6 +100,35 @@
 	    infarction, stroke and heart failure) over the next 10 years.  Your heart age refelcts the age of your vascualr system.\n\nImproving your dietary
 	    and exercise behaviour, while also quitting smoking will help lower your CVD risk score and heart age.
 	</string>
-	
+	<string name="bmi_desc_str">
+	    The rise of developing weight-related health problems is minimal when your BMI is between 18.5 to 24.9. A high BMI (&#62;25 overweight or obese) is associated with 
+	    increase risk of health problems such as diabetes, heart disease, high blood pressure, gallbladder diesease and some forms of cancer. A low BMI (&#60;18.5, underweight)
+	    is associated with health problems such as osteoporosis, under nutrition, and eating disorders.\nNote: BMI applies to adults 18 years and over with the exception of 
+	    pregnant and lactating women.  BMI measurement may not apply if you are an athlete who has a large muscle mass.
+	</string>
+	<string name="plan_overview_title">My Workout: Plan Overview</string>
+	<string name="workout_inst_title">Workout Instructions</string>
+	<string name="see_workout">See Workout</string>
+	<string name="plan_overview_description">
+	    Your fitness goal is:\n
+	    - Decrease Body Mass Index (BMI)\n
+	    - Increse Physical Activity Level\n\n\n
+	    Your 6 week workout is broken down into 3 phases.\n\n
+	    Phase 1 (week 1-2) is the introduction phase. We will teach you how to maximize your workouts.  We will be going though how you can workout at an optimal exercise intensity.\n\n
+	    Phase 2 (week 3-4) is the adaptation phase. During this phase you will be exercising a little bit harder.\n\n
+	    Phase 3 (week 5-6) is the home stretch phase where you will be challenged again.\n\n
+	    Let\'s Begin!
+	</string>
+	<string name="workout_inst_description">
+	    Workout intensity: Refers to how hard you are working out.  The intensity is measured by your heart rate.  There are 3 ways you can measure your heart rate.\n\n
+	    1) Find the radial pulse.  This is also known as the pulse on the inside of the wrist.  Place the tips of your 3 adjacent finger just below the spot where your
+	    wrist creases at the base of thumb.  Press LIGHTLY until you feel a pulse.\n\n
+	    2) Find the carotid pulse, on the side of your neck.  Place 2 fingers, index and middle finger, in the hollow between your windpipe and the large muscle in your
+	     neck.  Press LIGHTLY until you feel a pulse.\n\n
+	    3) Use a hear rate monitor.\n\n\n
+	    You may choose any aerobic exercises such as cycling, running, or rowing as long as you are maintaining your hear rate at the optimal hear rate zone.  
+	</string>
+	<string name="workout_length">Workout duration:</string>
+	<string name="health_report">Health Report</string>
 	   
 </resources>

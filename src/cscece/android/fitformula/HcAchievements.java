@@ -2,6 +2,8 @@ package cscece.android.fitformula;
 
 import java.util.ArrayList;
 
+import cscece.android.fitformula.utils.DatabaseHelper;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.database.Cursor;
